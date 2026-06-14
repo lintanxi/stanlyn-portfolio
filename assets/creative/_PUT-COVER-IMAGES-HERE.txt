@@ -1,0 +1,15 @@
+Creative section cover images go in this folder.
+
+Export each cover SQUARE — 1000×1000 px (or 1200×1200), JPG or WebP, ideally under ~300 KB.
+
+Expected filenames (these match the <img> paths used in the Creative pages):
+
+  estranged-stars.jpg   →  Estranged Stars card
+  lotus-baby.jpg        →  Lotus Baby card
+  sba.jpg               →  Susan B. Anthony's House card
+  dialogue.jpg          →  Decent Dialogue card
+
+After adding an image, open creative.html and, for that card, uncomment the
+<img ...> line and delete the matching <span class="ph">...</span> placeholder.
+
+You can delete this .txt file once your images are in.

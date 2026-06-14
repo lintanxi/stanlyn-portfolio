@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warden — Stanlyn Lu</title>
+<meta name="description" content="How I identified a governance bottleneck inside Walmart's global security operations platform and designed the infrastructure needed to scale workflows safely.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/everyday-700.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="fonts/everyday-400.woff" as="font" type="font/woff" crossorigin>
+<style>
+  @font-face{font-family:"Everyday Sans";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/everyday-400.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:500;font-style:normal;font-display:swap;src:url("fonts/everyday-500.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/everyday-700.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:900;font-style:normal;font-display:swap;src:url("fonts/everyday-900.woff") format("woff")}
+
+  :root{
+    --bg:#f0efeb;
+    --surface:#f7f6f2;
+    --ink:#222222;
+    --muted:#515357;
+    --line:#e1e0d8;
+    --blue:#0a5fd6;
+    --blue-ink:#002e99;
+    --blue-pale:#e6ecf9;
+    --leaf:#3a9d3a;
+    --font:"Everyday Sans","Helvetica Neue",Arial,sans-serif;
+    --max:800px;
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+  img{display:block;max-width:100%}
+  .skip{position:absolute;left:-9999px}
+  .skip:focus{left:16px;top:16px;background:var(--ink);color:#fff;padding:10px 14px;border-radius:8px;z-index:99}
+
+  /* ── Nav ── */
+  header{position:sticky;top:0;z-index:20;background:rgba(240,239,235,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav{max-width:1080px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:62px;gap:24px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;letter-spacing:-.01em;color:var(--ink)}
+  .brand svg{width:20px;height:20px;color:var(--leaf);flex:none}
+  .back{font-size:14px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .back:hover{color:var(--ink);text-decoration:none}
+  .back svg{width:14px;height:14px}
+
+  /* ── Layout ── */
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  .wrap-wide{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* ── Hero ── */
+  .hero{padding:72px 0 0}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex:none}
+  h1{font-size:clamp(32px,5vw,52px);font-weight:700;line-height:1.02;letter-spacing:-.035em;margin-bottom:24px}
+  h1 em{color:var(--blue);font-style:normal}
+  .hero-sub{font-size:19px;line-height:1.6;color:var(--muted);max-width:54ch;margin-bottom:48px}
+
+  /* ── Meta strip ── */
+  .meta-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:64px}
+  .meta-item{background:var(--surface);padding:20px 18px}
+  .meta-item .label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .meta-item .val{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
+  @media(max-width:640px){.meta-strip{grid-template-columns:repeat(2,1fr)}}
+
+  /* ── Hero image crossfade ── */
+  .hero-img{width:100%;border-radius:var(--r);border:1px solid var(--line);overflow:hidden;margin-bottom:80px;position:relative}
+  .hero-img img{width:100%;height:480px;object-fit:cover;object-position:center top;display:block}
+  .hero-img img.slide-back{position:absolute;inset:0;animation:crossfade 8s ease-in-out infinite alternate}
+  @keyframes crossfade{0%,30%{opacity:1}70%,100%{opacity:0}}
+  @media(max-width:640px){.hero-img img{height:260px}}
+
+  /* ── Prose ── */
+  .prose{margin-bottom:72px}
+  .prose h2{font-size:clamp(24px,3.5vw,34px);font-weight:700;letter-spacing:-.03em;margin-bottom:16px;margin-top:0}
+  .prose h3{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:10px;margin-top:32px;color:var(--ink)}
+  .prose p{color:var(--muted);margin-bottom:18px;font-size:16.5px;line-height:1.7}
+  .prose p:last-child{margin-bottom:0}
+  .prose strong{color:var(--ink);font-weight:600}
+
+  /* ── Section label ── */
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+
+  /* ── Pull quote ── */
+  .pullquote{border-left:3px solid var(--blue);padding:18px 24px;background:var(--surface);border-radius:0 var(--r) var(--r) 0;margin:32px 0;font-size:18px;font-weight:500;color:var(--ink);line-height:1.55;font-style:italic}
+  .pullquote cite{display:block;margin-top:10px;font-size:13px;font-weight:500;font-style:normal;color:var(--muted)}
+
+  /* ── Callout box ── */
+  .callout{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;margin:28px 0}
+  .callout .callout-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .callout p{color:var(--ink);font-size:15px;line-height:1.6;margin:0}
+  .callout p+p{margin-top:10px}
+
+  /* ── Decision cards ── */
+  .decisions{display:flex;flex-direction:column;gap:16px;margin:28px 0}
+  .decision{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:560px){.decision{grid-template-columns:1fr}}
+  .decision .d-col .d-head{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+  .decision .d-col.rejected .d-head{color:#c0392b}
+  .decision .d-col.chosen .d-head{color:var(--leaf)}
+  .decision .d-col p{font-size:14px;color:var(--muted);line-height:1.55;margin:0}
+  .decision .d-col.chosen p{color:var(--ink)}
+
+  /* ── Impact grid ── */
+  .impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}
+  @media(max-width:560px){.impact-grid{grid-template-columns:1fr}}
+  .impact-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px}
+  .impact-item .num{font-size:32px;font-weight:700;letter-spacing:-.04em;color:var(--blue);line-height:1}
+  .impact-item .impact-label{margin-top:8px;font-size:13px;color:var(--muted);line-height:1.45}
+
+  /* ── Image with caption ── */
+  .fig{margin:36px 0}
+  .fig img{width:100%;border-radius:var(--r);border:1px solid var(--line)}
+  .fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.5;text-align:center}
+
+  /* ── Lightbox ── */
+  #lb{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;display:none;align-items:center;justify-content:center;cursor:zoom-out;padding:24px}
+  #lb.open{display:flex}
+  #lb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;box-shadow:0 8px 48px rgba(0,0,0,.6)}
+  #lb-close{position:fixed;top:20px;right:24px;color:#fff;font-size:28px;line-height:1;cursor:pointer;opacity:.7;font-family:sans-serif}
+  #lb-close:hover{opacity:1}
+  .fig img[data-lb]{cursor:zoom-in}
+  .fig img[data-lb]:hover{opacity:.92}
+
+  /* ── Wide breakout ── */
+  .fig-wide{position:relative;left:50%;transform:translateX(-50%);width:min(960px,calc(100vw - 48px));margin:36px 0}
+  @media(max-width:720px){.fig-wide{left:0;transform:none;width:100%}}
+
+  /* ── Two-up images ── */
+  .two-up{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:36px 0}
+  @media(max-width:560px){.two-up{grid-template-columns:1fr}}
+  .two-up .fig{margin:0}
+
+  /* ── Three-up ── */
+  .three-up{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:36px 0}
+  @media(max-width:640px){.three-up{grid-template-columns:1fr}}
+  .three-up .fig{margin:0}
+
+  /* ── Chips ── */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .chip{font-size:12px;font-weight:500;padding:5px 11px;border-radius:999px;background:var(--blue-pale);color:var(--blue-ink)}
+
+  /* ── Divider ── */
+  hr{border:none;border-top:1px solid var(--line);margin:64px 0}
+
+  /* ── Challenge grid ── */
+  .challenge-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:28px 0}
+  .challenge-item{background:var(--surface);padding:22px 20px;display:flex;flex-direction:column;gap:8px}
+  .c-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+  .c-body{margin:0;font-size:14.5px;color:var(--muted);line-height:1.55}
+  @media(max-width:560px){.challenge-grid{grid-template-columns:1fr}}
+
+  /* ── Phase table ── */
+  .phase-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0}
+  @media(max-width:560px){.phase-grid{grid-template-columns:1fr}}
+  .phase-col{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px}
+  .phase-col .phase-head{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .phase-col.included .phase-head{color:var(--leaf)}
+  .phase-col.deferred .phase-head{color:var(--muted)}
+  .phase-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .phase-col ul li{font-size:14px;color:var(--muted);line-height:1.5;display:flex;align-items:flex-start;gap:8px}
+  .phase-col.included ul li{color:var(--ink)}
+  .phase-col ul li::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none;margin-top:7px;opacity:.5}
+  .phase-col.included ul li::before{background:var(--leaf);opacity:1}
+
+  /* ── Stakeholder cards ── */
+  /* ── User type grid ── */
+  .user-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0 0}
+  @media(max-width:640px){.user-grid{grid-template-columns:1fr}}
+  .user-col .user-img{width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center top;border-radius:var(--r);border:1px solid var(--line);display:block}
+  .user-col h3{font-size:15px;font-weight:700;color:var(--ink);margin:14px 0 8px}
+  .user-col ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:5px}
+  .user-col ul li{font-size:13.5px;color:var(--muted);line-height:1.5;padding-left:14px;position:relative}
+  .user-col ul li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--blue);position:absolute;left:0;top:8px}
+
+  /* ── Stakeholder cards ── */
+  .stakeholder-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}
+  @media(max-width:640px){.stakeholder-grid{grid-template-columns:1fr}}
+  .stakeholder-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .stakeholder-card .s-img{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:center top;display:block}
+  .stakeholder-card .s-body{padding:18px 20px 20px}
+  .stakeholder-name{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px}
+  .stakeholder-title{font-size:12px;color:var(--muted);line-height:1.4;margin-bottom:14px}
+  .stakeholder-quote{font-size:14px;color:var(--muted);line-height:1.6;font-style:italic}
+  .stakeholder-quote strong{color:var(--blue-ink);font-style:normal;font-weight:600}
+
+  /* ── Reflection ── */
+  .reflection-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin:20px 0}
+  .reflection-list li{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start}
+  .reflection-list li .num{width:28px;height:28px;border-radius:50%;background:var(--blue-pale);color:var(--blue-ink);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px}
+  .reflection-list li p{font-size:15px;color:var(--muted);margin:0;line-height:1.6}
+  .reflection-list li p strong{color:var(--ink)}
+
+  /* ── Next project ── */
+  .next-card{display:grid;grid-template-columns:38% 1fr;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;margin-bottom:80px;transition:border-color .2s,transform .2s}
+  .next-card:hover{border-color:var(--blue);transform:translateY(-2px);text-decoration:none}
+  .next-card .shot{background:#1b1c18;min-height:200px;position:relative}
+  .next-card .shot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+  .next-card .body{padding:28px}
+  .next-card .next-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .next-card h3{font-size:22px;font-weight:700;letter-spacing:-.015em;margin-bottom:8px}
+  .next-card p{font-size:14px;color:var(--muted);line-height:1.55;margin:0}
+  @media(max-width:600px){.next-card{grid-template-columns:1fr}.next-card .shot{min-height:180px;height:180px}}
+
+  /* ── Footer ── */
+  footer{border-top:1px solid var(--line);padding:32px 0 48px}
+  .foot-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .foot-name{font-size:14px;color:var(--muted)}
+  .foot-links{display:flex;gap:20px}
+  .foot-links a{font-size:13px;font-weight:500;color:var(--muted)}
+  .foot-links a:hover{color:var(--ink)}
+
+  /* ── Back to top ── */
+  #back-top{position:fixed;bottom:32px;right:32px;z-index:90;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s,background .15s;background:var(--ink);color:var(--bg);border:none;border-radius:100px;padding:10px 20px;font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px}
+  #back-top svg{width:12px;height:12px;flex-shrink:0;transition:transform .2s}
+  #back-top.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+  #back-top:hover{background:var(--blue)}
+  #back-top:hover svg{transform:translateY(-2px)}
+
+  /* ── Scroll progress ── */
+  #progress-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--blue);z-index:200;transition:width .1s linear;pointer-events:none}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div id="progress-bar" aria-hidden="true"></div>
+<button id="back-top" aria-label="Back to top">
+  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,8 6,4 10,8"/></svg>
+  Top
+</button>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Image enlarged"><span id="lb-close" aria-label="Close">&times;</span><img id="lb-img" src="" alt=""></div>
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="brand" aria-label="Stanlyn Lu, home">
+      <svg viewBox="0 0 200 200" width="22" height="22" aria-hidden="true"><circle cx="100" cy="100" r="100" fill="#2d8841"/><g fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="5"><line x1="44.69" y1="21.51" x2="100.91" y2="77.73"/><line x1="155.31" y1="21.51" x2="98.39" y2="78.42"/><line x1="44.69" y1="121.14" x2="100" y2="176.45"/><line x1="155.31" y1="121.14" x2="98.26" y2="178.19"/><line x1="100" y1="73.99" x2="100" y2="155.83"/></g></svg>
+      Stanlyn Lu
+    </a>
+    <a href="index.html#works" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      All works
+    </a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Governance Design · Security Operations · Design Systems · AI</div>
+      <h1>Governing the <em>system</em> behind the system</h1>
+      <p class="hero-sub">How I reframed a usability request as a governance problem, and designed the infrastructure that lets the people closest to operations change the system safely, without going through engineering.</p>
+
+      <div class="meta-strip" role="list" aria-label="Project details">
+        <div class="meta-item" role="listitem">
+          <div class="label">My Role</div>
+          <div class="val">Sole Product Designer</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Surfaces</div>
+          <div class="val">Warden · Warden Mobile · Emergency App</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Team</div>
+          <div class="val">~40 people · Product + Engineering</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Timeline</div>
+          <div class="val">Feb 2026 – Present</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap-wide">
+      <div class="hero-img">
+        <img src="assets/warden.jpg" alt="Warden Global Security Operations Center: three operators monitoring real-time incident data across a wall of screens showing facility maps, active incidents, and analytics dashboards">
+        <img class="slide-back" src="assets/warden-dark.jpg" alt="Warden dark-mode interface showing the Super Admin configuration platform and incident management dashboard">
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+
+    <!-- THE PLATFORM -->
+    <div class="prose">
+      <div class="section-label">The Platform</div>
+      <h2>Security operations at global scale</h2>
+      <p>Warden is Walmart's global security operations ecosystem, built across two surfaces: the <strong>Emergency App</strong>, a mobile tool for store-level staff to report incidents; and the <strong>Warden platform</strong>, a desktop system used by the Global Security Operations Center to monitor and coordinate response.</p>
+      <p>It follows a four-stage lifecycle: <strong>Facility</strong> (routine monitoring) → <strong>Watch Item</strong> (suspicious activity) → <strong>Incident</strong> (emergency response) → <strong>Event</strong> (multi-location coordination). What operators are asked, what's required, and what triggers a notification all change by stage.</p>
+    </div>
+
+    <!-- USER TYPE IMAGES -->
+    <div class="user-grid fig-wide" style="margin-top:28px">
+      <div class="user-col">
+        <img class="user-img" src="assets/warden-storemanager.jpg" alt="Store manager at a Walmart location using the Emergency App to report an incident in real time" data-lb>
+        <h3>Store Managers <span style="font-weight:400;color:var(--muted);font-size:13px">· Emergency App</span></h3>
+        <ul>
+          <li>Report suspicious activity in real time</li>
+          <li>Request emergency assistance</li>
+          <li>Submit incident details from the field</li>
+          <li>No access to Warden platform content</li>
+        </ul>
+      </div>
+      <div class="user-col">
+        <img class="user-img" src="assets/warden-securityoperators.jpg" alt="Security operator at the Global Security Operations Center monitoring real-time camera feeds and incident data across multiple screens" data-lb>
+        <h3>Security Operators <span style="font-weight:400;color:var(--muted);font-size:13px">· Warden</span></h3>
+        <ul>
+          <li>Monitor cameras and incoming reports</li>
+          <li>Investigate and escalate incidents</li>
+          <li>Create Watch Items, Incidents, and Events</li>
+          <li>Coordinate emergency response</li>
+        </ul>
+      </div>
+      <div class="user-col">
+        <img class="user-img" src="assets/warden-adminusers.jpg" alt="Super Admin user at a workstation configuring incident questionnaires and managing permissions in the Warden admin platform" data-lb>
+        <h3>Super Admins <span style="font-weight:400;color:var(--muted);font-size:13px">· Manual Process</span></h3>
+        <ul>
+          <li>Own questionnaire content and compliance rules</li>
+          <li>Coordinate changes across multiple approval layers</li>
+          <li>Rely on spreadsheets and meetings to track every update</li>
+          <li>No direct path to change the system they're accountable for</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- LIFECYCLE IMAGE -->
+    <!-- Export slide 3 (Incident Lifecycle infographic) and save as assets/warden-lifecycle.jpg -->
+    <figure class="fig fig-wide">
+      <img src="assets/warden-lifecycle.jpg" alt="Incident lifecycle diagram showing four stages: Facility (routine monitoring), Watch Item (suspicious activity tracking), Incident (active emergency response), and Event (coordinated multi-location situation)" data-lb>
+      <figcaption><strong>Incident lifecycle:</strong> a facility under routine monitoring escalates to a Watch Item when suspicious behavior is detected, then to an active Incident triggering emergency response, and to an Event when multiple locations are involved.</figcaption>
+    </figure>
+
+    <hr>
+
+    <!-- SITUATION -->
+    <div class="prose">
+      <div class="section-label">The Situation I Inherited</div>
+      <h2>A platform that had outgrown its foundations</h2>
+      <p>Warden was built fast. Growth from a handful of incident types to 72+ across 11 categories (more regions, more compliance requirements, and a designer transition along the way) left a system that had never been designed to be maintained at this scale. I joined in February 2026 as the sole designer on a ~40-person team, inheriting three surfaces and an open set of problems.</p>
+    </div>
+
+    <div class="challenge-grid">
+      <div class="challenge-item">
+        <div class="c-title">Operational Complexity</div>
+        <p class="c-body">72+ incident types, 11+ categories, 80+ question categories, and a taxonomy still actively evolving. Regional requirements and compliance rules varied across the system with no unified logic.</p>
+      </div>
+      <div class="challenge-item">
+        <div class="c-title">UX Debt</div>
+        <p class="c-body">The codebase mixed Material UI, Ant Design, and custom styling. Patterns were inconsistent across surfaces. A previous designer had built a Warden sub-system that improved usability, but adoption was partial and it had never been reconciled with Walmart's enterprise design standard.</p>
+      </div>
+      <div class="challenge-item">
+        <div class="c-title">Governance Bottleneck</div>
+        <p class="c-body">Every questionnaire change (even minor ones) required a spreadsheet, multiple approval meetings, an engineering ticket, and a release cycle. Operational needs moved faster than the system could adapt.</p>
+      </div>
+      <div class="challenge-item">
+        <div class="c-title">Solo Coverage</div>
+        <p class="c-body">As the only designer, I was simultaneously responsible for new feature design, design system alignment across three layers, and AI feature evaluation, with no design coverage handover from the previous designer.</p>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- RESEARCH -->
+    <div class="prose">
+      <div class="section-label">Stakeholder Research</div>
+      <h2>Three different problems. One root cause.</h2>
+      <p>I interviewed three stakeholders with different vantage points: the Director of Operations, the Director of Security Operations who owned questionnaire content, and the Product Manager who bore the cost of every change request.</p>
+    </div>
+
+    <div class="stakeholder-grid fig-wide">
+      <div class="stakeholder-card">
+        <img class="s-img" src="assets/warden-interview-rick.jpg" alt="Rick, Director of Operations and Technology at the Global Security Operations Center">
+        <div class="s-body">
+          <div class="stakeholder-name">Rick</div>
+          <div class="stakeholder-title">Director, Operations &amp; Technology · GSOC</div>
+          <div class="stakeholder-quote">"When something changes operationally, we need to <strong>update the questionnaire quickly</strong>, but by the time a change reaches operators, the situation has already moved on."</div>
+        </div>
+      </div>
+      <div class="stakeholder-card">
+        <img class="s-img" src="assets/warden-interview-lizzy.jpg" alt="Lizzy, Director of Security Operations and questionnaire content owner">
+        <div class="s-body">
+          <div class="stakeholder-name">Lizzy</div>
+          <div class="stakeholder-title">Director, Security Operations · Content Owner</div>
+          <div class="stakeholder-quote">"I maintain a <strong>huge spreadsheet of questions</strong>, and every change requires reviews and approvals from multiple leaders before anything can go to engineering."</div>
+        </div>
+      </div>
+      <div class="stakeholder-card">
+        <img class="s-img" src="assets/warden-interview-mike.jpg" alt="Mike, Product Manager for the Warden project">
+        <div class="s-body">
+          <div class="stakeholder-name">Mike</div>
+          <div class="stakeholder-title">Product Manager · Warden Project</div>
+          <div class="stakeholder-quote">"Every questionnaire change becomes an <strong>engineering effort</strong>. We need to reduce the friction and manual work without creating compliance or data risks."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout fig-wide">
+      <div class="callout-label">Cross-interview insight</div>
+      <p><strong>Workflow ownership was trapped in spreadsheets, approvals, and release cycles.</strong> The people who understood what needed to change had no direct path to change it.</p>
+    </div>
+
+    <hr>
+
+    <!-- DISCOVERY -->
+    <div class="prose">
+      <div class="section-label">Discovery</div>
+      <h2>The real problem was workflow governance, not the workflow itself</h2>
+      <p>What looked like a UX problem was structural. A single questionnaire change followed this path: spreadsheet → approval meetings → engineering ticket → release cycle. Weeks, for what was essentially a content edit. Worse, <strong>a simple change had downstream effects on compliance reporting, dashboards, and notification subscriptions</strong>, none of which were visible to the person requesting it. That invisibility was the real problem.</p>
+    </div>
+
+    <!-- PAIN PIPELINE IMAGE -->
+    <!-- Export slide 6 (Discover the Pain Points) and save as assets/warden-pain-pipeline.jpg -->
+    <figure class="fig fig-wide">
+      <img src="assets/warden-pain-pipeline.jpg" alt="Five-step pain pipeline: Content Change → Spreadsheet → Meetings → Engineering → Release, with callouts showing the costs at each step: slow updates, conflicting requirements, engineering dependency, operational overhead" data-lb>
+      <figcaption><strong>Pain pipeline:</strong> mapping the content change process revealed friction at every step, and a gap between the speed at which operational needs changed and the speed at which the system could respond.</figcaption>
+    </figure>
+
+    <div class="pullquote">
+      "Operational needs change fast, but our process doesn't."
+      <cite>The result of a change pipeline that treated questionnaire content as code, not configuration</cite>
+    </div>
+
+    <hr>
+
+    <!-- OPPORTUNITY -->
+    <div class="prose">
+      <div class="section-label">Opportunity</div>
+      <h2>Moving workflow ownership closer to operations</h2>
+      <p>The core opportunity: move the <em>ability to change</em> the questionnaire out of engineering and into operations, without compromising compliance or content integrity. Meaningful flexibility within real constraints: approvals still required, taxonomy still consolidating, compliance non-negotiable. The design challenge was finding that boundary.</p>
+    </div>
+
+    <hr>
+
+    <!-- SUPER ADMIN PLATFORM -->
+    <div class="prose">
+      <div class="section-label">0→1 Design</div>
+      <h2>Designing the boundary between flexibility and governance</h2>
+      <p>The central design question: what to allow, not just what to show. Phase 1 gave Super Admins four configurable dimensions: <strong>visibility</strong> (show/hide per question within an incident type), <strong>ordering</strong> (drag-to-reorder), <strong>requiredness</strong> (required vs. optional), and <strong>country rules</strong> (region-based question logic). Super Admins can also lock individual questions based on compliance or policy requirements, preventing users with lower access from making changes to those questions.</p>
+      <p>Every change is logged in a persistent audit trail: who changed what, when, and on which incident type. Auditability was a first-class requirement, surfaced at the bottom of the configuration view rather than buried in settings.</p>
+    </div>
+
+    <!-- SUPER ADMIN UI IMAGE -->
+    <!-- Export slide 8 (0→1 Super Admin Platform UI screenshot) and save as assets/warden-super-admin.jpg -->
+    <figure class="fig fig-wide">
+      <img src="assets/warden-super-admin.jpg" alt="Super Admin configuration platform showing incident question management interface with controls for visibility toggle, drag-to-reorder, required/optional toggle, country/region selector, compliance locks, and audit trail. Phase 1 capabilities annotated, upcoming phases shown in sidebar." data-lb>
+      <figcaption><strong>Super Admin configuration platform:</strong> Phase 1 capabilities are annotated; deferred capabilities are visible in the sidebar to communicate the roadmap without creating premature expectations.</figcaption>
+    </figure>
+
+    <div class="prose" style="margin-top:48px">
+      <h3>Conditional logic and the sub-question system</h3>
+      <p>Beyond Phase 1, I prototyped a conditional logic model for future question authoring, where answering a question can trigger a relevant follow-up, constrained enough to keep unreviewed content out of compliance-sensitive workflows.</p>
+    </div>
+
+    <figure class="fig fig-wide" style="margin-top:8px">
+      <svg viewBox="0 0 760 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;font-family:'Everyday Sans','Helvetica Neue',Arial,sans-serif">
+        <defs>
+          <marker id="arr-dark" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#515357"/></marker>
+          <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#0a5fd6"/></marker>
+          <marker id="arr-line" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#e1e0d8"/></marker>
+        </defs>
+
+        <!-- Parent question -->
+        <rect x="220" y="16" width="320" height="58" rx="10" fill="#e6ecf9" stroke="#0a5fd6" stroke-width="1.5"/>
+        <text x="380" y="38" text-anchor="middle" font-size="10" font-weight="700" fill="#002e99" letter-spacing=".06em">QUESTION</text>
+        <text x="380" y="58" text-anchor="middle" font-size="13.5" fill="#222222">"Were emergency services notified?"</text>
+
+        <!-- Arrow down to diamond -->
+        <line x1="380" y1="74" x2="380" y2="104" stroke="#515357" stroke-width="1.5" marker-end="url(#arr-dark)"/>
+
+        <!-- Diamond -->
+        <polygon points="380,108 448,148 380,188 312,148" fill="#f7f6f2" stroke="#e1e0d8" stroke-width="1.5"/>
+        <text x="380" y="143" text-anchor="middle" font-size="12" font-weight="600" fill="#515357">Operator</text>
+        <text x="380" y="160" text-anchor="middle" font-size="12" font-weight="600" fill="#515357">response</text>
+
+        <!-- YES arrow left -->
+        <line x1="312" y1="148" x2="155" y2="148" stroke="#0a5fd6" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+        <text x="230" y="140" text-anchor="middle" font-size="11" font-weight="700" fill="#0a5fd6">Yes</text>
+
+        <!-- NO arrow right -->
+        <line x1="448" y1="148" x2="605" y2="148" stroke="#e1e0d8" stroke-width="1.5" marker-end="url(#arr-line)"/>
+        <text x="530" y="140" text-anchor="middle" font-size="11" font-weight="700" fill="#b0b3b8">No</text>
+
+        <!-- YES box -->
+        <line x1="155" y1="148" x2="155" y2="186" stroke="#0a5fd6" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+        <rect x="16" y="190" width="278" height="114" rx="10" fill="#f7f6f2" stroke="#0a5fd6" stroke-width="1.5"/>
+        <text x="26" y="212" font-size="10" font-weight="700" fill="#0a5fd6" letter-spacing=".06em">SUB-QUESTION TRIGGERED</text>
+        <text x="26" y="232" font-size="13.5" fill="#222222">"Who was notified?"</text>
+        <!-- option chips -->
+        <rect x="26" y="244" width="60" height="24" rx="6" fill="#e6ecf9"/>
+        <text x="56" y="261" text-anchor="middle" font-size="12" fill="#002e99">911</text>
+        <rect x="94" y="244" width="130" height="24" rx="6" fill="#e6ecf9"/>
+        <text x="159" y="261" text-anchor="middle" font-size="12" fill="#002e99">Fire Department</text>
+        <rect x="232" y="244" width="50" height="24" rx="6" fill="#e6ecf9"/>
+        <text x="257" y="261" text-anchor="middle" font-size="12" fill="#002e99">EMS</text>
+        <rect x="26" y="276" width="140" height="24" rx="6" fill="#e6ecf9"/>
+        <text x="96" y="293" text-anchor="middle" font-size="12" fill="#002e99">Medical Services</text>
+        <rect x="174" y="276" width="108" height="24" rx="6" fill="#e6ecf9"/>
+        <text x="228" y="293" text-anchor="middle" font-size="12" fill="#002e99">Other (specify)</text>
+
+        <!-- NO box -->
+        <line x1="605" y1="148" x2="605" y2="186" stroke="#e1e0d8" stroke-width="1.5" marker-end="url(#arr-line)"/>
+        <rect x="466" y="190" width="278" height="58" rx="10" fill="#f7f6f2" stroke="#e1e0d8" stroke-width="1.5"/>
+        <text x="605" y="215" text-anchor="middle" font-size="13.5" fill="#515357">No follow-up shown</text>
+        <text x="605" y="234" text-anchor="middle" font-size="12" fill="#b0b3b8">Flow continues normally</text>
+
+        <!-- Admin note -->
+        <rect x="220" y="324" width="320" height="44" rx="8" fill="#f0efeb" stroke="#e1e0d8" stroke-width="1"/>
+        <text x="380" y="343" text-anchor="middle" font-size="10" font-weight="700" fill="#515357" letter-spacing=".06em">CONFIGURED BY SUPER ADMIN</text>
+        <text x="380" y="359" text-anchor="middle" font-size="12" fill="#515357">Single-select · Multi-select · Free-text</text>
+      </svg>
+      <figcaption><strong>Conditional sub-question logic:</strong> administrators define which answers trigger follow-up questions, keeping the form concise while capturing the right detail when it matters.</figcaption>
+    </figure>
+
+    <hr>
+
+    <!-- GOVERNANCE DECISIONS -->
+    <div class="prose">
+      <div class="section-label">Design Strategy</div>
+      <h2>Earning trust before expanding capability</h2>
+      <p>The most important decision was what not to build yet. Question creation, editing, and removal were excluded from Phase 1, not for technical reasons, but because the taxonomy was mid-consolidation, approval workflows weren't formalized, and premature authoring access would have created real compliance exposure. Phase 1 was designed to earn trust before expanding capability, with the roadmap communicated openly through the deferred-capabilities sidebar.</p>
+    </div>
+
+    <div class="phase-grid">
+      <div class="phase-col included">
+        <div class="phase-head">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="7" fill="#3a9d3a"/><polyline points="3.5,7 6,9.5 10.5,5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Phase 1 · Shipped
+        </div>
+        <ul>
+          <li>Show / hide questions per incident type</li>
+          <li>Drag-to-reorder question sequence</li>
+          <li>Toggle required vs. optional</li>
+          <li>Country and region rules</li>
+          <li>Compliance locks to restrict changes by lower-access users</li>
+          <li>Full audit trail with user, timestamp, and change record</li>
+        </ul>
+      </div>
+      <div class="phase-col deferred">
+        <div class="phase-head">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6.5" stroke="#999"/><line x1="7" y1="4" x2="7" y2="7.5" stroke="#999" stroke-width="1.8" stroke-linecap="round"/><circle cx="7" cy="9.5" r=".9" fill="#999"/></svg>
+          Upcoming Phases
+        </div>
+        <ul>
+          <li>Create and edit questions</li>
+          <li>Remove questions from incident types</li>
+          <li>Sub-question and conditional logic authoring</li>
+          <li>Incident type and category management</li>
+          <li>Historical versioning and change rollback</li>
+          <li>AI-assisted configuration</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="decisions">
+      <div class="decision">
+        <div class="d-col rejected">
+          <div class="d-head">Full authoring from day one</div>
+          <p>Allow Super Admins to create, edit, and remove questions immediately. Maximum flexibility, but the taxonomy was mid-consolidation, approval processes weren't established, and question changes cascade into compliance reports, dashboards, and subscription logic.</p>
+        </div>
+        <div class="d-col chosen">
+          <div class="d-head">Configuration-first, authoring later</div>
+          <p>Phase 1 introduces meaningful operational control (visibility, ordering, requiredness) while deferring authoring until governance structures mature. Builds trust and adoption before expanding capability. A question's content stays stable; only its behavior is configurable.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- DESIGN SYSTEM -->
+    <div class="prose">
+      <div class="section-label">Design Governance</div>
+      <h2>Aligning three sources of truth simultaneously</h2>
+      <p>I inherited three overlapping design system layers: a live product built on mixed Material UI and Ant Design; a Warden UX sub-system built by the previous designer (dark-mode-optimized, partially adopted); and Walmart's LD 3.5, a new company-wide standard whose dark mode components were still in progress. I audited inconsistencies between the live product and the sub-system, aligned new work to LD 3.5 where possible, and documented Warden-specific patterns for formal LD 3.5 review, so they could enter the backlog rather than remain one-off implementations.</p>
+    </div>
+
+    <!-- DESIGN SYSTEM — THREE IMAGES -->
+    <div class="three-up fig-wide" style="margin-top:8px">
+      <figure class="fig">
+        <img src="assets/warden-ds-current.jpg" alt="Current product UI showing the live Warden incident list with legacy dark-mode components built from mixed Material UI and Ant Design libraries" data-lb>
+        <figcaption><strong>Current product reality:</strong> legacy implementation with fragmented component libraries and inconsistent patterns</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="assets/warden-ds-subsystem.jpg" alt="Warden UX sub-system built by the previous designer, showing improved dark-mode components and more consistent interaction patterns" data-lb>
+        <figcaption><strong>Warden UX sub-system:</strong> dark-mode patterns built by the previous designer, partially adopted in engineering</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="assets/warden-ds-ld35.jpg" alt="Walmart LD 3.5 design system component documentation showing dark mode components marked as work-in-progress and not yet available" data-lb>
+        <figcaption><strong>Walmart LD 3.5:</strong> required enterprise standard with dark mode components still in progress at time of this work</figcaption>
+      </figure>
+    </div>
+    <p class="fig-wide" style="font-size:13px;color:var(--muted);text-align:center;margin-top:-20px;margin-bottom:36px">Three evolving systems, each at a different level of completeness and dark-mode readiness, all requiring alignment at the same time.</p>
+
+    <hr>
+
+    <!-- AI -->
+    <div class="prose">
+      <div class="section-label">Scope Beyond the Platform</div>
+      <h2>Evaluating AI in high-stakes workflows</h2>
+      <p>As the sole designer, I was also responsible for evaluating two AI features that had already been built. The features existed, but the interaction model hadn't been validated for the accountability risks specific to a security operations context. My discovery work focused on understanding where the current flows created trust gaps, and defining the guardrails needed before operators could rely on AI output in time-sensitive situations.</p>
+
+      <h3>AI-assisted incident reporting</h3>
+      <p>Store managers in the field can't always stop to fill out a form. The AI reporting flow lets them describe the situation in plain language and pre-populates the incident form from that narrative. The AI presents its output as a draft (every field editable, ambiguities flagged for human confirmation, and a persistent note reminding operators to verify before submitting). The AI never submits on their behalf.</p>
+
+      <h3>AI-assisted incident summary</h3>
+      <p>Operators managing high volumes of concurrent incidents can tap to surface a one-paragraph AI summary of any open report, enough to assess severity and act, without reading through a full questionnaire response. Always on demand, never auto-shown.</p>
+    </div>
+
+    <!-- AI IMAGES -->
+    <!-- Export slide 11 top screenshot (Incident Agent chat + disambiguation) as assets/warden-ai-reporting.jpg -->
+    <!-- Export slide 11 bottom screenshot (Incident Agent + pre-populated form) as assets/warden-ai-form.jpg -->
+    <div class="two-up fig-wide">
+      <figure class="fig">
+        <img src="assets/warden-ai-reporting.jpg" alt="AI Incident Agent chat interface showing a narrative incident report submitted by a store manager, with the AI asking a disambiguation question about which 'Maria' is the reporter, showing three options by name and employee ID" data-lb>
+        <figcaption><strong>Disambiguation checkpoint:</strong> when the AI is uncertain, it surfaces the ambiguity for human resolution rather than guessing. The human confirms before the system proceeds.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="assets/warden-ai-form.jpg" alt="AI Incident Agent interface alongside a pre-populated incident form showing extracted fields: incident type 'Person with a gun', category 'Threat', location 'Front Parking Lot', severity 'Critical'. All fields are editable before submission." data-lb>
+        <figcaption><strong>Human-editable draft:</strong> the AI generates a structured form pre-fill, presented as a draft. Every field is editable. The operator reviews and submits, and the AI never submits on their behalf.</figcaption>
+      </figure>
+    </div>
+
+    <div class="callout" style="margin-top:8px">
+      <div class="callout-label">Design Principle</div>
+      <p><strong>AI assists documentation. Humans remain accountable.</strong> Every interaction pattern in the AI features (disambiguation prompts, editable drafts, explicit accuracy reminders) was designed to support this principle. The risk in a high-stakes workflow is not AI failing to extract data correctly. It's an operator trusting AI output they didn't verify.</p>
+    </div>
+
+    <hr>
+
+    <!-- IMPACT -->
+    <div class="prose">
+      <div class="section-label">Impact</div>
+      <h2>What was delivered, and what comes next</h2>
+      <p>Phase 1 was handed off to engineering at launch-ready fidelity, with annotated specs and implementation support through the build. The governance framework and interaction model it established will carry forward into subsequent phases.</p>
+    </div>
+
+    <div class="impact-grid">
+      <div class="impact-item">
+        <div class="num">0→1</div>
+        <div class="impact-label">Super Admin configuration platform, no comparable tooling existed before this project</div>
+      </div>
+      <div class="impact-item">
+        <div class="num">3</div>
+        <div class="impact-label">surfaces aligned under a unified governance and design system strategy for the first time</div>
+      </div>
+      <div class="impact-item">
+        <div class="num">∞→1</div>
+        <div class="impact-label">design system layers reduced to a single documented alignment strategy with LD 3.5</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:8px">
+      <p>Intended success measures (directional, not baselined): reduced engineering dependency for workflow changes, faster questionnaire updates, and stronger governance visibility through the audit trail.</p>
+    </div>
+
+    <hr>
+
+    <!-- REFLECTION -->
+    <div class="prose">
+      <div class="section-label">Reflection</div>
+      <h2>From designing screens to designing systems</h2>
+      <p>The stated request was to improve usability. Research revealed that the inconsistencies, the slow workflows, the frustrated operators all traced back to a governance bottleneck that UI refinement couldn't fix. That reframe changed the scope, the stakeholders, and what "done" meant.</p>
+
+      <ul class="reflection-list">
+        <li>
+          <div class="num" aria-hidden="true">1</div>
+          <p><strong>I'd push for instrumentation from day one.</strong> There was almost no baseline data: how long changes took, how often operators hit irrelevant questions. Measurement as a first-class requirement would have made Phase 1 success criteria far more concrete.</p>
+        </li>
+        <li>
+          <div class="num" aria-hidden="true">2</div>
+          <p><strong>The design system work deserved earlier ownership alignment.</strong> The three-layer challenge (product → sub-system → LD 3.5) was complex, but some of that complexity was avoidable ambiguity about who owned each layer. Brokering that earlier would have reduced a lot of reactive navigation.</p>
+        </li>
+        <li>
+          <div class="num" aria-hidden="true">3</div>
+          <p><strong>The most valuable outcome was the governance framework itself:</strong> a clear boundary between what's configurable and what requires engineering, an audit trail as an accountability mechanism, and a phased model that builds trust before expanding authority. That's the infrastructure that makes the platform improvable over time.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="chips" style="margin-bottom:80px">
+      <span class="chip">Governance Design</span>
+      <span class="chip">Security Operations</span>
+      <span class="chip">0→1 Platform</span>
+      <span class="chip">Design Systems</span>
+      <span class="chip">AI-Assisted UX</span>
+      <span class="chip">Enterprise SaaS</span>
+    </div>
+
+  </div>
+
+  <!-- NEXT PROJECT -->
+  <div class="wrap">
+    <p class="section-label" style="margin-bottom:16px">Next project</p>
+    <a href="visit-checkin.html" class="next-card">
+      <div class="shot">
+        <img src="assets/visitor-checkin.png" alt="Visitor Check-in Experience">
+      </div>
+      <div class="body">
+        <div class="next-label">Related work</div>
+        <h3>Visitor Check-in Experience</h3>
+        <p>How I unified Walmart's campus visitor check-in from twelve isolated, inaccessible systems into a single accessible service across every US and India campus.</p>
+      </div>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap-wide foot-inner">
+    <div class="foot-name">Stanlyn Lu · Product Designer</div>
+    <div class="foot-links">
+      <a href="mailto:lintanxi@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/lintanxi/" rel="noopener" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const progressBar = document.getElementById('progress-bar');
+  const backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = pct + '%';
+    backTop.classList.toggle('visible', pct > 15);
+  }, { passive: true });
+  backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // Lightbox
+  const lb = document.getElementById('lb');
+  const lbImg = document.getElementById('lb-img');
+  const lbClose = document.getElementById('lb-close');
+  document.querySelectorAll('img[data-lb]').forEach(img => {
+    img.addEventListener('click', () => {
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  function closeLb() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  lb.addEventListener('click', e => { if (e.target === lb || e.target === lbClose) closeLb(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+</script>
+
+</body>
+</html>

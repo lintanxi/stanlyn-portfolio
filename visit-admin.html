@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visit Admin Portal  -  Stanlyn Lu</title>
+<meta name="description" content="How I redesigned the operational backbone of Walmart campus security: a phased, constraint-driven strategy to modernize the admin portal used by front desk and security teams across every campus.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/everyday-700.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="fonts/everyday-400.woff" as="font" type="font/woff" crossorigin>
+<style>
+  @font-face{font-family:"Everyday Sans";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/everyday-400.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:500;font-style:normal;font-display:swap;src:url("fonts/everyday-500.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/everyday-700.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:900;font-style:normal;font-display:swap;src:url("fonts/everyday-900.woff") format("woff")}
+
+  :root{
+    --bg:#f0efeb;
+    --surface:#f7f6f2;
+    --ink:#222222;
+    --muted:#515357;
+    --line:#e1e0d8;
+    --blue:#0a5fd6;
+    --blue-ink:#002e99;
+    --blue-pale:#e6ecf9;
+    --leaf:#3a9d3a;
+    --red:#c0392b;
+    --red-pale:#fdf0ee;
+    --font:"Everyday Sans","Helvetica Neue",Arial,sans-serif;
+    --max:800px;
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  img{display:block;max-width:100%}
+
+  /* ── Nav ── */
+  header{position:sticky;top:0;z-index:20;background:rgba(240,239,235,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav{max-width:1080px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:62px;gap:24px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;letter-spacing:-.01em;color:var(--ink)}
+  .brand svg{width:20px;height:20px;color:var(--leaf);flex:none}
+  .back{font-size:14px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .back:hover{color:var(--ink);text-decoration:none}
+  .back svg{width:14px;height:14px}
+
+  /* ── Layout ── */
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  .wrap-wide{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* ── Hero ── */
+  .hero{padding:72px 0 0}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex:none}
+  h1{font-size:clamp(38px,6vw,64px);font-weight:700;line-height:1.02;letter-spacing:-.035em;margin-bottom:24px}
+  h1 em{color:var(--blue);font-style:normal}
+  .hero-sub{font-size:19px;line-height:1.6;color:var(--muted);max-width:54ch;margin-bottom:48px}
+
+  /* ── Meta strip ── */
+  .meta-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:64px}
+  .meta-item{background:var(--surface);padding:20px 18px}
+  .meta-item .label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .meta-item .val{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
+  @media(max-width:640px){.meta-strip{grid-template-columns:repeat(2,1fr)}}
+
+  /* ── Hero image crossfade ── */
+  .hero-img{width:100%;border-radius:var(--r);border:1px solid var(--line);overflow:hidden;margin-bottom:80px;position:relative}
+  .hero-img img{width:100%;height:480px;object-fit:cover;object-position:center;display:block}
+  .hero-img img.slide-back{position:absolute;inset:0;animation:crossfade 8s ease-in-out infinite alternate}
+  @keyframes crossfade{0%,30%{opacity:1} 70%,100%{opacity:0}}
+  @media(max-width:640px){.hero-img img{height:260px}}
+
+  /* ── Prose ── */
+  .prose{margin-bottom:72px}
+  .prose h2{font-size:clamp(24px,3.5vw,34px);font-weight:700;letter-spacing:-.03em;margin-bottom:16px;margin-top:0}
+  .prose h3{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:10px;margin-top:32px;color:var(--ink)}
+  .prose p{color:var(--muted);margin-bottom:18px;font-size:16.5px;line-height:1.7}
+  .prose p:last-child{margin-bottom:0}
+  .prose strong{color:var(--ink);font-weight:600}
+
+  /* ── Section label ── */
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+
+  /* ── Pull quote ── */
+  .pullquote{border-left:3px solid var(--blue);padding:18px 24px;background:var(--surface);border-radius:0 var(--r) var(--r) 0;margin:32px 0;font-size:18px;font-weight:500;color:var(--ink);line-height:1.55;font-style:italic}
+  .pullquote cite{display:block;margin-top:10px;font-size:13px;font-weight:500;font-style:normal;color:var(--muted)}
+
+  /* ── Callout box ── */
+  .callout{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;margin:28px 0}
+  .callout .callout-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .callout p{color:var(--ink);font-size:15px;line-height:1.6;margin:0}
+  .callout p+p{margin-top:10px}
+
+  /* ── Image with caption ── */
+  .fig{margin:36px 0}
+  .fig img{width:100%;border-radius:var(--r);border:1px solid var(--line)}
+  .fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.5;text-align:center}
+
+  /* ── Lightbox ── */
+  #lb{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;display:none;align-items:center;justify-content:center;cursor:zoom-out;padding:24px}
+  #lb.open{display:flex}
+  #lb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;box-shadow:0 8px 48px rgba(0,0,0,.6)}
+  #lb-close{position:fixed;top:20px;right:24px;color:#fff;font-size:28px;line-height:1;cursor:pointer;opacity:.7;font-family:sans-serif}
+  #lb-close:hover{opacity:1}
+  .fig img[data-lb]{cursor:zoom-in}
+  .fig img[data-lb]:hover{opacity:.92}
+
+  /* ── Video embed ── */
+  .video-wrap{aspect-ratio:16/9;overflow:hidden;border-radius:var(--r);border:1px solid var(--line);background:var(--surface)}
+  .video-wrap video{width:100%;height:100%;object-fit:contain;display:block}
+
+  /* ── Wide breakout ── */
+  .fig-wide,
+  .wrap > figure.fig,
+  .wrap > .two-up{position:relative;left:50%;transform:translateX(-50%);width:min(960px,calc(100vw - 48px))}
+  @media(max-width:720px){
+    .fig-wide,
+    .wrap > figure.fig,
+    .wrap > .two-up{left:0;transform:none;width:100%}
+  }
+
+  /* ── Two-up images ── */
+  .two-up{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:36px 0}
+  @media(max-width:560px){.two-up{grid-template-columns:1fr}}
+  .two-up .fig{margin:0}
+
+  /* ── Field image pair ── */
+  .field-img-wrap{aspect-ratio:4/3;overflow:hidden;border-radius:var(--r);border:1px solid var(--line)}
+  .field-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* ── Heuristic carousel ── */
+  .heuristic-carousel{margin:32px 0 48px;position:relative}
+  .heuristic-track-outer{overflow:hidden;border-radius:var(--r);border:1px solid var(--line)}
+  .heuristic-track{display:flex;will-change:transform;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+  .heuristic-slide{flex:0 0 100%;box-sizing:border-box;background:var(--surface);padding:0}
+  .heuristic-slide img{width:100%;display:block;max-height:540px;object-fit:contain;background:var(--surface);cursor:zoom-in}
+  .heuristic-slide img:hover{opacity:.9}
+  .heuristic-caption{padding:16px 20px;background:var(--surface);border-top:1px solid var(--line)}
+  .heuristic-caption .hc-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;background:var(--red-pale);color:var(--red);padding:3px 9px;border-radius:999px;margin-bottom:8px}
+  .heuristic-caption strong{font-size:15px;font-weight:700;color:var(--ink);display:block;margin-bottom:4px}
+  .heuristic-caption p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.55}
+  .heuristic-nav{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:12px}
+  .h-arrow{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 18px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink);transition:background .15s;font-family:var(--font);white-space:nowrap}
+  .h-arrow:hover:not(:disabled){background:var(--line)}
+  .h-arrow:disabled{opacity:.28;cursor:default}
+  .heuristic-dots{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:center}
+  .heuristic-dot{width:7px;height:7px;border-radius:50%;background:var(--line);border:none;cursor:pointer;padding:0;transition:background .2s}
+  .heuristic-dot.active{background:var(--red)}
+  .heuristic-count{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+
+  /* ── Module section ── */
+  .module-section{margin-bottom:80px}
+  .module-header{margin-bottom:24px}
+  .module-body{margin-top:12px}
+  .module-num{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .module-title{font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.025em;margin-bottom:0;color:var(--ink)}
+  .module-body p{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+  .module-body p:last-child{margin-bottom:0}
+  .module-body strong{color:var(--ink);font-weight:600}
+  .module-changes{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:8px}
+  .module-changes li{display:grid;grid-template-columns:20px 1fr;gap:10px;font-size:14px;color:var(--muted);line-height:1.55;align-items:start}
+  .module-changes li::before{content:"→";color:var(--blue);font-weight:700;margin-top:1px}
+  .module-changes li strong{color:var(--ink)}
+
+  /* ── Current IA tree ── */
+  .ia-row{display:grid;grid-template-columns:160px 1fr;gap:14px;align-items:center}
+  .ia-module{background:var(--blue-pale);color:var(--blue-ink);border-radius:8px;padding:9px 14px;font-size:13px;font-weight:700;text-align:center}
+  .ia-kids{display:flex;flex-wrap:wrap;gap:6px}
+  .ia-kids span{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 11px;font-size:12.5px;color:var(--muted);font-weight:500}
+  @media(max-width:560px){.ia-row{grid-template-columns:1fr;gap:8px}}
+
+  /* ── Module before/after split carousel ── */
+  .ba-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0}
+  .ba-split > *{min-width:0}
+  .ba-col-head{margin-bottom:8px}
+  .mini-carousel{position:relative}
+  .mini-track-outer{overflow:hidden;border-radius:var(--r);border:1px solid var(--line)}
+  .mini-track{display:flex;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+  .mini-slide{flex:0 0 100%;box-sizing:border-box;background:var(--surface)}
+  .mini-slide img{width:100%;display:block;height:420px;object-fit:contain;background:var(--surface);cursor:zoom-in}
+  .mini-slide img:hover{opacity:.9}
+  .mini-nav{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:8px}
+  .mini-arrow{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 14px;cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);font-family:var(--font);transition:background .15s}
+  .mini-arrow:hover:not(:disabled){background:var(--line)}
+  .mini-arrow:disabled{opacity:.28;cursor:default}
+  .mini-dots{display:flex;gap:5px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .mini-dot{width:6px;height:6px;border-radius:50%;background:var(--line);border:none;cursor:pointer;padding:0;transition:background .2s}
+  .mini-dot.active{background:var(--ink)}
+  .mini-count{font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap}
+  .ba-single img{width:100%;display:block;height:420px;object-fit:contain;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);cursor:zoom-in}
+  .ba-single img:hover{opacity:.9}
+
+  /* ── Before/after pair ── */
+  .ba-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0}
+  @media(max-width:560px){.ba-pair{grid-template-columns:1fr}}
+  .ba-pair .fig{margin:0}
+  .ba-pair .fig figcaption{text-align:left}
+  .ba-label{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;margin-bottom:6px}
+  .ba-label.before{background:var(--red-pale);color:var(--red)}
+  .ba-label.after{background:#e8f5e9;color:#1b5e20}
+
+  /* ── Constraint split ── */
+  .constraint-split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-bottom:64px}
+  @media(max-width:640px){.constraint-split{grid-template-columns:1fr}}
+  .constraint-split .left p{font-size:15.5px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+  .constraint-split .left p:last-child{margin-bottom:0}
+  .constraint-split .left strong{color:var(--ink);font-weight:600}
+  .constraint-split .left h3{font-size:15px;font-weight:700;margin-bottom:8px;margin-top:24px;color:var(--ink)}
+  .constraint-split .left h3:first-child{margin-top:0}
+
+  /* ── Heuristic summary grid ── */
+  .heuristic-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:28px 0}
+  @media(max-width:560px){.heuristic-grid{grid-template-columns:1fr}}
+  .heuristic-item{background:var(--surface);padding:18px 20px}
+  .heuristic-item .hi-title{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:5px}
+  .heuristic-item .hi-body{font-size:13px;color:var(--muted);line-height:1.55;margin:0}
+
+  /* ── Phase roadmap ── */
+  .roadmap-split{display:grid;grid-template-columns:1fr 1.4fr;gap:48px;align-items:start;margin-bottom:64px}
+  @media(max-width:640px){.roadmap-split{grid-template-columns:1fr}}
+
+  /* ── Deep dive flow ── */
+  .deepdive-intro{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-bottom:40px}
+  @media(max-width:640px){.deepdive-intro{grid-template-columns:1fr}}
+  .dd-col p{font-size:15.5px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+  .dd-col p:last-child{margin-bottom:0}
+  .dd-col strong{color:var(--ink);font-weight:600}
+  .dd-col h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px;margin-top:24px}
+  .dd-col h3:first-child{margin-top:0}
+  .dd-list{list-style:none;display:flex;flex-direction:column;gap:7px;margin:0}
+  .dd-list li{display:grid;grid-template-columns:16px 1fr;gap:8px;font-size:13.5px;color:var(--muted);line-height:1.5;align-items:start}
+  .dd-list li::before{content:"·";color:var(--blue);font-weight:900;margin-top:1px}
+
+  /* ── Check-in showcase ── */
+  .checkin-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:40px 0}
+  .checkin-split > *{min-width:0}
+  @media(max-width:640px){.checkin-split{grid-template-columns:1fr}}
+
+  /* ── Group flow carousel ── */
+  .group-carousel{margin:0;position:relative}
+  .gc-track-outer{overflow:hidden;border-radius:var(--r);border:1px solid var(--line)}
+  .gc-track{display:flex;will-change:transform;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+  .gc-slide{flex:0 0 100%;box-sizing:border-box;background:var(--surface)}
+  .gc-slide img{width:100%;display:block;height:520px;object-fit:contain;background:var(--surface);cursor:zoom-in}
+  .gc-slide img:hover{opacity:.9}
+  .gc-caption{padding:14px 20px;background:var(--surface);border-top:1px solid var(--line)}
+  .gc-caption strong{font-size:14px;font-weight:700;color:var(--ink);display:block;margin-bottom:3px}
+  .gc-caption p{font-size:13px;color:var(--muted);margin:0;line-height:1.5}
+  .gc-nav{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:12px}
+  .gc-arrow{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 18px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink);transition:background .15s;font-family:var(--font)}
+  .gc-arrow:hover:not(:disabled){background:var(--line)}
+  .gc-arrow:disabled{opacity:.28;cursor:default}
+  .gc-dots{display:flex;gap:6px;align-items:center}
+  .gc-dot{width:7px;height:7px;border-radius:50%;background:var(--line);border:none;cursor:pointer;padding:0;transition:background .2s}
+  .gc-dot.active{background:var(--blue)}
+  .gc-count{font-size:12px;color:var(--muted);font-weight:600}
+
+  /* ── Reflection list ── */
+  .reflection-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin:20px 0}
+  .reflection-list li{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start}
+  .reflection-list li .num{width:28px;height:28px;border-radius:50%;background:var(--blue-pale);color:var(--blue-ink);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px}
+  .reflection-list li p{font-size:15px;color:var(--muted);margin:0;line-height:1.6}
+  .reflection-list li p strong{color:var(--ink)}
+
+  /* ── Next project ── */
+  .next-card{display:grid;grid-template-columns:38% 1fr;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;margin-bottom:80px;transition:border-color .2s,transform .2s}
+  .next-card:hover{border-color:var(--blue);transform:translateY(-2px);text-decoration:none}
+  .next-card .shot{background:#1b1c18;min-height:200px;position:relative}
+  .next-card .shot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+  .next-card .body{padding:28px}
+  .next-card .next-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .next-card h3{font-size:22px;font-weight:700;letter-spacing:-.015em;margin-bottom:8px}
+  .next-card p{font-size:14px;color:var(--muted);line-height:1.55;margin:0}
+  @media(max-width:600px){.next-card{grid-template-columns:1fr}.next-card .shot{min-height:180px;height:180px}}
+
+  /* ── Divider ── */
+  hr{border:none;border-top:1px solid var(--line);margin:64px 0}
+
+  /* ── Footer ── */
+  footer{border-top:1px solid var(--line);padding:32px 0 48px}
+  .foot-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .foot-name{font-size:14px;color:var(--muted)}
+  .foot-links{display:flex;gap:20px}
+  .foot-links a{font-size:13px;font-weight:500;color:var(--muted)}
+  .foot-links a:hover{color:var(--ink)}
+
+  /* ── Back to top ── */
+  #back-top{position:fixed;bottom:32px;right:32px;z-index:90;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s,background .15s;background:var(--ink);color:var(--bg);border:none;border-radius:100px;padding:10px 20px;font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px}
+  #back-top svg{width:12px;height:12px;flex-shrink:0;transition:transform .2s}
+  #back-top.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+  #back-top:hover{background:var(--blue)}
+  #back-top:hover svg{transform:translateY(-2px)}
+
+  /* ── Scroll progress ── */
+  #progress{position:fixed;top:0;left:0;height:3px;background:var(--blue);z-index:100;transition:width .1s linear;pointer-events:none}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<button id="back-top" aria-label="Back to top">
+  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,8 6,4 10,8"/></svg>
+  Top
+</button>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Image enlarged"><span id="lb-close" aria-label="Close">&times;</span><img id="lb-img" src="" alt=""></div>
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="brand" aria-label="Stanlyn Lu, home">
+      <svg viewBox="0 0 200 200" width="22" height="22" aria-hidden="true"><circle cx="100" cy="100" r="100" fill="#2d8841"/><g fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="5"><line x1="44.69" y1="21.51" x2="100.91" y2="77.73"/><line x1="155.31" y1="21.51" x2="98.39" y2="78.42"/><line x1="44.69" y1="121.14" x2="100" y2="176.45"/><line x1="155.31" y1="121.14" x2="98.26" y2="178.19"/><line x1="100" y1="73.99" x2="100" y2="155.83"/></g></svg>
+      Stanlyn Lu
+    </a>
+    <a href="index.html#works" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      All works
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Enterprise Tooling · Systems Thinking · Design Operations</div>
+      <h1>The tool that keeps campuses <em>safe</em></h1>
+      <p class="hero-sub">How I turned years of accumulated inconsistency in Walmart's visitor management admin portal into a strategic foundation, shipping targeted improvements under tight constraints while preserving the vision for a full redesign.</p>
+
+      <div class="meta-strip" role="list" aria-label="Project details">
+        <div class="meta-item" role="listitem">
+          <div class="label">My Role</div>
+          <div class="val">Lead Product Designer</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Scope</div>
+          <div class="val">Research · IA · Interaction Design · Design System</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Partners</div>
+          <div class="val">PM, Engineering, Security, Workplace Ops</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Timeline</div>
+          <div class="val">Feb 2025 – Present · Phased rollout</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap-wide">
+      <div class="hero-img">
+        <!-- slide-back fades out to reveal the screen behind -->
+        <img src="assets/visit-admin-desk.jpg" alt="Front desk associate at a Walmart campus using the Visit Admin Portal">
+        <img class="slide-back" src="assets/visit-admin.jpg" alt="Visit Admin Portal — redesigned Check-in module on screen at the front desk">
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ OVERVIEW ══ -->
+  <div class="wrap">
+
+    <div class="prose">
+      <div class="section-label">The Situation</div>
+      <h2>Mission-critical infrastructure, quietly degraded</h2>
+      <p>The Visit Admin Portal is the internal CMS used by front desk associates and security teams across every Walmart campus. Every check-in, every watchlist flag, every badge, every security escalation flows through it, and it had been accumulating years of inconsistency. Legacy patterns mixed with newer modules, navigation had grown without a unifying model, and staff had built workarounds that made the real failure rate invisible in usage data.</p>
+      <p><strong>The product was eroding everywhere at once, in ways that only surfaced when the pressure was highest.</strong> I led this as the lead designer, working alongside a mid-level designer and cross-functional partners across PM, engineering, security, and workplace ops.</p>
+    </div>
+
+    <hr>
+
+    <!-- ══ DIAGNOSIS ══ -->
+    <div class="prose">
+      <div class="section-label">Diagnosis</div>
+      <h2>Understanding the failure modes before designing anything</h2>
+      <p>I ran a heuristic evaluation across all eight modules, mapping violations against Nielsen's 10 heuristics. The goal: a shared diagnostic artifact for team alignment, not just a UX audit. <strong>Where is the system breaking trust, and what's the operational consequence?</strong></p>
+      <p>Twelve failure patterns emerged. The most consequential are below.</p>
+    </div>
+
+    <!-- Heuristic carousel -->
+    <div class="fig-wide">
+      <div class="heuristic-carousel" id="hCarousel">
+        <div class="heuristic-track-outer">
+          <div class="heuristic-track" id="hTrack">
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-01.png" alt="Live Feed — visitor profile panel showing no undo on check-out and disabled button state" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">Error Prevention · System Feedback</span>
+                <strong>Live Feed - Manage a visitor record</strong>
+                <p>Checking out a visitor is irreversible with no confirmation and no undo. Disabled buttons appear with no explanation of why the action is unavailable or what the user needs to do to proceed.</p>
+              </div>
+            </div>
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-02.png" alt="Organization — Create form with unlabeled required field asterisks" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">Missing Labels</span>
+                <strong>Organization - Create an organization</strong>
+                <p>Required field asterisks appear throughout the form with no legend explaining what they mean. Users have no reliable way to know which fields are mandatory before attempting to submit.</p>
+              </div>
+            </div>
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-03.png" alt="Organization — Delete confirmation with destructive action as the primary CTA" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">UI Hierarchy · Error Prevention</span>
+                <strong>Organization - Manage organization</strong>
+                <p>The confirmation modal styles Cancel as the primary (filled) button and Delete as secondary (outlined), inverting the intended action hierarchy. Delete is the user's goal — demoting it visually creates confusion, not safety. And once confirmed, there's no way to undo it.</p>
+              </div>
+            </div>
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-04.png" alt="Organization Devices — Invalid action error with no guidance on how to resolve" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">System Feedback</span>
+                <strong>Organization - Manage devices</strong>
+                <p>Attempting to delete the primary printer shows a generic "Invalid action!" error. The message tells users what can't be done but provides no guidance on what they need to do first to resolve the situation.</p>
+              </div>
+            </div>
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-05.png" alt="Organization Devices — Kiosk deleted with no undo available afterward" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">Limited User Control</span>
+                <strong>Organization - Manage devices</strong>
+                <p>Deleting a kiosk removes it immediately with no way to recover the action. Users have no undo path, so a mistaken deletion requires the entire setup process to be repeated from scratch.</p>
+              </div>
+            </div>
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-06.png" alt="Reporting — Dense visitor log table with chevrons implying inconsistent row actions" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">Interaction Inconsistency · Cognitive Load</span>
+                <strong>Reporting - Manage a visitor record</strong>
+                <p>Chevrons in the table imply a clickable action, but behavior is inconsistent across modules. The dense layout also makes it difficult to scan for specific records quickly during high-volume periods.</p>
+              </div>
+            </div>
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-07.png" alt="Manual Check-in — Check In button disabled with no explanation" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">System Feedback</span>
+                <strong>Manual Check-in - Single/group visitor check-in</strong>
+                <p>The Check In button is disabled with no indication of what's missing. Staff cannot tell which field is incomplete or what action is needed to enable the button, creating friction at the highest-traffic moment of the day.</p>
+              </div>
+            </div>
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-08.png" alt="Manual Check-in — Group flow with no back navigation and no undo for visitor deletion" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">Weak Multi-step Workflows · Error Prevention</span>
+                <strong>Manual Check-in - Manage an existing group</strong>
+                <p>The group check-in flow has no back navigation between steps and no undo after removing a visitor. Any error mid-flow requires restarting the entire group from scratch, a critical gap during large group arrivals.</p>
+              </div>
+            </div>
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-09.png" alt="Watchlist — Icon-only threat level flags with no text labels, filter button hard to find" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">Icon-only Safety Indicators · Hard-to-find Actions</span>
+                <strong>Watchlist - Search &amp; filter</strong>
+                <p>Threat levels are communicated through flag icon clusters alone: no text labels, no color-independent encoding. In a safety-critical module, that's a direct risk to staff response. The filter button compounds this: it's disabled with no explanation of why, no indication of what would enable it, and no guidance on how it's meant to be used.</p>
+              </div>
+            </div>
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-10.png" alt="Watchlist — Duplicate profile error blocks user instead of guiding them to the existing record" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">Error Prevention · User Control</span>
+                <strong>Watchlist - Manage watchlist</strong>
+                <p>When a profile already exists on the watchlist, the system blocks the action entirely and instructs the user to "search and edit this profile instead" (with no direct link). Users are left to find it manually with no clear path forward.</p>
+              </div>
+            </div>
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-11.png" alt="All Facilities — Same invalid action error pattern repeated for printer deletion" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">System Feedback</span>
+                <strong>All Facilities - Manage devices</strong>
+                <p>The same "Invalid action!" error pattern from the Organization module appears here, with no explanation of what to do next, no path to resolution. Inconsistent error handling across modules compounds user frustration.</p>
+              </div>
+            </div>
+
+            <div class="heuristic-slide">
+              <img src="assets/admin-heuristic-12.png" alt="All Facilities — Kiosk deletion confirmed with no undo option afterward" data-lb>
+              <div class="heuristic-caption">
+                <span class="hc-tag">Error Prevention</span>
+                <strong>All Facilities - Manage devices</strong>
+                <p>Kiosk deletion has a confirmation step, but once confirmed there is no undo. The pattern repeats across Organization and All Facilities, a systemic gap in error recovery that affects every admin managing physical devices across campuses.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="heuristic-nav">
+          <button class="h-arrow" id="hPrev" aria-label="Previous finding" disabled>← Prev</button>
+          <div class="heuristic-dots" id="hDots" aria-label="Finding navigation"></div>
+          <span class="heuristic-count" id="hCount">1 / 12</span>
+          <button class="h-arrow" id="hNext" aria-label="Next finding">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ══ STRATEGY ══ -->
+    <div class="prose">
+      <div class="section-label">Strategic Scoping</div>
+      <h2>Designing within real constraints, intentionally</h2>
+      <p>The original proposal was a full IA overhaul. Mapping the existing structure showed why: <strong>eight top-level modules and roughly thirty screens, all sitting flat off the root with no grouping layer to tell operational work from configuration.</strong> Then engineering capacity shifted to the kiosk and preregistration rebuild, and the scope had to be renegotiated.</p>
+    </div>
+
+    <!-- Current IA tree — web-friendly reconstruction -->
+    <div class="fig-wide" style="margin:32px 0 40px">
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:32px 36px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:24px">Current IA — 8 flat modules, ~30 screens, no grouping layer</div>
+
+        <!-- Root -->
+        <div style="display:flex;justify-content:center;margin-bottom:6px">
+          <div style="background:var(--ink);color:var(--bg);border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700">Visit Admin Portal</div>
+        </div>
+        <div style="height:14px;border-left:1px solid var(--line);width:0;margin:0 auto 14px"></div>
+
+        <!-- Module rows -->
+        <div style="display:flex;flex-direction:column;gap:10px">
+
+          <div class="ia-row">
+            <div class="ia-module">Live Feed</div>
+            <div class="ia-kids"><span>Country filter</span><span>Facility filter</span><span>Date filter</span><span>Activity metrics</span><span>Activity log</span></div>
+          </div>
+          <div class="ia-row">
+            <div class="ia-module">Organization</div>
+            <div class="ia-kids"><span>Organization list</span><span>Create organization</span></div>
+          </div>
+          <div class="ia-row">
+            <div class="ia-module">Reporting</div>
+            <div class="ia-kids"><span>Facility filter</span><span>Date range filter</span><span>Advanced filter</span><span>Export</span><span>Visitor log</span></div>
+          </div>
+          <div class="ia-row">
+            <div class="ia-module">Manual Check-In</div>
+            <div class="ia-kids"><span>Facility filter</span><span>Date filter</span><span>Check-in form</span><span>Group visitor log</span><span>New group</span></div>
+          </div>
+          <div class="ia-row">
+            <div class="ia-module">Watchlist</div>
+            <div class="ia-kids"><span>Search</span><span>Profile filter</span><span>Profile list</span><span>New profile</span></div>
+          </div>
+          <div class="ia-row">
+            <div class="ia-module">All Facilities</div>
+            <div class="ia-kids"><span>Create facility / POI</span></div>
+          </div>
+          <div class="ia-row">
+            <div class="ia-module">Role Management</div>
+            <div class="ia-kids"><span>Search</span><span>Role list</span><span>New role</span></div>
+          </div>
+          <div class="ia-row">
+            <div class="ia-module">Support</div>
+            <div class="ia-kids"><span>Support form</span><span>FAQ</span></div>
+          </div>
+
+        </div>
+        <div style="margin-top:20px;font-size:13px;color:var(--muted);line-height:1.5;border-top:1px solid var(--line);padding-top:16px"><strong style="color:var(--ink)">Current information architecture, reconstructed from the audit</strong>: every module hangs directly off the root at the same level, so daily operational work (Live Feed, Check-In) sits beside one-time configuration (Role Management, Organization) with nothing to distinguish them. Filters and list views also repeat across modules with no shared pattern. This flat structure became the baseline for the Phase 2 consolidation.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">The strategic choice</div>
+      <p>Rather than spread thin across the whole product, I scoped Phase 1 to one thing: <strong>migrate to LD 3.5 and ship targeted usability fixes (no IA changes).</strong></p>
+      <p>Every decision was made with Phase 2 in mind, keeping the IA work documented and queued for when capacity returned.</p>
+      <p>Phasing also de-risked adoption. Many front desk associates are long-tenured Walmart employees, some with 20+ years on the legacy manual process of typing and printing each visitor by hand. A big-bang launch would have meant heavy retraining and real resistance. Shipping incrementally let them absorb the new interface a little at a time, on familiar ground.</p>
+    </div>
+
+    <!-- How we addressed the constraints -->
+    <div style="margin-bottom:48px">
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--ink)">How we addressed the constraints</h3>
+      <ul class="module-changes" style="margin-top:0">
+        <li><div><strong>Phased PRD with the PM:</strong> Phase 1 improvements scoped to fit engineering capacity, no IA changes, giving teams predictable delivery drops</div></li>
+        <li><div><strong>Four priority modules:</strong> Live Feed, Check-In, Watchlist, Support selected by operational frequency and failure severity</div></li>
+        <li><div><strong>Manual Check-In fast-tracked</strong> as a standalone proof-of-concept after kiosk outages created an acute need</div></li>
+        <li><div><strong>Adoption built in by design:</strong> incremental releases gave long-tenured associates time to adjust to the new interface, avoiding the retraining burden and resistance of a single big-bang launch</div></li>
+        <li><div><strong>Phase 2 IA documented and socialized:</strong> kept visible throughout Phase 1 so stakeholders read the phasing as strategy, not compromise</div></li>
+      </ul>
+    </div>
+
+    <!-- Roadmap full-width (wide rectangle fits better here) -->
+    <figure class="fig fig-wide">
+      <img src="assets/admin-roadmap.jpg" alt="Phase roadmap in Confluence aligning design drops with engineering capacity and operational priorities" data-lb>
+      <figcaption><strong>Phase roadmap (Confluence)</strong>: structuring design work as discrete engineering drops (each scoped to fit available capacity) kept delivery predictable while ensuring design stayed one phase ahead.</figcaption>
+    </figure>
+
+    <hr>
+
+    <!-- ══ PHASE 1 MODULES ══ -->
+    <div class="prose" style="margin-bottom:40px">
+      <div class="section-label">Phase 1 Execution</div>
+      <h2>Establishing a consistent operational foundation</h2>
+      <p>Phase 1 was about removing friction from workflows front desk associates run dozens of times a day, without the structural IA changes engineering couldn't support yet. One filter for every decision: <strong>does this reduce error risk or cognitive load at the front desk?</strong></p>
+    </div>
+
+    <!-- 1. Live Feed -->
+    <div class="module-section">
+      <div class="module-header">
+        <div>
+          <div class="module-num">Module 01</div>
+          <h2 class="module-title">Live Feed</h2>
+        </div>
+        <div class="module-body">
+          <p>The first screen every morning. It answers one question: <strong>who's on campus, and who isn't accounted for?</strong> Phase 1 redesigned the information hierarchy so that answer is immediate, with inline actions for the most common tasks.</p>
+          <ul class="module-changes">
+            <li><div>Active / Completed / Planned visit counts surfaced as scannable header metrics</div></li>
+            <li><div>Consistent tab filtering aligned with Live Feed, Checked In, Checked Out, and Preregistered states</div></li>
+            <li><div>Inline contextual actions (Check out, Print badge, View profile) exposed without needing to open a modal</div></li>
+            <li><div>Status badges standardized using LD 3.5 semantic tokens for consistent color encoding</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="fig-wide">
+        <div class="ba-split">
+          <div>
+            <span class="ba-label before" style="display:inline-block;margin-bottom:8px">Before</span>
+            <div class="mini-carousel">
+              <div class="mini-track-outer">
+                <div class="mini-track" id="lfBTrack">
+                  <div class="mini-slide"><img src="assets/admin-lf-b1.png" alt="Legacy Live Feed overview" data-lb></div>
+                  <div class="mini-slide"><img src="assets/admin-lf-b2.png" alt="Legacy Live Feed — visitor record panel" data-lb></div>
+                </div>
+              </div>
+              <div class="mini-nav">
+                <button class="mini-arrow" id="lfBPrev" disabled>← Prev</button>
+                <div class="mini-dots" id="lfBDots"></div>
+                <span class="mini-count" id="lfBCount">1 / 2</span>
+                <button class="mini-arrow" id="lfBNext">Next →</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="ba-label after" style="display:inline-block;margin-bottom:8px">Phase 1</span>
+            <div class="mini-carousel">
+              <div class="mini-track-outer">
+                <div class="mini-track" id="lfATrack">
+                  <div class="mini-slide"><img src="assets/admin-lf-a1.png" alt="Redesigned Live Feed overview" data-lb></div>
+                  <div class="mini-slide"><img src="assets/admin-lf-a2.png" alt="Redesigned Live Feed — visitor record panel" data-lb></div>
+                  <div class="mini-slide"><img src="assets/admin-lf-a3.png" alt="Redesigned Live Feed — additional state" data-lb></div>
+                </div>
+              </div>
+              <div class="mini-nav">
+                <button class="mini-arrow" id="lfAPrev" disabled>← Prev</button>
+                <div class="mini-dots" id="lfADots"></div>
+                <span class="mini-count" id="lfACount">1 / 3</span>
+                <button class="mini-arrow" id="lfANext">Next →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Check-In -->
+    <div class="module-section">
+      <div class="module-header">
+        <div>
+          <div class="module-num">Module 02</div>
+          <h2 class="module-title">Manual Check-In</h2>
+        </div>
+        <div class="module-body">
+          <p>Manual Check-In kicks in at the worst moments: kiosk outage at morning rush, a 30-person group with incomplete preregistration, an NDA visit. <strong>Failure here creates a security gap.</strong> The redesign restructured the form around how staff actually work and separated destructive actions with appropriate visual weight.</p>
+          <ul class="module-changes">
+            <li><div>Required fields clearly labeled with asterisk + inline guidance</div></li>
+            <li><div>NDA acknowledgment checkbox added for regulated visits</div></li>
+            <li><div><strong>&ldquo;Clear all&rdquo;</strong> and <strong>&ldquo;Check in&rdquo;</strong> separated, with the destructive reset action de-emphasized</div></li>
+            <li><div>Facility and date filters moved into the group visitor list, scoping them to the visits they actually affect. Their old spot at the page top implied they filtered the whole screen, including the single check-in form they never touched</div></li>
+            <li><div>Group visitor log surfaced on the same page, no context switch needed</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="fig-wide">
+        <div class="ba-split">
+          <div>
+            <span class="ba-label before" style="display:inline-block;margin-bottom:8px">Before</span>
+            <div class="mini-carousel">
+              <div class="mini-track-outer">
+                <div class="mini-track" id="ciBTrack">
+                  <div class="mini-slide"><img src="assets/admin-ci-b1.jpg" alt="Legacy Check-In — group visitor check-in list" data-lb></div>
+                  <div class="mini-slide"><img src="assets/admin-ci-b2.png" alt="Legacy Check-In — add visitors table" data-lb></div>
+                </div>
+              </div>
+              <div class="mini-nav">
+                <button class="mini-arrow" id="ciBPrev" disabled>← Prev</button>
+                <div class="mini-dots" id="ciBDots"></div>
+                <span class="mini-count" id="ciBCount">1 / 2</span>
+                <button class="mini-arrow" id="ciBNext">Next →</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="ba-label after" style="display:inline-block;margin-bottom:8px">Phase 1</span>
+            <div class="mini-carousel">
+              <div class="mini-track-outer">
+                <div class="mini-track" id="ciATrack">
+                  <div class="mini-slide"><img src="assets/admin-ci-a1.png" alt="Redesigned Check-In — group visitor check-in list" data-lb></div>
+                  <div class="mini-slide"><img src="assets/admin-ci-a2.png" alt="Redesigned Check-In — add visitors" data-lb></div>
+                </div>
+              </div>
+              <div class="mini-nav">
+                <button class="mini-arrow" id="ciAPrev" disabled>← Prev</button>
+                <div class="mini-dots" id="ciADots"></div>
+                <span class="mini-count" id="ciACount">1 / 2</span>
+                <button class="mini-arrow" id="ciANext">Next →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Watchlist -->
+    <div class="module-section">
+      <div class="module-header">
+        <div>
+          <div class="module-num">Module 03</div>
+          <h2 class="module-title">Watchlist</h2>
+        </div>
+        <div class="module-body">
+          <p>If your ex threatens to show up at your workplace (yes, this happens), the front desk and security can add them to the Watchlist. The module covers domestic threats, labor disputes, and police notifications, and when a flagged visitor attempts entry, <strong>the front desk needs to recognize the alert and respond with confidence. Ambiguity here has direct safety consequences.</strong> The redesign introduced semantic status badges, separated active and archived states, and scoped actions to what's appropriate per record.</p>
+          <ul class="module-changes">
+            <li><div>Semantic status badges with text labels (Caution, Critical, Awareness), replacing icon-only indicators</div></li>
+            <li><div>Active / Archived / All tabs clearly separate record states</div></li>
+            <li><div>Actions scoped to record state: archive appears only on active records</div></li>
+            <li><div>Table density reduced for faster scanning during high-stress moments</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="fig-wide">
+        <div class="ba-split">
+          <div>
+            <span class="ba-label before" style="display:inline-block;margin-bottom:8px">Before</span>
+            <div class="mini-carousel">
+              <div class="mini-track-outer">
+                <div class="mini-track" id="wlBTrack">
+                  <div class="mini-slide"><img src="assets/admin-wl-b1.png" alt="Legacy Watchlist — icon-only threat levels" data-lb></div>
+                  <div class="mini-slide"><img src="assets/admin-wl-b2.png" alt="Legacy Watchlist — user profile panel" data-lb></div>
+                </div>
+              </div>
+              <div class="mini-nav">
+                <button class="mini-arrow" id="wlBPrev" disabled>← Prev</button>
+                <div class="mini-dots" id="wlBDots"></div>
+                <span class="mini-count" id="wlBCount">1 / 2</span>
+                <button class="mini-arrow" id="wlBNext">Next →</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="ba-label after" style="display:inline-block;margin-bottom:8px">Phase 1</span>
+            <div class="mini-carousel">
+              <div class="mini-track-outer">
+                <div class="mini-track" id="wlATrack">
+                  <div class="mini-slide"><img src="assets/admin-wl-a1.png" alt="Redesigned Watchlist — labeled status badges" data-lb></div>
+                  <div class="mini-slide"><img src="assets/admin-wl-a2.png" alt="Redesigned Watchlist — user profile panel" data-lb></div>
+                </div>
+              </div>
+              <div class="mini-nav">
+                <button class="mini-arrow" id="wlAPrev" disabled>← Prev</button>
+                <div class="mini-dots" id="wlADots"></div>
+                <span class="mini-count" id="wlACount">1 / 2</span>
+                <button class="mini-arrow" id="wlANext">Next →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Support -->
+    <div class="module-section">
+      <div class="module-header">
+        <div>
+          <div class="module-num">Module 04</div>
+          <h2 class="module-title">Support</h2>
+        </div>
+        <div class="module-body">
+          <p>A kiosk failure during morning rush needs to be resolved in under two minutes. The old Support module made that harder: FAQs were buried, unsearchable, and there was no way to track tickets. <strong>The redesign flips the hierarchy: self-service first, ticket submission as a last resort.</strong></p>
+          <ul class="module-changes">
+            <li><div>FAQ-first layout with full-text search: most issues resolvable without submitting a ticket</div></li>
+            <li><div>Accordions for fast scanning: category, then content on demand</div></li>
+            <li><div>Track support requests link surfaced in the header, ticket status visible without a separate workflow</div></li>
+            <li><div>FAQ search is the primary action on the page; &ldquo;Create support ticket&rdquo; sits below it as a secondary CTA for the cases self-service can't resolve</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="fig-wide">
+        <div class="ba-split">
+          <div>
+            <span class="ba-label before" style="display:inline-block;margin-bottom:8px">Before</span>
+            <div class="ba-single">
+              <img src="assets/admin-sp-b1.jpg" alt="Legacy Support — ticket form as primary action, FAQs buried" data-lb>
+            </div>
+          </div>
+          <div>
+            <span class="ba-label after" style="display:inline-block;margin-bottom:8px">Phase 1</span>
+            <div class="mini-carousel">
+              <div class="mini-track-outer">
+                <div class="mini-track" id="spATrack">
+                  <div class="mini-slide"><img src="assets/admin-sp-a1.png" alt="Redesigned Support — FAQ-first with search" data-lb></div>
+                  <div class="mini-slide"><img src="assets/admin-sp-a2.png" alt="Redesigned Support — ticket submission and tracking" data-lb></div>
+                </div>
+              </div>
+              <div class="mini-nav">
+                <button class="mini-arrow" id="spAPrev" disabled>← Prev</button>
+                <div class="mini-dots" id="spADots"></div>
+                <span class="mini-count" id="spACount">1 / 2</span>
+                <button class="mini-arrow" id="spANext">Next →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ══ DEEP DIVE ══ -->
+    <div class="prose" style="margin-bottom:40px">
+      <div class="section-label">Deep Dive</div>
+      <h2>Manual Check-In: designing for the hardest moment</h2>
+      <p>All four modules got Phase 1 improvements. Check-In got more. A confused staff member during a 30-person group check-in creates a gap in the visitor record that compliance depends on.</p>
+    </div>
+
+    <div style="margin-bottom:32px">
+      <ul class="module-changes">
+        <li><div><strong>Reworked task flow:</strong> clarified the decision point between single and group check-in at the landing screen</div></li>
+        <li><div><strong>Multi-step form with clear structure:</strong> Enter event info, add visitors, schedule badge print, with explicit stage labels</div></li>
+        <li><div><strong>Bulk upload with error indicators:</strong> CSV data appears in an editable table with inline error flags; bad data no longer enters the system silently</div></li>
+        <li><div><strong>Inline editing in data table:</strong> correct any visitor detail without navigating away or restarting the flow</div></li>
+        <li><div><strong>Undo after destructive actions:</strong> removing a visitor triggers a snackbar confirmation with an Undo option</div></li>
+        <li><div><strong>Flexible badge printing:</strong> print now or schedule for a specific printer, date, and time</div></li>
+        <li><div><strong>Full accessibility annotations:</strong> WCAG 2.1 AA coverage for contrast, focus order, error messaging, and keyboard interaction across all states</div></li>
+      </ul>
+    </div>
+
+    <!-- Flow diagram -->
+    <figure class="fig fig-wide">
+      <img src="assets/admin-checkin-flow.jpg" alt="Manual Check-In task flow diagram showing single visitor path and multi-step group visitor path" data-lb>
+      <figcaption><strong>Manual Check-In task flow</strong>: mapping both paths before designing revealed the structural problem: single and group check-in had been conflated into one surface with no clear decision point. The redesign separates them at the landing screen while keeping them accessible from the same entry point.</figcaption>
+    </figure>
+
+    <!-- Single check-in video -->
+    <div class="fig fig-wide">
+      <div class="video-wrap">
+        <video src="assets/admin-checkin-single.mp4" autoplay loop muted playsinline></video>
+      </div>
+      <figcaption><strong>Single visitor check-in</strong>: structured form with clear required fields, NDA acknowledgment, and a form-level clear action separated from the primary Check In CTA.</figcaption>
+    </div>
+
+    <!-- Group check-in carousel -->
+    <div class="fig-wide">
+        <div class="group-carousel" id="gcCarousel">
+          <div class="gc-track-outer">
+            <div class="gc-track" id="gcTrack">
+
+              <div class="gc-slide">
+                <img src="assets/admin-a11y.png" alt="Accessibility annotations covering contrast, focus order, error messaging, and keyboard interaction" data-lb>
+                <div class="gc-caption">
+                  <strong>Accessibility annotations</strong>
+                  <p>Full WCAG 2.1 AA annotations covering contrast ratios, focus order, error messaging, field requirements, and keyboard interaction across every state, delivered alongside every Hi-Fi screen.</p>
+                </div>
+              </div>
+
+              <div class="gc-slide">
+                <img src="assets/admin-group-event.png" alt="Group event details form — structured entry of event information before visitors are added" data-lb>
+                <div class="gc-caption">
+                  <strong>Group event details</strong>
+                  <p>Step 1 of the multi-step group flow: associates enter event name, host, facility, and check-in time before any visitor data is added. Clear structure prevents partial records.</p>
+                </div>
+              </div>
+
+              <div class="gc-slide">
+                <img src="assets/admin-bulk-upload.png" alt="Bulk upload modal with template download and CSV/XLS upload" data-lb>
+                <div class="gc-caption">
+                  <strong>Bulk upload modal</strong>
+                  <p>Associates can download a standardized template and upload CSV or XLS files for large groups. Removing the need for manual entry at scale was the highest-impact change for large group events.</p>
+                </div>
+              </div>
+
+              <div class="gc-slide">
+                <img src="assets/admin-data-table-errors.png" alt="Uploaded visitor data table with inline error indicators flagging invalid entries" data-lb>
+                <div class="gc-caption">
+                  <strong>Data table with error indicators</strong>
+                  <p>After upload, visitor data appears in an editable table. Invalid entries are flagged inline with prominent error indicators, so bad data no longer enters the system silently.</p>
+                </div>
+              </div>
+
+              <div class="gc-slide">
+                <img src="assets/admin-inline-editing.png" alt="Inline editing of visitor details directly in the data table without navigating away" data-lb>
+                <div class="gc-caption">
+                  <strong>Inline editing</strong>
+                  <p>Any visitor detail can be corrected directly in the table (name, email, phone number, company) without navigating away or restarting the flow.</p>
+                </div>
+              </div>
+
+              <div class="gc-slide">
+                <img src="assets/admin-remove-confirm.png" alt="Confirmation modal before removing a visitor from the group list" data-lb>
+                <div class="gc-caption">
+                  <strong>Remove visitor confirmation</strong>
+                  <p>Removing a visitor from the group list triggers a confirmation modal, preventing accidental deletions during the stressful, time-pressured conditions of a large group check-in.</p>
+                </div>
+              </div>
+
+              <div class="gc-slide">
+                <img src="assets/admin-snackbar-undo.png" alt="Snackbar with Undo option after removing a visitor" data-lb>
+                <div class="gc-caption">
+                  <strong>Snackbar with undo</strong>
+                  <p>After removal is confirmed, a snackbar provides a timed Undo option, giving staff a second recovery path and directly addressing one of the most severe heuristic failures identified in the audit.</p>
+                </div>
+              </div>
+
+              <div class="gc-slide">
+                <img src="assets/admin-print-options.png" alt="Badge print options — print now or schedule for a specific time" data-lb>
+                <div class="gc-caption">
+                  <strong>Badge print options</strong>
+                  <p>Print badges immediately or schedule for a specific date and time, accommodating both same-day arrivals and pre-event preparation for planned group visits.</p>
+                </div>
+              </div>
+
+              <div class="gc-slide">
+                <img src="assets/admin-schedule-print.png" alt="Schedule printing modal with printer selection, date, and time" data-lb>
+                <div class="gc-caption">
+                  <strong>Schedule printing modal</strong>
+                  <p>A focused modal lets associates select the printer, date, and time for batch printing, decoupling data entry from badge production for large events where preparation happens in advance.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="gc-nav">
+            <button class="gc-arrow" id="gcPrev" aria-label="Previous" disabled>← Prev</button>
+            <div class="gc-dots" id="gcDots"></div>
+            <span class="gc-count" id="gcCount">1 / 9</span>
+            <button class="gc-arrow" id="gcNext" aria-label="Next">Next →</button>
+          </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ══ PHASE 2 ══ -->
+    <div class="prose" style="margin-bottom:28px">
+      <div class="section-label">Phase 2</div>
+      <h2>The IA redesign that was always the plan</h2>
+      <p>With more engineering capacity now available, the team is moving into the IA redesign Phase 1 held space for. The goal: navigation that matches how staff actually work.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom:40px">
+      <div class="callout-label">North Star Metric</div>
+      <p style="font-size:17px;font-weight:500;color:var(--ink);font-style:italic">"A front desk associate who has never used the tool can complete a group check-in during a kiosk outage without asking for help."</p>
+    </div>
+
+    <!-- IA Before/After Diagram -->
+    <div class="fig-wide" style="margin-bottom:48px">
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:32px 36px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:24px">Proposed IA Consolidation: 8 flat items → 3 semantic clusters</div>
+        <div style="display:grid;grid-template-columns:1fr 48px 1fr;gap:0;align-items:center">
+
+          <!-- Current state -->
+          <div>
+            <div style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Current: flat navigation</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:14px;font-weight:500;color:var(--ink)">Live Feed</div>
+              <div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:14px;font-weight:500;color:var(--ink)">Organization</div>
+              <div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:14px;font-weight:500;color:var(--ink)">Reporting</div>
+              <div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:14px;font-weight:500;color:var(--ink)">Manual Check-In</div>
+              <div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:14px;font-weight:500;color:var(--ink)">Watchlist</div>
+              <div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:14px;font-weight:500;color:var(--ink)">All Facilities</div>
+              <div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:14px;font-weight:500;color:var(--ink)">Role Management</div>
+              <div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:14px;font-weight:500;color:var(--ink)">Support</div>
+            </div>
+          </div>
+
+          <!-- Arrow -->
+          <div style="display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--blue);font-weight:700">→</div>
+
+          <!-- Proposed state -->
+          <div>
+            <div style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Proposed: semantic clusters</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+
+              <div style="border:1px solid var(--blue-pale);border-radius:10px;overflow:hidden">
+                <div style="background:var(--blue-pale);padding:8px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue-ink)">Operations · daily workflow</div>
+                <div style="padding:8px 14px;display:flex;flex-direction:column;gap:5px;background:var(--surface)">
+                  <div style="font-size:13.5px;color:var(--ink);font-weight:500">Live Feed</div>
+                  <div style="font-size:13.5px;color:var(--ink);font-weight:500">Manual Check-In</div>
+                </div>
+              </div>
+
+              <div style="border:1px solid #fce8e6;border-radius:10px;overflow:hidden">
+                <div style="background:#fce8e6;padding:8px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--red)">Security · safety-critical</div>
+                <div style="padding:8px 14px;display:flex;flex-direction:column;gap:5px;background:var(--surface)">
+                  <div style="font-size:13.5px;color:var(--ink);font-weight:500">Watchlist</div>
+                  <div style="font-size:13.5px;color:var(--ink);font-weight:500">Reporting</div>
+                </div>
+              </div>
+
+              <div style="border:1px solid #e5f0e5;border-radius:10px;overflow:hidden">
+                <div style="background:#e5f0e5;padding:8px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#1b5e20">Administration · setup &amp; config</div>
+                <div style="padding:8px 14px;display:flex;flex-direction:column;gap:5px;background:var(--surface)">
+                  <div style="font-size:13.5px;color:var(--ink);font-weight:500">Organization</div>
+                  <div style="font-size:13.5px;color:var(--ink);font-weight:500">All Facilities</div>
+                  <div style="font-size:13.5px;color:var(--ink);font-weight:500">Role Management</div>
+                  <div style="font-size:13.5px;color:var(--ink);font-weight:500">Support</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        <div style="margin-top:20px;font-size:13px;color:var(--muted);line-height:1.5;border-top:1px solid var(--line);padding-top:16px"><strong style="color:var(--ink)">Proposed information architecture</strong>: consolidating 8 flat nav items into 3 semantic clusters reduces cognitive overhead for new users, groups safety-critical functions for faster access, and creates a scalable structure for future capabilities, including an AI-powered Support Center and user profile management.</div>
+      </div>
+    </div>
+
+    <!-- ══ REFLECTION ══ -->
+    <div class="prose">
+      <div class="section-label">Reflection</div>
+      <h2>What this project reinforced</h2>
+      <ol class="reflection-list">
+        <li>
+          <span class="num">1</span>
+          <p><strong>Constraints shape the design work.</strong> The most important design work on this project was the strategic scoping conversation that turned limited engineering capacity into a coherent delivery plan. Knowing what not to ship, and why, is a skill.</p>
+        </li>
+        <li>
+          <span class="num">2</span>
+          <p><strong>Diagnosis before prescription.</strong> The heuristic evaluation served as a stakeholder alignment tool. Framing problems in terms of operational consequence rather than design principle gave a cross-functional team a shared language for prioritization.</p>
+        </li>
+        <li>
+          <span class="num">3</span>
+          <p><strong>Internal tools have real stakes.</strong> It's easy to treat enterprise tooling as lower-stakes than consumer products. But for front desk associates managing security incidents, every ambiguous button and missing error state is a moment of exposure. Design quality in operational tools is a safety question.</p>
+        </li>
+      </ol>
+    </div>
+
+    <!-- ══ NEXT PROJECT ══ -->
+    <a href="navigation.html" class="next-card" aria-label="Next project: Campus Navigation Subsystem">
+      <div class="shot">
+        <img src="assets/campus-nav.png" alt="Navigation UI component sheets: header nav, masthead, dropdown, bottom nav, action bar">
+      </div>
+      <div class="body">
+        <div class="next-label">Next project</div>
+        <h3>Campus Navigation Subsystem</h3>
+        <p>A navigation sub-design-system inside Walmart's LD 3.5 framework, standardizing map, search, and location experiences across products used by associates campus-wide.</p>
+      </div>
+    </a>
+
+  </div><!-- /wrap -->
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="foot-inner">
+      <span class="foot-name">Stanlyn Lu · Product Designer</span>
+      <nav class="foot-links" aria-label="Footer links">
+        <a href="index.html">Work</a>
+        <a href="mailto:hello@yelu.work">Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ SCRIPTS ══ -->
+<script>
+  /* ── Scroll progress + back to top ── */
+  const prog = document.getElementById('progress');
+  const backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', () => {
+    const s = document.documentElement;
+    const pct = s.scrollTop / (s.scrollHeight - s.clientHeight) * 100;
+    prog.style.width = pct + '%';
+    backTop.classList.toggle('visible', s.scrollTop > 400);
+  }, {passive: true});
+  backTop.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
+
+  /* ── Lightbox ── */
+  const lb = document.getElementById('lb');
+  const lbImg = document.getElementById('lb-img');
+  document.querySelectorAll('img[data-lb]').forEach(img => {
+    img.addEventListener('click', () => {
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  document.getElementById('lb-close').addEventListener('click', closeLb);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+  function closeLb() { lb.classList.remove('open'); document.body.style.overflow = ''; }
+
+  /* ── Generic carousel factory ── */
+  function makeCarousel(cfg) {
+    const track = document.getElementById(cfg.trackId);
+    const slides = track.querySelectorAll(cfg.slideSelector);
+    const dotsEl = document.getElementById(cfg.dotsId);
+    const prevBtn = document.getElementById(cfg.prevId);
+    const nextBtn = document.getElementById(cfg.nextId);
+    const countEl = document.getElementById(cfg.countId);
+    const n = slides.length;
+    let cur = 0;
+
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = cfg.dotClass + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Go to item ' + (i + 1));
+      d.addEventListener('click', () => go(i));
+      dotsEl.appendChild(d);
+    });
+
+    function go(idx) {
+      cur = ((idx % n) + n) % n;
+      track.style.transform = 'translateX(-' + (cur * 100) + '%)';
+      dotsEl.querySelectorAll('.' + cfg.dotClass.split(' ')[0]).forEach((d, i) =>
+        d.classList.toggle('active', i === cur));
+      prevBtn.disabled = false;
+      nextBtn.disabled = false;
+      if (countEl) countEl.textContent = (cur + 1) + ' / ' + n;
+    }
+
+    prevBtn.addEventListener('click', () => go(cur - 1));
+    nextBtn.addEventListener('click', () => go(cur + 1));
+    go(0);
+  }
+
+  /* ── Module before/after split carousels ── */
+  const ms = '.mini-slide';
+  makeCarousel({ trackId:'lfBTrack', slideSelector:ms, dotsId:'lfBDots', prevId:'lfBPrev', nextId:'lfBNext', countId:'lfBCount', dotClass:'mini-dot' });
+  makeCarousel({ trackId:'lfATrack', slideSelector:ms, dotsId:'lfADots', prevId:'lfAPrev', nextId:'lfANext', countId:'lfACount', dotClass:'mini-dot' });
+  makeCarousel({ trackId:'ciBTrack', slideSelector:ms, dotsId:'ciBDots', prevId:'ciBPrev', nextId:'ciBNext', countId:'ciBCount', dotClass:'mini-dot' });
+  makeCarousel({ trackId:'ciATrack', slideSelector:ms, dotsId:'ciADots', prevId:'ciAPrev', nextId:'ciANext', countId:'ciACount', dotClass:'mini-dot' });
+  makeCarousel({ trackId:'wlBTrack', slideSelector:ms, dotsId:'wlBDots', prevId:'wlBPrev', nextId:'wlBNext', countId:'wlBCount', dotClass:'mini-dot' });
+  makeCarousel({ trackId:'wlATrack', slideSelector:ms, dotsId:'wlADots', prevId:'wlAPrev', nextId:'wlANext', countId:'wlACount', dotClass:'mini-dot' });
+  makeCarousel({ trackId:'spATrack', slideSelector:ms, dotsId:'spADots', prevId:'spAPrev', nextId:'spANext', countId:'spACount', dotClass:'mini-dot' });
+
+  /* ── Heuristic carousel ── */
+  makeCarousel({
+    trackId: 'hTrack',
+    slideSelector: '.heuristic-slide',
+    dotsId: 'hDots',
+    prevId: 'hPrev',
+    nextId: 'hNext',
+    countId: 'hCount',
+    dotClass: 'heuristic-dot'
+  });
+
+  /* ── Group check-in carousel ── */
+  makeCarousel({
+    trackId: 'gcTrack',
+    slideSelector: '.gc-slide',
+    dotsId: 'gcDots',
+    prevId: 'gcPrev',
+    nextId: 'gcNext',
+    countId: 'gcCount',
+    dotClass: 'gc-dot'
+  });
+</script>
+
+</body>
+</html>

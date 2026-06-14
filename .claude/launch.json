@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio",
+      "runtimeExecutable": "ruby",
+      "runtimeArgs": ["-run", "-e", "httpd", "/tmp/portfolio", "-p", "8787"],
+      "port": 8787
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "ruby",
+      "runtimeArgs": ["-run", "-e", "httpd", "/Users/lintanxi/Downloads/Stanlyn Lu_files", "-p", "8123"],
+      "port": 8123
+    }
+  ]
+}

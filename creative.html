@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stanlyn Lu — Creative</title>
+<meta name="description" content="The creative work of Stanlyn (Ye) Lu — an immersive 3D show, an interactive thesis game, exhibition design, and an experimental chatbot.">
+<meta property="og:title" content="Stanlyn Lu — Creative">
+<meta property="og:description" content="Things I've made outside of product design — for their own sake.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yelu.work/creative.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="fonts/everyday-700.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="creative.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="brand" aria-label="Stanlyn Lu, home">
+      <svg viewBox="0 0 200 200" width="22" height="22" aria-hidden="true"><circle cx="100" cy="100" r="100" fill="#2d8841"/><g fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="5"><line x1="44.69" y1="21.51" x2="100.91" y2="77.73"/><line x1="155.31" y1="21.51" x2="98.39" y2="78.42"/><line x1="44.69" y1="121.14" x2="100" y2="176.45"/><line x1="155.31" y1="121.14" x2="98.26" y2="178.19"/><line x1="100" y1="73.99" x2="100" y2="155.83"/></g></svg>
+      Stanlyn Lu
+    </a>
+    <nav class="navlinks" aria-label="Primary">
+      <a class="navlink" href="index.html#works">Works</a>
+      <a class="navlink active keep" href="creative.html" aria-current="page">Creative</a>
+      <a class="navlink" href="index.html#about">About</a>
+      <a class="navlink" href="index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- MASTHEAD (minimal) -->
+  <section class="mast">
+    <div class="wrap">
+      <span class="kicker">Creative</span>
+      <p class="index">A few things I've made outside of product design — for their own sake.</p>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section aria-label="Creative projects">
+    <div class="wrap">
+      <div class="works">
+
+        <a class="item" href="creative-show.html" data-cursor="Watch" style="--accent:#b3502f">
+          <div class="cover">
+            <img src="assets/creative/estranged-stars.jpg" alt="Still from Estranged Stars" loading="lazy">
+            <span class="medium">Immersive · 3D show</span>
+          </div>
+          <div class="cap"><h3>Estranged Stars</h3><span class="scope">Writer · director · editor</span></div>
+        </a>
+
+        <a class="item" href="creative-lotus.html" data-cursor="Play" style="--accent:#9c4368">
+          <div class="cover">
+            <img src="assets/creative/lotus-baby.jpg" alt="Lotus Baby interactive game" loading="lazy">
+            <span class="medium">Interactive game · thesis</span>
+          </div>
+          <div class="cap"><h3>Lotus Baby</h3><span class="scope">Solo · master's thesis</span></div>
+        </a>
+
+        <a class="item" href="creative-sba.html" data-cursor="Explore" style="--accent:#2f6e57">
+          <div class="cover">
+            <img src="assets/creative/sba.jpg" alt="Susan B. Anthony's House exhibition" loading="lazy">
+            <span class="medium">Exhibition design</span>
+          </div>
+          <div class="cap"><h3>Susan B. Anthony's House</h3><span class="scope">Experiential · interaction</span></div>
+        </a>
+
+        <a class="item" href="creative-dialogue.html" data-cursor="Try it" style="--accent:#2d5fa3">
+          <div class="cover">
+            <img src="assets/creative/dialogue.jpg" alt="Decent Dialogue chatbot demo" loading="lazy">
+            <span class="medium">Experiment · Python</span>
+          </div>
+          <div class="cap"><h3>Decent Dialogue</h3><span class="scope">Conversational concept</span></div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="cursor" aria-hidden="true"><span></span></div>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div class="foot-name">Stanlyn Lu · Senior Product Designer, Walmart Global Tech</div>
+    <div class="foot-links">
+      <a href="index.html">Product work</a>
+      <a href="mailto:lintanxi@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/lintanxi/" rel="noopener" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var cur = document.querySelector('.cursor');
+  var label = cur ? cur.querySelector('span') : null;
+  var fine = window.matchMedia('(pointer:fine)').matches;
+  var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(!cur || !fine || reduce) return;
+  document.body.classList.add('has-cursor');
+  var x=0,y=0,tx=0,ty=0;
+  window.addEventListener('mousemove', function(e){ tx=e.clientX; ty=e.clientY; });
+  (function loop(){ x+=(tx-x)*0.2; y+=(ty-y)*0.2; cur.style.transform='translate('+x+'px,'+y+'px)'; requestAnimationFrame(loop); })();
+  document.querySelectorAll('.item').forEach(function(it){
+    it.addEventListener('mouseenter', function(){ label.textContent = it.getAttribute('data-cursor') || 'View'; cur.classList.add('on'); });
+    it.addEventListener('mouseleave', function(){ cur.classList.remove('on'); });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visitor Check-in Experience  -  Stanlyn Lu</title>
+<meta name="description" content="How I redesigned Walmart's campus visitor check-in from a fragmented legacy system into an accessible, unified physical-digital service across global campuses.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/everyday-700.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="fonts/everyday-400.woff" as="font" type="font/woff" crossorigin>
+<style>
+  @font-face{font-family:"Everyday Sans";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/everyday-400.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:500;font-style:normal;font-display:swap;src:url("fonts/everyday-500.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/everyday-700.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:900;font-style:normal;font-display:swap;src:url("fonts/everyday-900.woff") format("woff")}
+
+  :root{
+    --bg:#f0efeb;
+    --surface:#f7f6f2;
+    --ink:#222222;
+    --muted:#515357;
+    --line:#e1e0d8;
+    --blue:#0a5fd6;
+    --blue-ink:#002e99;
+    --blue-pale:#e6ecf9;
+    --leaf:#3a9d3a;
+    --font:"Everyday Sans","Helvetica Neue",Arial,sans-serif;
+    --max:800px;
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  img{display:block;max-width:100%}
+
+  /* ── Nav ── */
+  header{position:sticky;top:0;z-index:20;background:rgba(240,239,235,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav{max-width:1080px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:62px;gap:24px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;letter-spacing:-.01em;color:var(--ink)}
+  .brand svg{width:20px;height:20px;color:var(--leaf);flex:none}
+  .back{font-size:14px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .back:hover{color:var(--ink);text-decoration:none}
+  .back svg{width:14px;height:14px}
+
+  /* ── Layout ── */
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  .wrap-wide{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* ── Hero ── */
+  .hero{padding:72px 0 0}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex:none}
+  h1{font-size:clamp(32px,5vw,52px);font-weight:700;line-height:1.02;letter-spacing:-.035em;margin-bottom:24px}
+  h1 em{color:var(--blue);font-style:normal}
+  .hero-sub{font-size:19px;line-height:1.6;color:var(--muted);max-width:54ch;margin-bottom:48px}
+
+  /* ── Meta strip ── */
+  .meta-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:64px}
+  .meta-item{background:var(--surface);padding:20px 18px}
+  .meta-item .label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .meta-item .val{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
+  @media(max-width:640px){.meta-strip{grid-template-columns:repeat(2,1fr)}}
+
+  /* ── Hero image crossfade ── */
+  .hero-img{width:100%;border-radius:var(--r);border:1px solid var(--line);overflow:hidden;margin-bottom:80px;position:relative}
+  .hero-img img{width:100%;height:480px;object-fit:cover;object-position:center;display:block}
+  .hero-img img.slide-back{position:absolute;inset:0;animation:crossfade 8s ease-in-out infinite alternate}
+  @keyframes crossfade{0%,30%{opacity:1} 70%,100%{opacity:0}}
+  @media(max-width:640px){.hero-img img{height:260px}}
+
+  /* ── Prose ── */
+  .prose{margin-bottom:72px}
+  .prose h2{font-size:clamp(24px,3.5vw,34px);font-weight:700;letter-spacing:-.03em;margin-bottom:16px;margin-top:0}
+  .prose h3{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:10px;margin-top:32px;color:var(--ink)}
+  .prose p{color:var(--muted);margin-bottom:18px;font-size:16.5px;line-height:1.7}
+  .prose p:last-child{margin-bottom:0}
+  .prose strong{color:var(--ink);font-weight:600}
+
+  /* ── Section label ── */
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+
+  /* ── Pull quote ── */
+  .pullquote{border-left:3px solid var(--blue);padding:18px 24px;background:var(--surface);border-radius:0 var(--r) var(--r) 0;margin:32px 0;font-size:18px;font-weight:500;color:var(--ink);line-height:1.55;font-style:italic}
+  .pullquote cite{display:block;margin-top:10px;font-size:13px;font-weight:500;font-style:normal;color:var(--muted)}
+
+  /* ── Callout box ── */
+  .callout{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;margin:28px 0}
+  .callout .callout-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .callout p{color:var(--ink);font-size:15px;line-height:1.6;margin:0}
+  .callout p+p{margin-top:10px}
+
+  /* ── Decision cards ── */
+  .decisions{display:flex;flex-direction:column;gap:16px;margin:28px 0}
+  .decision{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:560px){.decision{grid-template-columns:1fr}}
+  .decision .d-col .d-head{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+  .decision .d-col.rejected .d-head{color:#c0392b}
+  .decision .d-col.chosen .d-head{color:var(--leaf)}
+  .decision .d-col p{font-size:14px;color:var(--muted);line-height:1.55;margin:0}
+  .decision .d-col.chosen p{color:var(--ink)}
+
+  /* ── Impact grid ── */
+  .impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}
+  @media(max-width:560px){.impact-grid{grid-template-columns:1fr}}
+  .impact-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px}
+  .impact-item .num{font-size:32px;font-weight:700;letter-spacing:-.04em;color:var(--blue);line-height:1}
+  .impact-item .impact-label{margin-top:8px;font-size:13px;color:var(--muted);line-height:1.45}
+
+  /* ── Image with caption ── */
+  .fig{margin:36px 0}
+  .fig img{width:100%;border-radius:var(--r);border:1px solid var(--line)}
+  .fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.5;text-align:center}
+
+  /* ── Lightbox ── */
+  #lb{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;display:none;align-items:center;justify-content:center;cursor:zoom-out;padding:24px}
+  #lb.open{display:flex}
+  #lb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;box-shadow:0 8px 48px rgba(0,0,0,.6)}
+  #lb-close{position:fixed;top:20px;right:24px;color:#fff;font-size:28px;line-height:1;cursor:pointer;opacity:.7;font-family:sans-serif}
+  #lb-close:hover{opacity:1}
+  .fig img[data-lb]{cursor:zoom-in}
+  .fig img[data-lb]:hover{opacity:.92}
+
+  /* ── Video embed ── */
+  .video-wrap{aspect-ratio:16/9;overflow:hidden;border-radius:var(--r);border:1px solid var(--line);background:var(--surface)}
+  .video-wrap video{width:100%;height:100%;object-fit:contain;display:block}
+
+  /* ── Email carousel ── */
+  .email-carousel{margin-top:24px;max-width:460px;margin-left:auto;margin-right:auto}
+  .email-track-outer{overflow:hidden}
+  .email-track{display:flex;will-change:transform}
+  .email-slide{flex:0 0 100%;box-sizing:border-box}
+  .email-img-wrap{position:relative;overflow-y:auto;overflow-x:hidden;border-radius:var(--r);border:1px solid var(--line);box-shadow:0 2px 16px rgba(0,0,0,.08);max-height:400px;cursor:default;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  .email-img-wrap::-webkit-scrollbar{width:5px}
+  .email-img-wrap::-webkit-scrollbar-track{background:transparent}
+  .email-img-wrap::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+  .email-img-wrap img{width:100%;display:block;vertical-align:top;cursor:zoom-in}
+  .email-img-wrap img:hover{opacity:.9}
+  .email-hint{font-size:11px;color:var(--muted);text-align:right;margin-top:5px;opacity:.7}
+  .email-caption{margin-top:8px;font-size:13px;color:var(--muted);line-height:1.5}
+  .email-nav{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:12px}
+  .email-arrow{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 16px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink);transition:background .15s;font-family:var(--font);white-space:nowrap}
+  .email-arrow:hover:not(:disabled){background:var(--line)}
+  .email-arrow:disabled{opacity:.28;cursor:default}
+  .email-dots{display:flex;gap:7px;align-items:center}
+  .email-dot{width:7px;height:7px;border-radius:50%;background:var(--line);border:none;cursor:pointer;padding:0;transition:background .2s}
+  .email-dot.active{background:var(--blue)}
+
+  /* ── Wide breakout (figures, videos, journey maps) ── */
+  .fig-wide,
+  .wrap > figure.fig,
+  .wrap > .two-up{position:relative;left:50%;transform:translateX(-50%);width:min(960px,calc(100vw - 48px))}
+  @media(max-width:720px){
+    .fig-wide,
+    .wrap > figure.fig,
+    .wrap > .two-up{left:0;transform:none;width:100%}
+  }
+
+  /* ── Journey map tabs ── */
+  .tab-bar{display:flex;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:24px}
+  .tab-btn{flex:1;padding:12px 16px;background:var(--surface);border:none;border-right:1px solid var(--line);font-family:var(--font);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
+  .tab-btn:last-child{border-right:none}
+  .tab-btn.active{background:var(--blue);color:#fff}
+  .tab-btn:hover:not(.active){background:var(--bg);color:var(--ink)}
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+
+  /* ── Field image pair (matched aspect ratio) ── */
+  .field-img-wrap{aspect-ratio:4/3;overflow:hidden;border-radius:var(--r);border:1px solid var(--line)}
+  .field-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* ── Two-up images ── */
+  .two-up{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:36px 0}
+  @media(max-width:560px){.two-up{grid-template-columns:1fr}}
+  .two-up .fig{margin:0}
+
+  /* ── Chips ── */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .chip{font-size:12px;font-weight:500;padding:5px 11px;border-radius:999px;background:var(--blue-pale);color:var(--blue-ink)}
+
+  /* ── Divider ── */
+  hr{border:none;border-top:1px solid var(--line);margin:64px 0}
+
+  /* ── Reflection ── */
+  .reflection-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin:20px 0}
+  .reflection-list li{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start}
+  .reflection-list li .num{width:28px;height:28px;border-radius:50%;background:var(--blue-pale);color:var(--blue-ink);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px}
+  .reflection-list li p{font-size:15px;color:var(--muted);margin:0;line-height:1.6}
+  .reflection-list li p strong{color:var(--ink)}
+
+  /* ── Next project ── */
+  .next-card{display:grid;grid-template-columns:38% 1fr;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;margin-bottom:80px;transition:border-color .2s,transform .2s}
+  .next-card:hover{border-color:var(--blue);transform:translateY(-2px);text-decoration:none}
+  .next-card .shot{background:#1b1c18;min-height:200px;position:relative}
+  .next-card .shot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+  .next-card .body{padding:28px}
+  .next-card .next-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .next-card h3{font-size:22px;font-weight:700;letter-spacing:-.015em;margin-bottom:8px}
+  .next-card p{font-size:14px;color:var(--muted);line-height:1.55;margin:0}
+  @media(max-width:600px){.next-card{grid-template-columns:1fr}.next-card .shot{min-height:180px;height:180px}}
+
+  /* ── Footer ── */
+  footer{border-top:1px solid var(--line);padding:32px 0 48px}
+  .foot-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .foot-name{font-size:14px;color:var(--muted)}
+  .foot-links{display:flex;gap:20px}
+  .foot-links a{font-size:13px;font-weight:500;color:var(--muted)}
+  .foot-links a:hover{color:var(--ink)}
+
+  /* ── Challenge grid ── */
+  .challenge-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:64px}
+  .challenge-item{background:var(--surface);padding:22px 20px;display:flex;flex-direction:column;gap:8px}
+  .c-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+  .c-body{margin:0;font-size:14.5px;color:var(--muted);line-height:1.55}
+  @media(max-width:560px){.challenge-grid{grid-template-columns:1fr}}
+
+  /* ── HMW grid ── */
+  .hmw-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:64px}
+  @media(max-width:600px){.hmw-grid{grid-template-columns:1fr}}
+  .hmw-item{border-radius:var(--r);overflow:hidden;display:grid;grid-template-rows:auto 1fr}
+  .hmw-topic{padding:14px 18px;font-size:14px;font-weight:700;color:#fff;line-height:1.3}
+  .hmw-q{padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-top:none;font-size:14px;color:var(--ink);line-height:1.6;border-radius:0 0 var(--r) var(--r)}
+  .hmw-blue .hmw-topic{background:#0a5fd6}
+  .hmw-teal .hmw-topic{background:#2e7d32}
+  .hmw-slate .hmw-topic{background:#e69b00;color:#1a1a1a}
+  .hmw-ink .hmw-topic{background:#c62828}
+
+  /* ── Back to top ── */
+  #back-top{position:fixed;bottom:32px;right:32px;z-index:90;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s,background .15s;background:var(--ink);color:var(--bg);border:none;border-radius:100px;padding:10px 20px;font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px}
+  #back-top svg{width:12px;height:12px;flex-shrink:0;transition:transform .2s}
+  #back-top.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+  #back-top:hover{background:var(--blue)}
+  #back-top:hover svg{transform:translateY(-2px)}
+
+  /* ── Scroll progress ── */
+  #progress-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--blue);z-index:200;transition:width .1s linear;pointer-events:none}
+</style>
+</head>
+<body>
+
+<div id="progress-bar" aria-hidden="true"></div>
+<button id="back-top" aria-label="Back to top">
+  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,8 6,4 10,8"/></svg>
+  Top
+</button>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Image enlarged"><span id="lb-close" aria-label="Close">&times;</span><img id="lb-img" src="" alt=""></div>
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="brand" aria-label="Stanlyn Lu, home">
+      <svg viewBox="0 0 200 200" width="22" height="22" aria-hidden="true"><circle cx="100" cy="100" r="100" fill="#2d8841"/><g fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="5"><line x1="44.69" y1="21.51" x2="100.91" y2="77.73"/><line x1="155.31" y1="21.51" x2="98.39" y2="78.42"/><line x1="44.69" y1="121.14" x2="100" y2="176.45"/><line x1="155.31" y1="121.14" x2="98.26" y2="178.19"/><line x1="100" y1="73.99" x2="100" y2="155.83"/></g></svg>
+      Stanlyn Lu
+    </a>
+    <a href="index.html#works" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      All works
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Service Design · Facilities &amp; Access · Accessibility</div>
+      <h1>When the welcome experience <em>isn't</em> welcoming</h1>
+      <p class="hero-sub">How I unified Walmart's visitor check-in from twelve isolated, inaccessible systems into a single accessible service across every US and India campus  -  and why the hardest part had nothing to do with screens.</p>
+
+      <div class="meta-strip" role="list" aria-label="Project details">
+        <div class="meta-item" role="listitem">
+          <div class="label">My Role</div>
+          <div class="val">Lead Product Designer</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Touchpoints</div>
+          <div class="val">Kiosk · Web · Email · Admin portal</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Team</div>
+          <div class="val">UX, PM, Engineering, Security, Workplace Ops</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Timeline</div>
+          <div class="val">Nov 2024 - Oct 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap-wide">
+      <div class="hero-img">
+        <!-- slide-back fades out to reveal the image beneath -->
+        <img src="assets/kiosk-real.jpg" alt="Deployed check-in kiosks at Walmart campus lobby with multilingual Welcome wall">
+        <img class="slide-back" src="assets/visitor-checkin.png" alt="Self-service check-in kiosk welcoming visitors to the Global People Center">
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEXT -->
+  <div class="wrap">
+
+    <div class="prose">
+      <div class="section-label">The Situation</div>
+      <h2>A $500B company with a clipboard at the front door</h2>
+      <p>When visitors arrive at one of Walmart's campuses, their first impression begins at the front desk. But each site: the 350-acre Home Office in Bentonville, the 338,000 sq. ft. Sunnyvale campus, the India Development Center in Bengaluru and Chennai, had its own process, technology, and security requirements. The result was a fragmented experience and a system that couldn't scale.</p>
+      <p>The California facilities required NDA signing. The <a href="https://public.walmart.com/content/wal-paper/en_in/company/who-we-are.html" target="_blank" rel="noopener">India Development Center</a> required device registration. The <a href="https://corporate.walmart.com/about/newhomeoffice/explore-the-new-campus/food-hall" target="_blank" rel="noopener">8th &amp; Plate</a> food court needed a simplified flow for short-stay visitors. None of these variants talked to each other, and none had been designed with accessibility in mind.</p>
+      <p><strong>Visit is a connected ecosystem, and decisions on any surface directly impact every other.</strong> A visitor who used a wheelchair had no guaranteed accessible path through check-in. A host wasn't reliably notified when their guest arrived. The legacy interface felt less like a welcome and more like a checkpoint.</p>
+    </div>
+
+    <div class="hmw-grid">
+      <div class="hmw-item hmw-blue">
+        <div class="hmw-topic">Walk-in Kiosk Check-in</div>
+        <div class="hmw-q">Twelve campuses, twelve different check-in processes. Visitors had no consistent experience, and security requirements varied by site.</div>
+      </div>
+      <div class="hmw-item hmw-teal">
+        <div class="hmw-topic">Check-out and Multi-Building Access</div>
+        <div class="hmw-q">Departures weren't tracked. Visitors moving between buildings had to re-check in, creating friction and security blind spots.</div>
+      </div>
+      <div class="hmw-item hmw-slate">
+        <div class="hmw-topic">Preregistration Flow</div>
+        <div class="hmw-q">A pre-arrival registration tool existed but almost no one used it. The flow was buried, confusing, and disconnected from how visits actually got scheduled.</div>
+      </div>
+      <div class="hmw-item hmw-ink">
+        <div class="hmw-topic">Host Notification Logic</div>
+        <div class="hmw-q">Hosts weren't reliably told when their guest arrived. The gap between check-in and host awareness created delays and lobby bottlenecks.</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <div class="section-label">My Role</div>
+      <h2>Sole lead designer, end to end</h2>
+      <p>I joined as the sole lead designer on a cross-functional team: a product manager, engineers across two squads, a facilities program manager, and regional operations leads in both Bentonville and Bengaluru. I took ownership of a system with no unified design, no shared logic across campuses, and no accessibility compliance  -  and redesigned it from the ground up.</p>
+      <p>I owned every surface: the kiosk interface, the preregistration web flow, the email notification system, and the admin portal. I also led the accessibility strategy  -  WCAG 2.1 AA compliance shaped the interaction model from day one.</p>
+      <p>What I inherited had real constraints. Each campus had built its own solution to the same problem, optimized for local requirements with no shared architecture and no cross-campus visibility.</p>
+      <div class="challenge-grid" style="margin-top:24px">
+        <div class="challenge-item">
+          <div class="c-title">Hardware</div>
+          <div class="c-body">Surface Go's compact screen meant every interaction had to be one decision deep. No room for multi-step panels or dense forms.</div>
+        </div>
+        <div class="challenge-item">
+          <div class="c-title">Connectivity</div>
+          <div class="c-body">Unreliable at several sites. The system needed a full offline mode with paper fallbacks so security staff could run evacuations without a live connection.</div>
+        </div>
+        <div class="challenge-item">
+          <div class="c-title">Inclusivity</div>
+          <div class="c-body">WCAG alone wasn't enough. Motion sensitivity, physical kiosk mounting heights, and screen reader support all had to be designed in from the start.</div>
+        </div>
+        <div class="challenge-item">
+          <div class="c-title">Fragmentation</div>
+          <div class="c-body">Twelve campus implementations, each with its own logic and visual language. No shared component library, no cross-campus visibility, no rollback path.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-up" style="margin-top:36px">
+      <figure class="fig">
+        <div class="field-img-wrap"><img src="assets/field-kiosk.jpg" alt="Two visitors using the check-in kiosks at Bentonville HQ before the new design launched" data-lb></div>
+        <figcaption><strong>Field observation:</strong> visitors at Bentonville HQ using the existing system. Each campus had its own implementation  -  same hardware, completely different flows.</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="field-img-wrap"><img src="assets/field-wheelchair.jpg" alt="Visitor using a wheelchair scanning their badge at a campus turnstile" data-lb></div>
+        <figcaption><strong>Accessibility gap:</strong> for some visitors, check-in simply didn't work. No keyboard path, no contrast compliance, no reliable alternative. This became a non-negotiable constraint from day one.</figcaption>
+      </figure>
+    </div>
+
+    <hr>
+
+    <!-- DISCOVERY -->
+    <div class="prose">
+      <div class="section-label">Discovery</div>
+      <h2>The problem the software couldn't see</h2>
+      <p>I spent time at check-in desks across campuses before touching any design tools. Every existing implementation had been built from the inside out: what does the system need to capture? Nobody had asked what the visitor, the host, or the front-desk associate actually needed to do. The screens were fine. The service around them had no connective tissue.</p>
+      <p>The check-in screen was just one moment in a larger chain: visitors, hosts, front-desk associates, security staff, and security managers all had different goals and zero shared visibility. None of the existing implementations connected those groups. Each ended at the screen.</p>
+
+      <div class="pullquote">
+        "I end up re-entering half the visitors myself because the screen times out on them. None of that shows up anywhere."
+        <cite>Front-desk associate, field interview</cite>
+      </div>
+
+      <p>Three findings that changed the direction of the project:</p>
+
+      <h3>1. Preregistration was the highest-leverage fix nobody had prioritized</h3>
+      <p>Visitors who arrived pre-registered had dramatically smoother check-ins  -  but most visitors walked in cold, not because hosts didn't want to prep them, but because the preregistration tool existed in a separate system nobody knew about. The kiosk was doing the work that should have happened before anyone arrived.</p>
+
+      <h3>2. Accessibility failures were creating invisible operational load</h3>
+      <p>Front-desk associates were routinely stepping in to complete check-in on behalf of visitors who couldn't navigate the existing interface  -  touch targets too small, no keyboard path, contrast ratios that failed in direct sunlight. None of this showed up in any usage data. The workaround had become the process.</p>
+
+      <h3>3. Hosts had no real-time awareness when their visitor arrived</h3>
+      <p>Visitors would complete check-in and then wait in the lobby (sometimes for extended periods) because hosts had no notification. Security associates had flagged this repeatedly. There was no mechanism in any existing campus system to solve it.</p>
+    </div>
+
+    <hr>
+
+    <!-- ALIGNMENT -->
+    <div class="prose">
+      <div class="section-label">The Hard Part</div>
+      <h2>Getting everyone to agree was the real design challenge</h2>
+      <p>Getting alignment took longer than the design itself. Each campus stakeholder had a different definition of "welcoming", and sequential review cycles were stalling progress. Leadership could engage with visual concepts more readily than with information architecture or service flows, so the landing page became a proxy for confidence in the entire system. Every review became a debate about hero images and background videos.</p>
+      <p>I recognized what was actually happening: <strong>stakeholders hadn't yet built a shared mental model of the system, so the landing page became the place that anxiety surfaced.</strong> Every review anchored on the one thing they could see and react to.</p>
+      <p>Instead of continuing sequential reviews, I restructured the process. I presented the full range of landing page directions simultaneously (video backgrounds, image carousels, static photography) with each option's tradeoffs made explicit and tied back to the campus experience goals we'd already aligned on. By making the decision space visible rather than funneling toward a single recommendation, I gave stakeholders a way to converge without feeling overruled.</p>
+
+    </div>
+
+    <hr>
+
+    <!-- DESIGN -->
+    <div class="prose">
+      <div class="section-label">The Design</div>
+      <h2>Three user groups, one coherent service</h2>
+      <p>I mapped the full experience across three user groups: walk-in visitors, invited visitors who pre-registered, and Walmart associates acting as hosts. Each journey exposed different failure points. Together they revealed where the service needed to connect across touchpoints and teams.</p>
+    </div>
+
+    <!-- Journey map tabs -->
+    <div class="fig-wide" style="margin:40px 0 56px">
+      <div class="tab-bar" role="tablist" aria-label="Journey maps">
+        <button class="tab-btn active" role="tab" aria-selected="true" data-tab="tab-walkin">Walk-in visitor</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="tab-invited">Invited visitor</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="tab-host">Host (Walmart associate)</button>
+      </div>
+      <div id="tab-walkin" class="tab-panel active">
+        <figure class="fig" style="margin:0">
+          <img src="assets/journey-map-walkin.png" alt="User journey map for walk-in visitor scenario showing stages, goals, actions, pain points, emotions, and opportunities" data-lb>
+          <figcaption><strong>Walk-in visitor journey:</strong> opportunities row drove every kiosk screen decision  -  each traces to a specific field observation.</figcaption>
+        </figure>
+      </div>
+      <div id="tab-invited" class="tab-panel">
+        <figure class="fig" style="margin:0">
+          <img src="assets/journey-map-invited.png" alt="User journey map for invited visitor who pre-registered through the preregistration flow" data-lb>
+          <figcaption><strong>Invited visitor journey:</strong> the biggest drop-off happened before arrival  -  hosts had a tool nobody knew existed. Fixing the invite flow was the highest-leverage change.</figcaption>
+        </figure>
+      </div>
+      <div id="tab-host" class="tab-panel">
+        <figure class="fig" style="margin:0">
+          <img src="assets/journey-map-host.png" alt="Journey map for the host - Walmart associate who sends the invite and receives visitor arrival notifications" data-lb>
+          <figcaption><strong>Host journey:</strong> notification latency was the most-flagged pain point in associate interviews  -  hosts had no reliable signal that their visitor had arrived.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- Walk-in kiosk -->
+    <div class="prose">
+      <h2>Unified UI, Local Logic</h2>
+      <p>The core design challenge was building one system that could adapt to genuinely different campus requirements without fracturing the experience. The answer was a configurable flow architecture: the same interface, with location-aware steps that activate based on facility type. NDA signing for California. Device registration for IDC. A streamlined short-form for 8th &amp; Plate. All on one codebase, all on the same Surface Go hardware.</p>
+      <p>For walk-in visitors (who arrive with no advance context, often stressed, often running late), the kiosk had to be operable in under 60 seconds without instruction. I prioritized progressive disclosure (one decision per screen), large touch targets sized for the Surface Go's compact display, and immediate error recovery. The result handles the 80% case fast and routes the 20% exceptions without creating lobby bottlenecks.</p>
+    </div>
+
+    <figure class="fig" style="margin-top:24px">
+      <div class="video-wrap">
+        <video autoplay muted loop playsinline>
+          <source src="assets/flow-standard.mp4" type="video/mp4">
+        </video>
+      </div>
+      <figcaption><strong>Standard kiosk flow:</strong> the core check-in experience, designed for cross-campus consistency. Photo capture, host selection, and badge print in one linear sequence.</figcaption>
+    </figure>
+
+    <figure class="fig" style="margin-top:16px">
+      <div class="video-wrap">
+        <video autoplay muted loop playsinline>
+          <source src="assets/flow-8thplate.mp4" type="video/mp4">
+        </video>
+      </div>
+      <figcaption><strong>8th &amp; Plate variant:</strong> streamlined for the food court environment - minimal required fields, family group check-in, optimized for high-volume foot traffic.</figcaption>
+    </figure>
+
+    <!-- Check-out and Multi-Building Access -->
+    <div class="prose" style="margin-top:56px">
+      <h2>Check-out and multi-building access</h2>
+      <p>Visitors moving between buildings scan their badge at each entry and exit point, with no repeated full check-ins required. Every scan syncs in real time to the Visit Admin portal, giving security teams a complete, time-stamped record of campus movement. This live tracking was a net-new feature: the legacy system had no cross-building visibility at all.</p>
+    </div>
+
+    <figure class="fig fig-wide" style="margin-top:24px">
+      <div class="video-wrap">
+        <video autoplay loop muted playsinline>
+          <source src="assets/flow-setup.mp4" type="video/mp4">
+        </video>
+      </div>
+      <figcaption><strong>Kiosk setup and check-out mode:</strong> any kiosk can be configured to switch between check-in and check-out, giving front-desk associates the flexibility to allocate devices based on what the lobby needs at any given moment.</figcaption>
+    </figure>
+
+    <figure class="fig fig-wide" style="margin-top:24px">
+      <img src="assets/admin-profile-checkout.jpg" alt="Visit Admin Portal visitor profile showing check-in and check-out records by time and location" data-lb>
+      <figcaption><strong>Visit Admin Portal:</strong> every badge scan syncs here in real time, giving security teams a complete, time-stamped view of who is on campus and which buildings they have accessed.</figcaption>
+    </figure>
+
+    <!-- Preregistration -->
+    <div class="prose" style="margin-top:56px">
+      <h2>Preregistration: front-loading the friction</h2>
+      <p>Visitors who arrived pre-registered cleared check-in significantly faster. The problem: most visitors arrived cold, not because hosts didn't want to prep them, but because the preregistration tool existed in a separate system that almost nobody knew about. I connected the preregistration link directly to the host's calendar invite, so sending the invite and sending the prep link became a single action. The visit experience was now shaped before the visitor left home.</p>
+      <p>The preregistration flow is also where the platform's configurability is most visible. The same flow activates location-specific steps silently in the background  -  visitors only ever see what their specific visit requires.</p>
+    </div>
+
+    <figure class="fig" style="margin-top:24px">
+      <div class="video-wrap">
+        <video autoplay muted loop playsinline>
+          <source src="assets/flow-prereg.mp4" type="video/mp4">
+        </video>
+      </div>
+      <figcaption><strong>Standard preregistration flow:</strong> the core experience a host sends to any invited visitor. Completion before arrival cuts kiosk time significantly and pre-populates the check-in screen on arrival.</figcaption>
+    </figure>
+
+    <div class="two-up" style="margin-top:16px">
+      <figure class="fig">
+        <div class="email-img-wrap">
+          <img src="assets/email-prereg-invite.jpg" alt="Preregistration invitation email sent to visitor with a link to complete registration online" data-lb>
+        </div>
+        <figcaption><strong>Preregistration invite:</strong> sent to the visitor when the host adds them to the calendar invite. Contains the registration link  -  no separate action needed from the host.</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="email-img-wrap">
+          <img src="assets/email-prereg-badge.jpg" alt="Digital badge email sent to visitor after completing preregistration online" data-lb>
+        </div>
+        <figcaption><strong>Digital badge:</strong> delivered to the visitor after completing registration. Presented at arrival to scan in  -  no kiosk queue needed.</figcaption>
+      </figure>
+    </div>
+
+    <!-- Host notification -->
+    <div class="prose" style="margin-top:56px">
+      <h2>Host notification: closing the loop</h2>
+      <p>Any completed check-in (whether a walk-in visitor at the kiosk or a preregistered visitor scanning their digital badge) triggers an immediate notification to the named host. In the legacy system nothing happened at this point. I designed a real-time alert that defaults to no action required: if the host is expecting the visitor, they simply go to the front desk and escort them in. Only if the visitor is unexpected does the host need to act, with a single tap to decline. When declined, the front desk associate receives an automatic notice and handles the guest  -  no phone call needed, no manual escalation.</p>
+    </div>
+
+    <div class="two-up" style="margin-top:24px">
+      <figure class="fig">
+        <div class="email-img-wrap">
+          <img src="assets/host-email.jpg" alt="Host notification email showing visitor name, photo, arrival time, and confirm or decline action buttons" data-lb>
+        </div>
+        <figcaption><strong>Host notification:</strong> sent the moment check-in completes, for both walk-in and preregistered visitors. Visitor photo and arrival time included. No action needed if the host is expecting them  -  one tap to decline if not.</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="email-img-wrap">
+          <img src="assets/email-rejection.png" alt="Rejection notice sent to front desk associate when host declines the visitor" data-lb>
+        </div>
+        <figcaption><strong>Front desk rejection notice:</strong> if the host declines, the front desk associate in that building is notified automatically. They handle the guest out  -  security is informed without a separate call.</figcaption>
+      </figure>
+    </div>
+
+    <figure class="fig" style="margin-top:16px">
+      <div class="video-wrap">
+        <video autoplay muted loop playsinline>
+          <source src="assets/flow-host.mp4" type="video/mp4">
+        </video>
+      </div>
+      <figcaption><strong>Host response interface:</strong> a single decline tap is all that's needed. No confirmation required for expected visitors. When declined, lobby status and the front-desk display update in real time  -  the security associate sees the change without a separate call.</figcaption>
+    </figure>
+
+    <!-- Accessibility -->
+    <div class="prose" style="margin-top:56px">
+      <h2>Accessibility built into the practice</h2>
+      <p>A wheelchair user at the Bentonville HQ turnstile had no guaranteed accessible check-in path. A security associate had flagged this gap for over a year before design started. I built the interaction model keyboard-navigation first, so every touch interaction had a keyboard equivalent from day one.</p>
+      <p>Before any screen went to engineering, it was validated against a shared accessibility checklist the team maintained across all products. Annotations were embedded directly in the Figma file (contrast ratios, focus order, screen reader labels) so developers had no ambiguity at handoff. Structured QA notes tracked every identified issue through to resolution before launch.</p>
+    </div>
+
+    <div class="two-up" style="margin-top:24px">
+      <figure class="fig">
+        <div class="email-img-wrap">
+          <img src="assets/a11y-checklist.jpg" alt="AEDT team accessibility checklist used to validate designs against inclusive interaction patterns and WCAG guidelines" data-lb>
+        </div>
+        <figcaption><strong>Team accessibility checklist:</strong> standardized reference maintained across the design team to validate compliance before any screen goes to handoff.</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="email-img-wrap">
+          <img src="assets/a11y-annotations.jpg" alt="Figma design file with embedded accessibility annotations covering contrast, focus states, and screen reader behaviors" data-lb>
+        </div>
+        <figcaption><strong>Annotated design deliverable:</strong> accessibility notes embedded directly in the design file (contrast ratios, focus order, screen reader labels) as the engineering handoff spec.</figcaption>
+      </figure>
+    </div>
+
+    <hr>
+
+    <!-- IMPACT -->
+    <div class="prose">
+      <div class="section-label">Outcomes</div>
+      <h2>What changed, and how we measured it</h2>
+      <p>The system shipped to all US campuses and then rolled out to Bengaluru and other India locations  -  becoming the global standard for Walmart campus visitor management. Deployment is a milestone. Here's what actually changed:</p>
+
+      <div class="impact-grid">
+        <div class="impact-item">
+          <div class="num">30%</div>
+          <div class="impact-label">reduction in average visitor processing time across all campuses post-launch</div>
+        </div>
+        <div class="impact-item">
+          <div class="num">3×</div>
+          <div class="impact-label">increase in preregistration completion rate</div>
+        </div>
+        <div class="impact-item">
+          <div class="num">~60%</div>
+          <div class="impact-label">fewer front-desk escalations at high-traffic campuses in the first quarter post-launch</div>
+        </div>
+      </div>
+
+      <p style="margin-top:28px">Early qualitative feedback from security, reception, and facilities teams showed smoother front-desk operations, fewer repeated check-ins for multi-building visits, and faster host response. The admin portal eliminated the most common manual override (associates re-entering visitor data after kiosk timeouts), which had driven a significant share of front-desk escalations at high-traffic campuses.</p>
+    </div>
+
+    <hr>
+
+    <!-- REFLECTION -->
+    <div class="prose">
+      <div class="section-label">Reflection</div>
+      <h2>What I'd do differently</h2>
+      <p>This project delivered what it set out to. But looking back at the constraints and trade-offs, three things stand out:</p>
+
+      <ul class="reflection-list">
+        <li>
+          <div class="num" aria-hidden="true">1</div>
+          <p><strong>I'd instrument the service earlier.</strong> We had almost no baseline data when we started  -  check-in times, preregistration rates, accessibility-related escalations were all unmeasured. I ended up building measurement into the system during design, but it took advocacy to get engineering to prioritize it. Measurement should have been scoped into the project from the start.</p>
+        </li>
+        <li>
+          <div class="num" aria-hidden="true">2</div>
+          <p><strong>I'd push harder for a pilot-then-scale rollout.</strong> We launched across all US campuses nearly simultaneously. In retrospect, a single high-traffic campus pilot with a six-week learning period would have surfaced the group-booking edge cases we discovered through support tickets post-launch  -  and saved two engineering sprints of fixes.</p>
+        </li>
+        <li>
+          <div class="num" aria-hidden="true">3</div>
+          <p><strong>I underestimated the front-desk associate as a design partner.</strong> I interviewed them early, but treated them as user-research subjects. I should have brought two of them into the design review process as co-reviewers  -  they caught workflow gaps in beta testing that I missed because I was too close to the designed flow.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="chips" style="margin-bottom:80px">
+      <span class="chip">Facilities &amp; Access</span>
+      <span class="chip">Service Design</span>
+      <span class="chip">Accessibility · WCAG 2.1 AA</span>
+      <span class="chip">Physical + Digital</span>
+      <span class="chip">Kiosk UX</span>
+    </div>
+
+  </div>
+
+  <!-- NEXT PROJECT -->
+  <div class="wrap">
+    <p class="section-label" style="margin-bottom:16px">Next project</p>
+    <a href="index.html#works" class="next-card">
+      <div class="shot">
+        <img src="assets/visit-admin.jpg" alt="Visit Admin Portal">
+      </div>
+      <div class="body">
+        <div class="next-label">Related work</div>
+        <h3>Visit Admin Portal</h3>
+        <p>The CMS and permissions layer behind the check-in experience  -  managing visitor records, multi-building access, and self-service administration at scale.</p>
+      </div>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap-wide foot-inner">
+    <div class="foot-name">Stanlyn Lu · Senior Product Designer, Walmart Global Tech</div>
+    <div class="foot-links">
+      <a href="mailto:lintanxi@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/lintanxi/" rel="noopener" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const progressBar = document.getElementById('progress-bar');
+  const backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = pct + '%';
+    backTop.classList.toggle('visible', pct > 15);
+  }, { passive: true });
+  backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // Lightbox
+  const lb = document.getElementById('lb');
+  const lbImg = document.getElementById('lb-img');
+  document.querySelectorAll('img[data-lb]').forEach(img => {
+    img.addEventListener('click', () => {
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  lb.addEventListener('click', () => {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { lb.classList.remove('open'); document.body.style.overflow = ''; }
+  });
+
+  // Email carousel
+  (() => {
+    const carousel = document.getElementById('emailCarousel');
+    const track = document.getElementById('emailTrack');
+    if (!track) return;
+    const slides = track.querySelectorAll('.email-slide');
+    const prev = document.getElementById('emailPrev');
+    const next = document.getElementById('emailNext');
+    const dots = document.querySelectorAll('.email-dot');
+    let cur = 0;
+    function slideWidth() { return carousel.offsetWidth; }
+    function goTo(n) {
+      cur = Math.max(0, Math.min(n, slides.length - 1));
+      track.style.transition = 'transform .32s ease';
+      track.style.transform = `translateX(-${cur * slideWidth()}px)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+      prev.disabled = cur === 0;
+      next.disabled = cur === slides.length - 1;
+    }
+    prev.addEventListener('click', () => goTo(cur - 1));
+    next.addEventListener('click', () => goTo(cur + 1));
+    dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.slide)));
+    // wire lightbox to image wraps
+    track.querySelectorAll('.email-img-wrap').forEach(wrap => {
+      wrap.addEventListener('click', () => {
+        const img = wrap.querySelector('img');
+        lbImg.src = img.src;
+        lbImg.alt = img.alt;
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+  })();
+
+  // Journey map tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.toggle('active', b === btn);
+        b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+      });
+      document.querySelectorAll('.tab-panel').forEach(p => {
+        p.classList.toggle('active', p.id === target);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

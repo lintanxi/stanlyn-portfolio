@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITFOW Chatbot — Stanlyn Lu</title>
+<meta name="description" content="UX research for In The Flow of Work (ITFOW): evaluating conversational and AR-based learning features on Me@Walmart for store associates.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/everyday-700.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="fonts/everyday-400.woff" as="font" type="font/woff" crossorigin>
+<style>
+  @font-face{font-family:"Everyday Sans";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/everyday-400.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:500;font-style:normal;font-display:swap;src:url("fonts/everyday-500.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/everyday-700.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:900;font-style:normal;font-display:swap;src:url("fonts/everyday-900.woff") format("woff")}
+
+  :root{
+    --bg:#f0efeb;
+    --surface:#f7f6f2;
+    --ink:#222222;
+    --muted:#515357;
+    --line:#e1e0d8;
+    --blue:#0a5fd6;
+    --blue-ink:#002e99;
+    --blue-pale:#e6ecf9;
+    --leaf:#3a9d3a;
+    --font:"Everyday Sans","Helvetica Neue",Arial,sans-serif;
+    --max:800px;
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  img{display:block;max-width:100%}
+
+  /* ── Nav ── */
+  header{position:sticky;top:0;z-index:20;background:rgba(240,239,235,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav{max-width:1080px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:62px;gap:24px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;letter-spacing:-.01em;color:var(--ink)}
+  .brand svg{width:20px;height:20px;color:var(--leaf);flex:none}
+  .back{font-size:14px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .back:hover{color:var(--ink);text-decoration:none}
+  .back svg{width:14px;height:14px}
+
+  /* ── Layout ── */
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  .wrap-wide{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* ── Hero ── */
+  .hero{padding:72px 0 0}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex:none}
+  h1{font-size:clamp(32px,5vw,52px);font-weight:700;line-height:1.02;letter-spacing:-.035em;margin-bottom:24px}
+  h1 em{color:var(--blue);font-style:normal}
+  .hero-sub{font-size:19px;line-height:1.6;color:var(--muted);max-width:54ch;margin-bottom:48px}
+
+  /* ── Meta strip ── */
+  .meta-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:64px}
+  .meta-item{background:var(--surface);padding:20px 18px}
+  .meta-item .label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .meta-item .val{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
+  @media(max-width:640px){.meta-strip{grid-template-columns:repeat(2,1fr)}}
+
+  /* ── Hero image crossfade ── */
+  .hero-img{width:100%;border-radius:var(--r);border:1px solid var(--line);overflow:hidden;margin-bottom:80px;position:relative}
+  .hero-img img{width:100%;height:480px;object-fit:cover;object-position:center;display:block}
+  .hero-img img.slide-back{position:absolute;inset:0;animation:crossfade 8s ease-in-out infinite alternate}
+  @keyframes crossfade{0%,30%{opacity:1} 70%,100%{opacity:0}}
+  @media(max-width:640px){.hero-img img{height:260px}}
+
+  /* ── Prose ── */
+  .prose{margin-bottom:72px}
+  .prose h2{font-size:clamp(24px,3.5vw,34px);font-weight:700;letter-spacing:-.03em;margin-bottom:16px;margin-top:0}
+  .prose h3{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:10px;margin-top:32px;color:var(--ink)}
+  .prose p{color:var(--muted);margin-bottom:18px;font-size:16.5px;line-height:1.7}
+  .prose p:last-child{margin-bottom:0}
+  .prose strong{color:var(--ink);font-weight:600}
+
+  /* ── Section label ── */
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+
+  /* ── Pull quote ── */
+  .pullquote{border-left:3px solid var(--blue);padding:18px 24px;background:var(--surface);border-radius:0 var(--r) var(--r) 0;margin:32px 0;font-size:18px;font-weight:500;color:var(--ink);line-height:1.55;font-style:italic}
+  .pullquote cite{display:block;margin-top:10px;font-size:13px;font-weight:500;font-style:normal;color:var(--muted)}
+
+  /* ── Callout box ── */
+  .callout{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;margin:28px 0}
+  .callout .callout-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .callout p{color:var(--ink);font-size:15px;line-height:1.6;margin:0}
+  .callout p+p{margin-top:10px}
+
+  /* ── Impact grid ── */
+  .impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}
+  @media(max-width:560px){.impact-grid{grid-template-columns:1fr}}
+  .impact-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px}
+  .impact-item .num{font-size:32px;font-weight:700;letter-spacing:-.04em;color:var(--blue);line-height:1}
+  .impact-item .impact-label{margin-top:8px;font-size:13px;color:var(--muted);line-height:1.45}
+
+  /* ── Scenario cards ── */
+  .scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:28px 0}
+  @media(max-width:580px){.scenario-grid{grid-template-columns:1fr}}
+  .scenario-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px}
+  .scenario-card .sc-header{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
+  .scenario-card .sc-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .scenario-card .sc-score{font-size:20px;font-weight:700;letter-spacing:-.03em;color:var(--blue)}
+  .scenario-card h3{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--ink)}
+  .scenario-card p{font-size:13.5px;color:var(--muted);line-height:1.55;margin:0}
+
+  /* ── Problem list ── */
+  .problem-section{margin:40px 0}
+  .problem-section .ps-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+  .problem-list{display:flex;flex-direction:column;gap:12px}
+  .problem-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}
+  @media(max-width:560px){.problem-item{grid-template-columns:1fr}}
+  .problem-item .p-body{}
+  .problem-item .p-head{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px}
+  .problem-item .p-desc{font-size:13.5px;color:var(--muted);line-height:1.55;margin:0}
+  .problem-item .p-rec{font-size:12.5px;color:var(--blue-ink);background:var(--blue-pale);border-radius:8px;padding:8px 12px;line-height:1.5;flex:none;max-width:220px;align-self:start}
+  @media(max-width:560px){.problem-item .p-rec{max-width:100%}}
+  .p-rec-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
+
+  /* ── Quote block ── */
+  .quote-row{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .quote-item{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px;color:var(--ink);line-height:1.55;font-style:italic}
+  .quote-item cite{font-style:normal;font-size:12px;font-weight:600;color:var(--muted);display:block;margin-top:6px}
+
+  /* ── Env grid ── */
+  .env-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:28px 0}
+  @media(max-width:640px){.env-grid{grid-template-columns:repeat(2,1fr)}}
+  .env-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;text-align:center}
+  .env-item .env-icon{font-size:28px;margin-bottom:10px}
+  .env-item .env-label{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px}
+  .env-item .env-desc{font-size:12.5px;color:var(--muted);line-height:1.45}
+
+  /* ── Stat bar ── */
+  .stat-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:28px 0}
+  .stat-item{background:var(--surface);padding:22px 20px;text-align:center}
+  .stat-item .s-num{font-size:30px;font-weight:700;letter-spacing:-.04em;color:var(--blue);line-height:1}
+  .stat-item .s-label{margin-top:8px;font-size:13px;color:var(--muted);line-height:1.4}
+  @media(max-width:560px){.stat-bar{grid-template-columns:repeat(2,1fr)}}
+
+  /* ── Priority table ── */
+  .priority-table{width:100%;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:28px 0;border-collapse:separate;border-spacing:0}
+  .priority-table thead th{background:var(--surface);padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;border-bottom:1px solid var(--line)}
+  .priority-table tbody tr{border-bottom:1px solid var(--line)}
+  .priority-table tbody tr:last-child{border-bottom:none}
+  .priority-table td{padding:14px 16px;font-size:14px;color:var(--muted);vertical-align:top;background:var(--bg)}
+  .priority-table td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+  .badge-high{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:#fef3c7;color:#92400e}
+  .badge-med{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--blue-pale);color:var(--blue-ink)}
+  .badge-low{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:#f0fdf4;color:#166534}
+
+  /* ── Future research cards ── */
+  .future-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:28px 0}
+  @media(max-width:680px){.future-grid{grid-template-columns:1fr}}
+  .future-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px 24px;display:flex;flex-direction:column;gap:14px}
+  .future-card .fc-icon{width:44px;height:44px;border-radius:12px;background:var(--blue-pale);display:flex;align-items:center;justify-content:center;flex:none}
+  .future-card .fc-icon svg{width:22px;height:22px;color:var(--blue)}
+  .future-card .fc-num{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue)}
+  .future-card h3{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.01em;margin:0}
+  .future-card p{font-size:13.5px;color:var(--muted);line-height:1.6;margin:0;flex:1}
+  .future-card .fc-outcome{font-size:12px;font-weight:600;color:var(--blue);border-top:1px solid var(--line);padding-top:12px;margin-top:auto}
+
+  /* ── What it became ── */
+  .became-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin:28px 0}
+  @media(max-width:640px){.became-grid{grid-template-columns:1fr}}
+  .became-phones{display:flex;gap:16px;justify-content:center;align-items:flex-end}
+  .became-phones .phone{flex:1;max-width:200px;border-radius:28px;overflow:hidden;border:1px solid var(--line);box-shadow:0 8px 32px rgba(0,0,0,.10)}
+  .became-phones .phone img{width:100%;display:block}
+  .became-text{}
+  .became-text .timeline{display:flex;align-items:center;gap:10px;margin-bottom:20px;font-size:13px;font-weight:600;color:var(--muted)}
+  .became-text .timeline .yr{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:3px 10px;font-weight:700;color:var(--ink)}
+  .became-text .timeline .arrow{color:var(--blue);font-size:16px}
+  .became-text .timeline .yr.now{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .became-text p{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+  .became-text p:last-child{margin-bottom:0}
+  .became-text strong{color:var(--ink)}
+
+  /* ── Reflection list ── */
+  .reflection-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin:20px 0}
+  .reflection-list li{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start}
+  .reflection-list li .num{width:28px;height:28px;border-radius:50%;background:var(--blue-pale);color:var(--blue-ink);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px}
+  .reflection-list li p{font-size:15px;color:var(--muted);margin:0;line-height:1.6}
+  .reflection-list li p strong{color:var(--ink)}
+
+  /* ── Chips ── */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .chip{font-size:12px;font-weight:500;padding:5px 11px;border-radius:999px;background:var(--blue-pale);color:var(--blue-ink)}
+
+  /* ── Design principles two-col ── */
+  .design-principles{display:grid;grid-template-columns:1fr 1fr;gap:32px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px 28px;margin:28px 0}
+  @media(max-width:600px){.design-principles{grid-template-columns:1fr}}
+  .dp-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .dp-note{font-size:14.5px;color:var(--ink);line-height:1.6;margin:0 0 14px}
+  .dp-question{font-size:13.5px;color:var(--blue);line-height:1.6;margin:0;font-style:italic}
+  .dp-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin:0;padding:0}
+  .dp-list li{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;color:var(--muted);line-height:1.5}
+  .dp-list li svg{flex:none;margin-top:2px;color:var(--blue)}
+  .dp-list li strong{color:var(--ink)}
+  .dp-aside{font-size:12px;color:var(--muted);opacity:.75}
+
+  /* ── Exec summary two-col ── */
+  .exec-summary{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;margin:28px 0}
+  @media(max-width:640px){.exec-summary{grid-template-columns:1fr}}
+  .exec-text p{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+  .exec-text p:last-child{margin-bottom:0}
+  .exec-text strong{color:var(--ink);font-weight:700}
+  .exec-artifact{border-radius:var(--r);border:1px solid var(--line);overflow:hidden}
+  .exec-artifact img{width:100%;display:block}
+
+  /* ── Findings tree ── */
+  .findings-tree{margin:36px 0;overflow-x:auto}
+  .tree-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:720px){.tree-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:480px){.tree-grid{grid-template-columns:1fr}}
+  .tree-group{}
+  .tree-root{background:var(--blue-pale);color:var(--blue-ink);border:1.5px solid #b8ccf4;border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;text-align:center;margin-bottom:10px}
+  .tree-leaves{display:flex;flex-direction:column;gap:7px;padding-left:10px;border-left:2px solid var(--line)}
+  .tree-leaf{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:12.5px;color:var(--muted);line-height:1.4}
+
+  /* ── Participants table ── */
+  .participants-table{width:100%;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:28px 0;border-collapse:separate;border-spacing:0}
+  .participants-table thead th{background:var(--surface);padding:11px 16px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center;border-bottom:1px solid var(--line)}
+  .participants-table thead th:first-child{text-align:left}
+  .participants-table tbody tr{border-bottom:1px solid var(--line)}
+  .participants-table tbody tr:last-child{border-bottom:none}
+  .participants-table tbody tr:nth-child(even) td{background:var(--surface)}
+  .participants-table td{padding:13px 16px;font-size:13.5px;color:var(--muted);text-align:center;background:var(--bg)}
+  .participants-table td:first-child{font-weight:700;color:var(--ink);text-align:left}
+  .score-bar{display:inline-flex;gap:3px;align-items:center;justify-content:center}
+  .score-pip{width:10px;height:10px;border-radius:50%}
+  .score-pip.filled{background:var(--blue)}
+  .score-pip.empty{background:var(--line)}
+
+  /* ── Blue participant count in problem headings ── */
+  .p-count{color:var(--blue);font-size:14px;font-weight:700;margin-left:6px}
+
+  /* ── Divider ── */
+  hr{border:none;border-top:1px solid var(--line);margin:64px 0}
+
+  /* ── Next project ── */
+  .next-card{display:grid;grid-template-columns:38% 1fr;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;margin-bottom:80px;transition:border-color .2s,transform .2s}
+  .next-card:hover{border-color:var(--blue);transform:translateY(-2px);text-decoration:none}
+  .next-card .shot{background:#1b1c18;min-height:200px;position:relative}
+  .next-card .shot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+  .next-card .body{padding:28px}
+  .next-card .next-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .next-card h3{font-size:22px;font-weight:700;letter-spacing:-.015em;margin-bottom:8px}
+  .next-card p{font-size:14px;color:var(--muted);line-height:1.55;margin:0}
+  @media(max-width:600px){.next-card{grid-template-columns:1fr}.next-card .shot{min-height:180px;height:180px}}
+
+  /* ── Back to top + progress ── */
+  #back-top{position:fixed;bottom:32px;right:32px;z-index:90;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s,background .15s;background:var(--ink);color:var(--bg);border:none;border-radius:100px;padding:10px 20px;font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px}
+  #back-top svg{width:12px;height:12px;flex-shrink:0;transition:transform .2s}
+  #back-top.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+  #back-top:hover{background:var(--blue)}
+  #back-top:hover svg{transform:translateY(-2px)}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--blue);z-index:200;transition:width .1s linear;pointer-events:none}
+
+  /* ── Lightbox ── */
+  #lb{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;display:none;align-items:center;justify-content:center;cursor:zoom-out;padding:24px}
+  #lb.open{display:flex}
+  #lb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;box-shadow:0 8px 48px rgba(0,0,0,.6)}
+  #lb-close{position:fixed;top:20px;right:24px;color:#fff;font-size:28px;line-height:1;cursor:pointer;opacity:.7;font-family:sans-serif}
+  #lb-close:hover{opacity:1}
+
+  /* ── Footer ── */
+  footer{border-top:1px solid var(--line);padding:32px 0 48px}
+  .foot-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .foot-name{font-size:14px;color:var(--muted)}
+  .foot-links{display:flex;gap:20px}
+  .foot-links a{font-size:13px;font-weight:500;color:var(--muted)}
+  .foot-links a:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div id="progress-bar" aria-hidden="true"></div>
+<button id="back-top" aria-label="Back to top">
+  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,8 6,4 10,8"/></svg>
+  Top
+</button>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Image enlarged"><span id="lb-close" aria-label="Close">&times;</span><img id="lb-img" src="" alt=""></div>
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="brand" aria-label="Stanlyn Lu, home">
+      <svg viewBox="0 0 200 200" width="22" height="22" aria-hidden="true"><circle cx="100" cy="100" r="100" fill="#2d8841"/><g fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="5"><line x1="44.69" y1="21.51" x2="100.91" y2="77.73"/><line x1="155.31" y1="21.51" x2="98.39" y2="78.42"/><line x1="44.69" y1="121.14" x2="100" y2="176.45"/><line x1="155.31" y1="121.14" x2="98.26" y2="178.19"/><line x1="100" y1="73.99" x2="100" y2="155.83"/></svg>
+      Stanlyn Lu
+    </a>
+    <a href="index.html#works" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      All works
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot" aria-hidden="true"></span>UX Research · AI / Conversational · AR Interactions</div>
+      <h1>What the walkie-talkie <em>already</em> does right</h1>
+      <p class="hero-sub">How I evaluated conversational and AR-based learning features for Walmart store associates, and turned 25 on-floor usability problems into 53 recommendations for what Me@Walmart (<a href="https://apps.apple.com/us/app/mywalmart/id1459898418" target="_blank" rel="noopener">now MyWalmart</a>)'s ITFOW initiative should become.</p>
+
+      <div class="meta-strip" role="list" aria-label="Project details">
+        <div class="meta-item" role="listitem">
+          <div class="label">My Role</div>
+          <div class="val">UX Designer, Research Collaborator</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Touchpoints</div>
+          <div class="val">Me@Walmart Mobile App</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Team</div>
+          <div class="val">UX research, UX design, PM, Engineering, Associate Learning &amp; Leadership, Store Ops</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Timeline</div>
+          <div class="val">Oct 2022 – Nov 2022</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap-wide">
+      <!-- slide-back fades out to reveal the image beneath. Replace itfow-mockup.jpg with the mockup asset when available. -->
+      <div class="hero-img">
+        <img src="assets/itfow-scenario.png" alt="Store associate using Me@Walmart in a Walmart aisle">
+        <img class="slide-back" src="assets/itfow.jpg" alt="iTFOW chatbot mockup screens">
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEXT -->
+  <div class="wrap">
+
+    <div class="prose">
+      <div class="section-label">The Situation</div>
+      <h2>Learning in a Walmart store is hard by design</h2>
+      <p>Store associates at Walmart face a unique challenge: they need to access knowledge (how to handle a customer request, complete a task, find a coworker) in an environment that is inherently hostile to slow, screen-heavy interactions. Loud floors, busy hands, frequent customer interruptions, and outdoor work areas conspire against any digital tool that demands more than a few seconds of attention.</p>
+      <p>The <strong>In The Flow of Work (ITFOW)</strong> initiative, developed by the Associate Learning &amp; Leadership team, proposed a direct answer: learning must have proximity to the task. Instead of sending associates away from the floor to complete training, ITFOW brings the right content (tutorials, guided help, connected coworkers) directly into the moment of need via Me@Walmart's Ask Sam and task features.</p>
+      <p>Before any of this could ship at scale, the team needed to know: <strong>Do these features actually work for associates on the floor?</strong> This is what the research set out to answer.</p>
+    </div>
+
+    <!-- Work environment photo grid — replace src with itfow-work-env.jpg once available -->
+    <figure class="fig" style="margin:28px 0">
+      <img src="assets/itfow-work-env.png" alt="Four store environment conditions: noisy floor, busy hands, customer interruptions, outdoor distractions" data-lb onerror="this.closest('figure').style.display='none'">
+    </figure>
+
+    <div class="design-principles">
+      <div class="dp-col">
+        <div class="dp-label">Currently</div>
+        <p class="dp-note">Store Associates have little time to monitor their mobile phone during the day</p>
+        <p class="dp-question">How to adapt to this environment and encourage Store Associates to use the features on Me@Walmart without loss of work productivity?</p>
+      </div>
+      <div class="dp-col">
+        <div class="dp-label">Keep in mind when designing</div>
+        <ul class="dp-list">
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 12h6M9 16h6M9 8h6M5 20h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
+            <span><strong>Less steps</strong> to complete tasks <span class="dp-aside">(even less than three clicks)</span></span>
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            <span><strong>Time sensitive</strong></span>
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            <span><strong>Talk</strong> rather than text</span>
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span><strong>Notify</strong> everything important</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- RESEARCH DESIGN -->
+    <div class="prose">
+      <div class="section-label">Research Design</div>
+      <h2>1-on-1, scenario-based, on-device</h2>
+      <p>We ran five 60-minute moderated testing sessions with non-manager store associates representing a range of tenure, roles, and technology comfort levels. Each participant worked through five scenarios on an actual Me@Walmart build (the same app they use on shift), so behavioral patterns, hesitations, and workarounds reflected real conditions rather than hypothetical preferences.</p>
+    </div>
+
+    <div class="stat-bar" role="list">
+      <div class="stat-item" role="listitem">
+        <div class="s-num">5</div>
+        <div class="s-label">store associates, non-managers</div>
+      </div>
+      <div class="stat-item" role="listitem">
+        <div class="s-num">60 min</div>
+        <div class="s-label">per moderated session</div>
+      </div>
+      <div class="stat-item" role="listitem">
+        <div class="s-num">5</div>
+        <div class="s-label">scenarios tested</div>
+      </div>
+      <div class="stat-item" role="listitem">
+        <div class="s-num">6.4 / 7</div>
+        <div class="s-label">average CSAT across all scenarios</div>
+      </div>
+    </div>
+
+    <table class="participants-table" aria-label="Participant profiles">
+      <thead>
+        <tr>
+          <th>Participant</th>
+          <th>Tenure</th>
+          <th>Position</th>
+          <th>Store Knowledge</th>
+          <th>Tech Fluency</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>P01</td><td>5 years</td><td>Associate</td><td><span class="score-bar" aria-label="5 out of 5"><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span></span></td><td><span class="score-bar" aria-label="2 out of 5"><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip empty"></span><span class="score-pip empty"></span><span class="score-pip empty"></span></span></td></tr>
+        <tr><td>P02</td><td>21 years</td><td>Associate</td><td><span class="score-bar" aria-label="5 out of 5"><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span></span></td><td><span class="score-bar" aria-label="1 out of 5"><span class="score-pip filled"></span><span class="score-pip empty"></span><span class="score-pip empty"></span><span class="score-pip empty"></span><span class="score-pip empty"></span></span></td></tr>
+        <tr><td>P03</td><td>9 months</td><td>Associate</td><td><span class="score-bar" aria-label="1 out of 5"><span class="score-pip filled"></span><span class="score-pip empty"></span><span class="score-pip empty"></span><span class="score-pip empty"></span><span class="score-pip empty"></span></span></td><td><span class="score-bar" aria-label="5 out of 5"><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span></span></td></tr>
+        <tr><td>P04</td><td>2 years</td><td>Team Lead</td><td><span class="score-bar" aria-label="4 out of 5"><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip empty"></span></span></td><td><span class="score-bar" aria-label="4 out of 5"><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip empty"></span></span></td></tr>
+        <tr><td>P05</td><td>3 years</td><td>Team Lead</td><td><span class="score-bar" aria-label="4 out of 5"><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip empty"></span></span></td><td><span class="score-bar" aria-label="4 out of 5"><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip filled"></span><span class="score-pip empty"></span></span></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="prose">
+      <div class="section-label">Executive Summary</div>
+      <h2>Satisfied, but asking for less friction</h2>
+    </div>
+
+    <div class="exec-summary">
+      <div class="exec-text">
+        <p>Store Associates are <strong>satisfied (6.4/7)</strong> with the new learning features on Me@Walmart. They believe these features can make their work easier by enabling them to <strong>quickly find useful content (tutorials)</strong> and <strong>ask for help from coworkers</strong>.</p>
+        <p>However, they are asking for a more streamlined experience with fewer steps to navigate, driven by their on-field work environment. The current interface designs and user flows are not intuitive enough, which reduces the functionality of the learning features.</p>
+        <p>Research identifies <strong>25 problems</strong> in five scenarios and provides <strong>53 recommendations</strong> to move forward.</p>
+      </div>
+      <div class="exec-artifact">
+        <img src="assets/itfow-artifact.png" alt="Research artifact showing scenario flow diagrams across all five tested scenarios" data-lb onerror="this.closest('.exec-artifact').style.display='none'">
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- FINDINGS TREE -->
+    <div class="prose">
+      <div class="section-label">Key Findings</div>
+      <h2>Six themes across 25 problems</h2>
+      <p>Findings clustered into six recurring themes that cut across all five scenarios.</p>
+    </div>
+
+    <div class="findings-tree">
+      <div class="tree-grid">
+        <div class="tree-group">
+          <div class="tree-root">Feature Discoverability</div>
+          <div class="tree-leaves">
+            <div class="tree-leaf">Unaware of new features</div>
+            <div class="tree-leaf">Want feature announcements</div>
+            <div class="tree-leaf">Need onboarding tutorials</div>
+          </div>
+        </div>
+        <div class="tree-group">
+          <div class="tree-root">Task &amp; Learning Content</div>
+          <div class="tree-leaves">
+            <div class="tree-leaf">Tasks need reordering: My → Team → Store</div>
+            <div class="tree-leaf">Prefer combined video + text</div>
+            <div class="tree-leaf">Need tutorial surfaced earlier</div>
+            <div class="tree-leaf">Tutorial labels unclear</div>
+          </div>
+        </div>
+        <div class="tree-group">
+          <div class="tree-root">Scan &amp; Geofencing</div>
+          <div class="tree-leaves">
+            <div class="tree-leaf">Slow, unfocused scan results</div>
+            <div class="tree-leaf">Scan icon unclear</div>
+            <div class="tree-leaf">Scan should be on every page</div>
+            <div class="tree-leaf">Geofence CTA should be "Need Help"</div>
+          </div>
+        </div>
+        <div class="tree-group">
+          <div class="tree-root">Help Request Workflow</div>
+          <div class="tree-leaves">
+            <div class="tree-leaf">Need scheduling + skill matching</div>
+            <div class="tree-leaf">Want request auto-expiration</div>
+            <div class="tree-leaf">Too many steps to request/accept help</div>
+            <div class="tree-leaf">Need lock-screen interaction</div>
+          </div>
+        </div>
+        <div class="tree-group">
+          <div class="tree-root">Environment Constraints</div>
+          <div class="tree-leaves">
+            <div class="tree-leaf">Need louder notifications</div>
+            <div class="tree-leaf">Noisy store &amp; interruptions</div>
+            <div class="tree-leaf">Hands busy, minimal taps needed</div>
+          </div>
+        </div>
+        <div class="tree-group">
+          <div class="tree-root">Navigation &amp; Team Visibility</div>
+          <div class="tree-leaves">
+            <div class="tree-leaf">Skill filters mismatch real knowledge</div>
+            <div class="tree-leaf">Reorder My Team by dept + availability</div>
+            <div class="tree-leaf">Expose navigate/message/call upfront</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- GENERAL PROBLEMS -->
+    <div class="prose">
+      <div class="section-label">Part 01: General Findings</div>
+      <h2>Four problems affecting every feature</h2>
+      <p>Before diving into the five scenarios, the research surfaced four systemic issues that touched every part of the experience. These aren't feature bugs; they're environmental and behavioral realities that any design must account for.</p>
+    </div>
+
+    <div class="problem-list">
+      <div class="problem-item">
+        <div class="p-body">
+          <div class="p-head">Old Habits Die Hard<span class="p-count">5/5</span></div>
+          <p class="p-desc">All 5 participants reached for their walkie talkies or Work Chat before considering Me@Walmart. For associates who have worked the floor for years, the radio is instant, familiar, and requires no screen.</p>
+          <div class="quote-row" style="margin-top:12px">
+            <div class="quote-item">"When meeting issues, I always get on radio to ask to see what people know around them." <cite>P5, 3 years tenure</cite></div>
+            <div class="quote-item">"I always reach out to my supervisor directly without confirming availability." <cite>P3, 9 months tenure</cite></div>
+          </div>
+        </div>
+        <div class="p-rec">
+          <div class="p-rec-label">Recommendation</div>
+          Research use cases where Me@Walmart offers clear advantages over radio or Work Chat before redesigning the request flow
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <div class="p-body">
+          <div class="p-head">Notifications Don't Break Through<span class="p-count">5/5</span></div>
+          <p class="p-desc">All 5 participants said push notifications would increase their Me@Walmart usage, but only if the alerts are loud enough to be heard over a busy store floor. The current implementation fails both requirements: notifications exist, but they're easily missed.</p>
+          <div class="quote-row" style="margin-top:12px">
+            <div class="quote-item">"We don't hear it until much later, so we don't know what's going on." <cite>P5</cite></div>
+            <div class="quote-item">"We need a loud notification because sometimes people will lock the screen and don't see the pop-up." <cite>P1</cite></div>
+          </div>
+        </div>
+        <div class="p-rec">
+          <div class="p-rec-label">Recommendation</div>
+          Push loud, alert-style notifications for time-sensitive events, not quiet badge updates
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <div class="p-body">
+          <div class="p-head">New Features Are Invisible<span class="p-count">5/5</span></div>
+          <p class="p-desc">All 5 participants failed to notice new features without prompting, including filter options (4/5), the scan feature (2/3), and "I need someone's help" in Ask Sam (2/5). On a busy floor, subtle UI additions simply don't register.</p>
+          <div class="quote-row" style="margin-top:12px">
+            <div class="quote-item">"People ask me how to use Me@Walmart and other apps and what the new features are." <cite>P3</cite></div>
+            <div class="quote-item">"We need notifications when there are new features and the tutorials of new features." <cite>P1</cite></div>
+          </div>
+        </div>
+        <div class="p-rec">
+          <div class="p-rec-label">Recommendation</div>
+          Step-by-step onboarding video + in-store face-to-face training at every feature launch
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <div class="p-body">
+          <div class="p-head">Many Associates Don't Use the Store Phone<span class="p-count">2/5</span></div>
+          <p class="p-desc">3 out of 5 participants noted that colleagues frequently lack access to a working, fully set-up store phone, meaning any feature on Me@Walmart is blocked before it starts for a meaningful share of the workforce.</p>
+          <div class="quote-row" style="margin-top:12px">
+            <div class="quote-item">"A lot of people in the store don't have phone." <cite>P3</cite></div>
+            <div class="quote-item">"Not everyone has a device to do that, they do on regular phone than store phone." <cite>P1</cite></div>
+          </div>
+        </div>
+        <div class="p-rec">
+          <div class="p-rec-label">Recommendation</div>
+          Pre-configure store phones with all apps and single-login access before handing to associates
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- SCENARIOS -->
+    <div class="prose">
+      <div class="section-label">Part 02: Scenario Findings</div>
+      <h2>Five scenarios, measured satisfaction, actionable gaps</h2>
+      <p>Each scenario simulated a real on-floor situation associates encounter. CSAT was measured on a 1–7 scale after each scenario. High scores don't mean the design is finished; they mean participants can see the value, even when the current execution creates friction.</p>
+    </div>
+
+    <div class="scenario-grid">
+      <div class="scenario-card">
+        <div class="sc-header"><span class="sc-label">Scenario 1</span><span class="sc-score">6.5 / 7</span></div>
+        <h3>Ask for help from a specific person</h3>
+        <p>Navigate My Team to find a coworker by skill or department and connect with them.</p>
+      </div>
+      <div class="scenario-card">
+        <div class="sc-header"><span class="sc-label">Scenario 2</span><span class="sc-score">6.5 / 7</span></div>
+        <h3>Ask help for a specific task</h3>
+        <p>Find a task, access tutorials, search Ask Sam for guidance, and submit a help request.</p>
+      </div>
+      <div class="scenario-card">
+        <div class="sc-header"><span class="sc-label">Scenario 3</span><span class="sc-score">5.9 / 7</span></div>
+        <h3>Someone requests your help</h3>
+        <p>Receive and respond to a help request from another associate (the helper experience).</p>
+      </div>
+      <div class="scenario-card">
+        <div class="sc-header"><span class="sc-label">Scenario 4</span><span class="sc-score">6.7 / 7</span></div>
+        <h3>Item scan to content</h3>
+        <p>Scan a product barcode to surface relevant tutorials and item information in Ask Sam.</p>
+      </div>
+      <div class="scenario-card" style="grid-column:1/-1">
+        <div class="sc-header"><span class="sc-label">Scenario 5</span><span class="sc-score">6.5 / 7</span></div>
+        <h3>Geofencing to an area</h3>
+        <p>Receive a location-triggered prompt when entering a specific department and use it to get contextual help.</p>
+      </div>
+    </div>
+
+    <!-- Scenario 1 detail -->
+    <div class="problem-section">
+      <div class="ps-title">Scenario 1: Ask for help from specific person</div>
+      <div class="problem-list">
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">Name ordering on My Team makes finding people hard<span class="p-count">5/5</span></div>
+            <p class="p-desc">All 5 participants found the alphabetical name ordering on My Team too slow to navigate. They need to find someone by department first, then by availability, not by last name.</p>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Reorder: Dept. alphabetically → availability within dept. → name. Team leads and managers always on top.
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">Navigate, Message, and Call are buried inside "Connect"<span class="p-count">4/5</span></div>
+            <p class="p-desc">3 of 5 participants preferred to navigate directly to a coworker rather than message or call. But the navigation option is hidden two taps deep. 2 participants wanted all three actions visible from the list view.</p>
+            <div class="quote-row" style="margin-top:12px">
+              <div class="quote-item">"Navigate is pretty cool, wants to see current location/dept/aisle before navigation." <cite>P5</cite></div>
+            </div>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Surface Navigate (or all three actions) directly from the My Team list, eliminating the Connect tap
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">Skill filters aren't tied to anything meaningful<span class="p-count">4/5</span></div>
+            <p class="p-desc">4 of 5 participants wanted skills that matched their roles and were grounded in real training data, ideally linked to uLearn/Academy badges. Generic skill tags felt arbitrary.</p>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Sync skill tags with the uLearn/Academy badging system; add years of tenure as a filter option
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario 2 detail -->
+    <div class="problem-section">
+      <div class="ps-title">Scenario 2: Ask help for specific task (Tasks + Ask Sam)</div>
+      <div class="problem-list">
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">Task Overview page doesn't show the associate's own tasks<span class="p-count">5/5</span></div>
+            <p class="p-desc">All 5 participants wanted to see their own tasks first when they tap "Task", but the Task Overview page showed team and store tasks, requiring them to scroll to find themselves.</p>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Reorder: My Tasks → Team Tasks → Store Tasks; sort alphabetically within each group
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">"Watch Tutorial" and "Step-By-Step" buttons are ambiguous<span class="p-count">5/5</span></div>
+            <p class="p-desc">All 5 participants had to guess what each button did. The labels don't communicate the format difference (video vs. text). 2 of 5 also reported the tutorial buttons were hard to find if the task description was long.</p>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Relabel to distinguish format explicitly; move tutorial button next to task name, above the fold
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">Associates want video and text together<span class="p-count">4/5</span></div>
+            <p class="p-desc">All 5 preferred video tutorials, but 4 of 5 wanted synchronized text. The current design separates them into two separate buttons, making associates choose instead of combining formats.</p>
+            <div class="quote-row" style="margin-top:12px">
+              <div class="quote-item">"I love video tutorials, but the text is also necessary. Maybe put them together is the best." <cite>P1</cite></div>
+              <div class="quote-item">"Prefer video or imagery (tutorials). Ideally both together; follow along with text while watching the video." <cite>P4</cite></div>
+            </div>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Combine into one player: subtitles, chapter markers, and a transcript that lets users jump to specific points
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">Ask Sam's "Popular Searches" box isn't useful<span class="p-count">4/5</span></div>
+            <p class="p-desc">4 of 5 participants expected searches relevant to their role or department, not store-wide or platform-wide popular queries. 2 participants didn't understand how popular searches were calculated at all.</p>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Move role/task-relevant searches to the top; add dept-relevant searches; surface automatically on open
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">Associates use Ask Sam for customers, not themselves<span class="p-count">4/5</span></div>
+            <p class="p-desc">4 of 5 participants reported that Ask Sam is one of their most-used features, but nearly all of that usage is to help customers find items and check prices, not to access learning or task content for their own use.</p>
+            <div class="quote-row" style="margin-top:12px">
+              <div class="quote-item">"I usually use the information from Ask Sam for customers, not for myself." <cite>P1</cite></div>
+            </div>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Add store map as a quick-access tag in Ask Sam and on the homepage to bridge the customer-help use case
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenarios 3 & 2 help request combined -->
+    <div class="problem-section">
+      <div class="ps-title">Scenarios 2 &amp; 3: Help Request Experience (Requester + Helper)</div>
+      <p style="font-size:14.5px;color:var(--muted);margin-bottom:16px;line-height:1.6">Participants raised nearly identical concerns from both sides of the help request flow: as the person asking and as the person responding. The lowest satisfaction score (5.9/7 for the helper experience) reflects how broken this two-way connection currently is.</p>
+      <div class="problem-list">
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">Requester: limited entry points to submit a request<span class="p-count">4/5</span></div>
+            <p class="p-desc">4 of 5 participants found it unintuitive that help requests could only be submitted from within Ask Sam. The flow isn't accessible from the homepage, task detail page, or lock screen.</p>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Add "Request Help" to the homepage, task detail page, Inbox, and lock screen
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">Helper: too many steps to connect after accepting<span class="p-count">4/5</span></div>
+            <p class="p-desc">4 of 5 participants (as helpers) found the flow from "Accept" to actually connecting with the requester required too many navigations. They expected to be routed immediately to a connection option.</p>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Allow immediate connection from the lock screen "Accept" tap and from the homepage help request box
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">Requests have no urgency or time awareness<span class="p-count">3/5</span></div>
+            <p class="p-desc">3 of 5 participants expected time-sensitive requests to expire or escalate automatically. Old requests staying in the queue with no context about urgency felt misleading and unreliable.</p>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Auto-cancel requests after 30 minutes with no acceptance; show a countdown timer on the helper notification
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario 4 detail -->
+    <div class="problem-section">
+      <div class="ps-title">Scenario 4: Item Scan to Content</div>
+      <div class="problem-list">
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">Scan is frequently used but hard to reach<span class="p-count">3/4</span></div>
+            <p class="p-desc">Scanning is one of the most-used features for customer-assist tasks, but it lives only inside Ask Sam. 3 of 4 participants wanted the scan icon on every page. 2 participants thought the current icon looked more like a camera than a scanner.</p>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Add a persistent scan icon to the top of every page using the same icon as Ask Sam
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">The scanner is slow and unfocused<span class="p-count">2/4</span></div>
+            <p class="p-desc">2 of 4 participants reported failed scan experiences: slow loading, difficulty isolating a single item, and returning too many results that required manual deletion.</p>
+            <div class="quote-row" style="margin-top:12px">
+              <div class="quote-item">"Gives too much information, so I need to delete 36 out of 37 items." <cite>P3</cite></div>
+            </div>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Center-lock the scan target to the closest item; prioritize speed over scan breadth
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario 5 detail -->
+    <div class="problem-section">
+      <div class="ps-title">Scenario 5: Geofencing to an Area</div>
+      <div class="problem-list">
+        <div class="problem-item">
+          <div class="p-body">
+            <div class="p-head">"More Help" routes to search, not to a help request<span class="p-count">2/4</span></div>
+            <p class="p-desc">2 of 4 participants expected tapping "More Help" on a geofence prompt to let them call for assistance or submit a help request. Instead it opened Ask Sam's search, which felt irrelevant when they already knew they needed a person, not information.</p>
+          </div>
+          <div class="p-rec">
+            <div class="p-rec-label">Recommendation</div>
+            Rename to "Need Help" and route to the help request submission flow, not keyword search
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- PRIORITIZATION -->
+    <div class="prose">
+      <div class="section-label">Prioritization</div>
+      <h2>25 problems, 53 recommendations, ranked for action</h2>
+      <p>Every problem identified in the study was logged and prioritized by the team. The majority landed as <strong>High priority</strong>, reflecting that the current implementation actively reduces functionality rather than simply being unoptimized. A handful required further research before redesign could begin.</p>
+    </div>
+
+    <table class="priority-table" aria-label="Top priority problems and recommendations">
+      <thead>
+        <tr>
+          <th>Problem</th>
+          <th>Scenario</th>
+          <th>Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Name ordering on My Team</td><td>Scenario 1</td><td><span class="badge-high">High</span></td></tr>
+        <tr><td>Navigate / Message / Call visibility</td><td>Scenario 1</td><td><span class="badge-high">High</span></td></tr>
+        <tr><td>Task Overview page ordering</td><td>Scenario 2</td><td><span class="badge-high">High</span></td></tr>
+        <tr><td>Ambiguous tutorial button labels</td><td>Scenario 2</td><td><span class="badge-high">High</span></td></tr>
+        <tr><td>Video + text tutorial separation</td><td>Scenario 2</td><td><span class="badge-high">High</span></td></tr>
+        <tr><td>Ask Sam popular searches irrelevant</td><td>Scenario 2</td><td><span class="badge-high">High</span></td></tr>
+        <tr><td>Too many steps to connect as helper</td><td>Scenario 3</td><td><span class="badge-high">High</span></td></tr>
+        <tr><td>Scan icon accessibility</td><td>Scenario 4</td><td><span class="badge-high">High</span></td></tr>
+        <tr><td>Lack of notifications</td><td>General</td><td><span class="badge-high">High</span></td></tr>
+        <tr><td>New feature unawareness</td><td>General</td><td><span class="badge-high">High</span></td></tr>
+        <tr><td>Skillset filter relevance</td><td>Scenario 1</td><td><span class="badge-med">Need Research</span></td></tr>
+        <tr><td>Old habits: Help Request vs. radio</td><td>General</td><td><span class="badge-med">Need Research</span></td></tr>
+        <tr><td>Unawareness of new features</td><td>General</td><td><span class="badge-low">Mid</span></td></tr>
+        <tr><td>Don't use store phone</td><td>General</td><td><span class="badge-low">Mid</span></td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <!-- FUTURE RESEARCH -->
+    <div class="prose" style="margin-bottom:24px">
+      <div class="section-label">What Comes Next</div>
+      <h2>Three research directions to move forward</h2>
+    </div>
+
+    <div class="future-grid">
+      <div class="future-card">
+        <div class="fc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="fc-num">Direction 01</div>
+        <h3>Use Cases of Help Request on Me@Walmart</h3>
+        <p>Walkie talkies and Work Chat dominate, but this study couldn't fully explain why. Before redesigning the help request flow, the team needs to understand what Me@Walmart can offer that radio can't: richer context, skill matching, scheduling. That answer should shape the design, not the other way around.</p>
+        <div class="fc-outcome">Expected outcome: Future Help Request Experience</div>
+      </div>
+
+      <div class="future-card">
+        <div class="fc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="fc-num">Direction 02</div>
+        <h3>A/B Testing for Uncertain Design Decisions</h3>
+        <p>Several questions from this study had no clear winner: auto-surfacing recommended searches vs. waiting for a tap, for instance. A/B testing via UserZoom Survey can gather fast, quantitative signal from a much larger associate pool and close those open decisions before the next build.</p>
+        <div class="fc-outcome">Expected outcome: Recommendations for Designs</div>
+      </div>
+
+      <div class="future-card">
+        <div class="fc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        </div>
+        <div class="fc-num">Direction 03</div>
+        <h3>Iterative Testing for New Designs</h3>
+        <p>Moderated testing on every design iteration, not just at POC stage. This study's findings are a snapshot. The real value is building a research rhythm that travels with the product, so new designs are tested before they ship rather than validated after.</p>
+        <div class="fc-outcome">Expected outcome: Recommendations for Designs</div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- WHAT IT BECAME -->
+    <div class="prose" style="margin-bottom:24px">
+      <div class="section-label">From POC to Product</div>
+      <h2>Ask Sam grew up. It's now Sidekick.</h2>
+    </div>
+
+    <div class="became-grid">
+      <div class="became-text">
+        <div class="timeline">
+          <span class="yr">2022</span>
+          <span class="arrow">→</span>
+          <span class="yr now">2026</span>
+        </div>
+        <p>The POC we evaluated in 2022 asked a simple question: can learning happen at the moment of need, without pulling associates off the floor? The research identified the foundations (<strong>conversational input, task proximity, speak-search-scan as a unified interaction model</strong>) and surfaced the friction that had to be resolved first.</p>
+        <p>Four years later, Ask Sam has become <strong>Sidekick</strong>: a full AI-powered assistant built into MyWalmart. It doesn't just find items anymore. It answers process questions, explains tasks, and supports associates through their day-to-day work, exactly the vision the ITFOW research was built to validate.</p>
+        <p>The walkie-talkie is still on the belt. But now there's something on the phone that earns its place next to it.</p>
+      </div>
+      <div class="became-phones">
+        <div class="phone">
+          <img src="assets/itfow-sidekick-1.jpg" alt="Sidekick Assistant in MyWalmart — home state with Speak, Search, and Scan actions" data-lb style="cursor:zoom-in" onerror="this.closest('.phone').style.display='none'">
+        </div>
+        <div class="phone">
+          <img src="assets/itfow-sidekick-2.jpg" alt="Sidekick Assistant responding with a Betterway Guide about how to use the AI feature" data-lb style="cursor:zoom-in" onerror="this.closest('.phone').style.display='none'">
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- REFLECTION -->
+    <div class="prose">
+      <div class="section-label">Reflection</div>
+      <h2>What this research taught us about designing for the floor</h2>
+
+      <ul class="reflection-list">
+        <li>
+          <div class="num" aria-hidden="true">1</div>
+          <p><strong>High satisfaction scores don't mean the design is working.</strong> A 6.4/7 overall CSAT is strong, but it measures perceived value, not usability. Associates understood what ITFOW was trying to do and appreciated the direction. The friction came from execution gaps: the distance between what the feature promised and how it actually felt to use. Those are fixable.</p>
+        </li>
+        <li>
+          <div class="num" aria-hidden="true">2</div>
+          <p><strong>The environment is the primary constraint.</strong> Every design problem we found ultimately traced back to a store floor reality: noise, motion, interruptions, busy hands. Features designed at a desk fail on the floor. On that floor, three clicks is the upper limit, not a guideline.</p>
+        </li>
+        <li>
+          <div class="num" aria-hidden="true">3</div>
+          <p><strong>Behavior change requires more than good UI.</strong> A better UI alone won't displace the walkie talkie. New tools earn habitual use through notification design, onboarding strategy, and in-store training. The research surfaced this clearly, and the recommendations reflect it.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="chips" style="margin-bottom:80px">
+      <span class="chip">UX Research</span>
+      <span class="chip">Moderated Usability Testing</span>
+      <span class="chip">AI / Conversational UX</span>
+      <span class="chip">AR Interactions</span>
+      <span class="chip">Associate Experience</span>
+      <span class="chip">Me@Walmart</span>
+    </div>
+
+  </div>
+
+  <!-- NEXT PROJECT -->
+  <div class="wrap">
+    <p class="section-label" style="margin-bottom:16px">Next project</p>
+    <a href="warden.html" class="next-card">
+      <div class="shot">
+        <img src="assets/warden.jpg" alt="Warden security operations dashboard showing a live US map of active sites and a real-time incident queue.">
+      </div>
+      <div class="body">
+        <div class="next-label">Next work</div>
+        <h3>Warden</h3>
+        <p>A global security operations platform enabling real-time incident response, emergency coordination, and AI-assisted reporting across Walmart's worldwide footprint.</p>
+      </div>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap-wide foot-inner">
+    <div class="foot-name">Stanlyn Lu · Senior Product Designer, Walmart Global Tech</div>
+    <div class="foot-links">
+      <a href="mailto:lintanxi@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/lintanxi/" rel="noopener" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const progressBar = document.getElementById('progress-bar');
+  const backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = pct + '%';
+    backTop.classList.toggle('visible', pct > 15);
+  }, { passive: true });
+  backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // Lightbox
+  const lb = document.getElementById('lb');
+  const lbImg = document.getElementById('lb-img');
+  document.querySelectorAll('img[data-lb]').forEach(img => {
+    img.addEventListener('click', () => {
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  lb.addEventListener('click', () => { lb.classList.remove('open'); document.body.style.overflow = ''; });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { lb.classList.remove('open'); document.body.style.overflow = ''; }
+  });
+</script>
+
+</body>
+</html>

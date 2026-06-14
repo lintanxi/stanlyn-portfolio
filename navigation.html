@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Navigation Subsystem · Stanlyn Lu</title>
+<meta name="description" content="How I built a reusable navigation component library to unify wayfinding across Walmart's Campus products - from audit to architecture, naming conventions to cross-team governance.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/everyday-700.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="fonts/everyday-400.woff" as="font" type="font/woff" crossorigin>
+<style>
+  @font-face{font-family:"Everyday Sans";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/everyday-400.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:500;font-style:normal;font-display:swap;src:url("fonts/everyday-500.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/everyday-700.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:900;font-style:normal;font-display:swap;src:url("fonts/everyday-900.woff") format("woff")}
+
+  :root{
+    --bg:#f0efeb;
+    --surface:#f7f6f2;
+    --ink:#222222;
+    --muted:#515357;
+    --line:#e1e0d8;
+    --blue:#0a5fd6;
+    --blue-ink:#002e99;
+    --blue-pale:#e6ecf9;
+    --leaf:#3a9d3a;
+    --font:"Everyday Sans","Helvetica Neue",Arial,sans-serif;
+    --max:800px;
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  img{display:block;max-width:100%}
+
+  /* ── Nav ── */
+  header{position:sticky;top:0;z-index:20;background:rgba(240,239,235,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav{max-width:1080px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:62px;gap:24px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;letter-spacing:-.01em;color:var(--ink)}
+  .brand svg{width:20px;height:20px;color:var(--leaf);flex:none}
+  .back{font-size:14px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .back:hover{color:var(--ink);text-decoration:none}
+  .back svg{width:14px;height:14px}
+
+  /* ── Layout ── */
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  .wrap-wide{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* ── Hero ── */
+  .hero{padding:72px 0 0}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex:none}
+  h1{font-size:clamp(32px,5vw,52px);font-weight:700;line-height:1.02;letter-spacing:-.035em;margin-bottom:24px}
+  h1 em{color:var(--blue);font-style:normal}
+  .hero-sub{font-size:19px;line-height:1.6;color:var(--muted);max-width:54ch;margin-bottom:48px}
+
+  /* ── Badge pill ── */
+  .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--blue-pale);color:var(--blue-ink);border-radius:999px;padding:4px 12px;margin-bottom:20px}
+
+  /* ── Meta strip ── */
+  .meta-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:64px}
+  .meta-item{background:var(--surface);padding:20px 18px}
+  .meta-item .label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .meta-item .val{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
+  @media(max-width:640px){.meta-strip{grid-template-columns:repeat(2,1fr)}}
+
+  /* ── Hero image crossfade ── */
+  .hero-img{width:100%;border-radius:var(--r);border:1px solid var(--line);overflow:hidden;margin-bottom:80px;position:relative}
+  .hero-img img{width:100%;height:480px;object-fit:cover;object-position:center top;display:block}
+  .hero-img img.slide-back{position:absolute;inset:0;animation:crossfade 8s ease-in-out infinite alternate}
+  @keyframes crossfade{0%,30%{opacity:1} 70%,100%{opacity:0}}
+  @media(max-width:640px){.hero-img img{height:260px}}
+
+  /* ── Prose ── */
+  .prose{margin-bottom:72px}
+  .prose h2{font-size:clamp(24px,3.5vw,34px);font-weight:700;letter-spacing:-.03em;margin-bottom:16px;margin-top:0}
+  .prose h3{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:10px;margin-top:32px;color:var(--ink)}
+  .prose p{color:var(--muted);margin-bottom:18px;font-size:16.5px;line-height:1.7}
+  .prose p:last-child{margin-bottom:0}
+  .prose strong{color:var(--ink);font-weight:600}
+  .prose ul{margin:16px 0 18px 0;display:flex;flex-direction:column;gap:10px;list-style:none}
+  .prose ul li{display:grid;grid-template-columns:20px 1fr;gap:8px;font-size:16px;color:var(--muted);line-height:1.6}
+  .prose ul li::before{content:"·";color:var(--blue);font-weight:700;font-size:20px;line-height:1.4}
+
+  /* ── Section label ── */
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+
+  /* ── Pull quote ── */
+  .pullquote{border-left:3px solid var(--blue);padding:18px 24px;background:var(--surface);border-radius:0 var(--r) var(--r) 0;margin:32px 0;font-size:18px;font-weight:500;color:var(--ink);line-height:1.55;font-style:italic}
+  .pullquote cite{display:block;margin-top:10px;font-size:13px;font-weight:500;font-style:normal;color:var(--muted)}
+
+  /* ── Callout box ── */
+  .callout{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;margin:28px 0}
+  .callout .callout-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .callout p{color:var(--ink);font-size:15px;line-height:1.6;margin:0}
+  .callout p+p{margin-top:10px}
+
+  /* ── Image with caption ── */
+  .fig{margin:36px 0}
+  .fig img{width:100%;border-radius:var(--r);border:1px solid var(--line)}
+  .fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.5;text-align:center}
+
+  /* ── Lightbox ── */
+  #lb{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;display:none;align-items:center;justify-content:center;cursor:zoom-out;padding:24px}
+  #lb.open{display:flex}
+  #lb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;box-shadow:0 8px 48px rgba(0,0,0,.6)}
+  #lb-close{position:fixed;top:20px;right:24px;color:#fff;font-size:28px;line-height:1;cursor:pointer;opacity:.7;font-family:sans-serif}
+  #lb-close:hover{opacity:1}
+  .fig img[data-lb]{cursor:zoom-in}
+  .fig img[data-lb]:hover{opacity:.92}
+
+  /* ── Wide breakout ── */
+  .fig-wide,
+  .wrap > figure.fig,
+  .wrap > .two-up{position:relative;left:50%;transform:translateX(-50%);width:min(960px,calc(100vw - 48px))}
+  @media(max-width:720px){
+    .fig-wide,
+    .wrap > figure.fig,
+    .wrap > .two-up{left:0;transform:none;width:100%}
+  }
+
+  /* ── Two-up images ── */
+  .two-up{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:36px 0}
+  @media(max-width:560px){.two-up{grid-template-columns:1fr}}
+  .two-up .fig{margin:0}
+
+  /* ── Impact grid ── */
+  .impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}
+  @media(max-width:560px){.impact-grid{grid-template-columns:1fr}}
+  .impact-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px}
+  .impact-item .num{font-size:32px;font-weight:700;letter-spacing:-.04em;color:var(--blue);line-height:1}
+  .impact-item .impact-label{margin-top:8px;font-size:13px;color:var(--muted);line-height:1.45}
+
+  /* ── Chips ── */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .chip{font-size:12px;font-weight:500;padding:5px 11px;border-radius:999px;background:var(--blue-pale);color:var(--blue-ink)}
+
+  /* ── Divider ── */
+  hr{border:none;border-top:1px solid var(--line);margin:64px 0}
+
+  /* ── Reflection ── */
+  .reflection-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin:20px 0}
+  .prose .reflection-list li{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start}
+  .prose .reflection-list li::before{display:none}
+  .reflection-list li{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start}
+  .reflection-list li .num{width:28px;height:28px;border-radius:50%;background:var(--blue-pale);color:var(--blue-ink);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px}
+  .reflection-list li p{font-size:15px;color:var(--muted);margin:0;line-height:1.6}
+  .reflection-list li p strong{color:var(--ink)}
+
+  /* ── Next project ── */
+  .next-card{display:grid;grid-template-columns:38% 1fr;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;margin-bottom:80px;transition:border-color .2s,transform .2s}
+  .next-card:hover{border-color:var(--blue);transform:translateY(-2px);text-decoration:none}
+  .next-card .shot{background:#1b1c18;min-height:200px;position:relative}
+  .next-card .shot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+  .next-card .body{padding:28px}
+  .next-card .next-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .next-card h3{font-size:22px;font-weight:700;letter-spacing:-.015em;margin-bottom:8px}
+  .next-card p{font-size:14px;color:var(--muted);line-height:1.55;margin:0}
+  @media(max-width:600px){.next-card{grid-template-columns:1fr}.next-card .shot{min-height:180px;height:180px}}
+
+  /* ── Footer ── */
+  footer{border-top:1px solid var(--line);padding:32px 0 48px}
+  .foot-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .foot-name{font-size:14px;color:var(--muted)}
+  .foot-links{display:flex;gap:20px}
+  .foot-links a{font-size:13px;font-weight:500;color:var(--muted)}
+  .foot-links a:hover{color:var(--ink)}
+
+  /* ── Back to top ── */
+  #back-top{position:fixed;bottom:32px;right:32px;z-index:90;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s,background .15s;background:var(--ink);color:var(--bg);border:none;border-radius:100px;padding:10px 20px;font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px}
+  #back-top svg{width:12px;height:12px;flex-shrink:0;transition:transform .2s}
+  #back-top.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+  #back-top:hover{background:var(--blue)}
+  #back-top:hover svg{transform:translateY(-2px)}
+
+  /* ── Scroll progress ── */
+  #progress-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--blue);z-index:200;transition:width .1s linear;pointer-events:none}
+
+  /* ── Architecture 4-level diagram ── */
+  .arch-levels{display:flex;flex-direction:column;gap:0;margin:28px 0 8px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .arch-level{display:grid;grid-template-columns:120px 1fr;gap:0;border-bottom:1px solid var(--line);background:var(--surface)}
+  .arch-level:last-child{border-bottom:none}
+  .arch-level-num{background:var(--blue);color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;padding:18px 12px;text-align:center;line-height:1.3}
+  .arch-level-body{padding:18px 20px}
+  .arch-level-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+  .arch-level-desc{font-size:13px;color:var(--muted);line-height:1.5;margin:0}
+  @media(max-width:480px){.arch-level{grid-template-columns:80px 1fr}.arch-level-num{font-size:10px;padding:14px 8px}}
+
+  /* ── Problem grid ── */
+  .problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:28px 0}
+  .problem-item{background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:6px}
+  .problem-tag{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue)}
+  .problem-body{font-size:14px;color:var(--muted);line-height:1.55;margin:0}
+  @media(max-width:560px){.problem-grid{grid-template-columns:1fr}}
+
+  /* ── Naming rule card ── */
+  .naming-rules{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:28px 0}
+  .naming-rule{display:grid;grid-template-columns:160px 1fr;gap:0;border-bottom:1px solid var(--line);background:var(--surface)}
+  .naming-rule:last-child{border-bottom:none}
+  .naming-rule-type{padding:16px 18px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-right:1px solid var(--line);display:flex;align-items:center}
+  .naming-rule-val{padding:16px 18px;font-size:13.5px;color:var(--ink);font-family:monospace;line-height:1.5;display:flex;flex-direction:column;gap:2px}
+  .naming-rule-val span{color:var(--muted);font-family:var(--font);font-size:12px}
+  @media(max-width:480px){.naming-rule{grid-template-columns:1fr}.naming-rule-type{border-right:none;border-bottom:1px solid var(--line)}}
+
+  /* ── Viewport scale strip ── */
+  .viewport-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0}
+  @media(max-width:560px){.viewport-strip{grid-template-columns:1fr}}
+  .vp-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 16px;display:flex;flex-direction:column;gap:6px}
+  .vp-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .vp-products{font-size:13px;color:var(--ink);line-height:1.45}
+  .vp-icon{font-size:22px;margin-bottom:2px}
+
+  /* ── A11y pillars ── */
+  .a11y-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0}
+  @media(max-width:480px){.a11y-grid{grid-template-columns:1fr}}
+  .a11y-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+  .a11y-title{font-size:13px;font-weight:700;color:var(--ink)}
+  .a11y-body{font-size:13px;color:var(--muted);line-height:1.5;margin:0}
+
+  /* ── Contribution highlight ── */
+  .contrib-strip{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;margin:28px 0;display:flex;flex-direction:column;gap:12px}
+  .contrib-strip .contrib-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .contrib-list{display:flex;flex-direction:column;gap:8px;list-style:none}
+  .contrib-list li{display:grid;grid-template-columns:18px 1fr;gap:10px;font-size:15px;color:var(--ink);line-height:1.5}
+  .contrib-list li::before{content:"✓";color:var(--leaf);font-weight:700;font-size:14px;margin-top:1px}
+
+  /* ── LD 3.5 org chart ── */
+  .ld-org{margin:28px 0 8px}
+  .ld-top{background:var(--ink);color:#fff;border-radius:var(--r);padding:18px 24px;text-align:center}
+  .ld-top-label{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .ld-top-sub{font-size:12px;opacity:.65;line-height:1.5}
+  .ld-connector{width:2px;height:20px;background:var(--line);margin:0 auto}
+  .ld-orgs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .ld-org-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;display:flex;flex-direction:column;gap:5px;position:relative}
+  .ld-org-item::before{content:'';position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:2px;height:12px;background:var(--line)}
+  .ld-org-active{border-color:var(--blue);background:var(--blue-pale)}
+  .ld-org-active::before{background:var(--blue)}
+  .ld-org-tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .ld-org-active .ld-org-tag{color:var(--blue-ink)}
+  .ld-org-name{font-size:14px;font-weight:700;color:var(--ink);line-height:1.3}
+  .ld-org-desc{font-size:12.5px;color:var(--muted);line-height:1.5;margin:0}
+  .ld-subsystem-badge{margin-top:10px;padding-top:10px;border-top:1px solid rgba(10,95,214,.2);font-size:12px;font-weight:600;color:var(--blue-ink);line-height:1.4}
+  .ld-subsystem-badge span{display:inline-block;background:var(--blue);color:#fff;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;padding:2px 6px;margin-left:6px;vertical-align:middle}
+  @media(max-width:560px){.ld-orgs{grid-template-columns:1fr}.ld-org-item::before{display:none}}
+
+  /* ── Documentation two-col ── */
+  .doc-two-col{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;max-width:960px;margin:0 auto}
+  @media(max-width:680px){.doc-two-col{grid-template-columns:1fr}}
+
+  /* ── img helper ── */
+  .img-scroll-wrap{overflow-y:auto;overflow-x:hidden;border-radius:var(--r);border:1px solid var(--line);max-height:420px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  .img-scroll-wrap img{width:100%;display:block}
+</style>
+</head>
+<body>
+
+<div id="progress-bar" aria-hidden="true"></div>
+<button id="back-top" aria-label="Back to top">
+  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,8 6,4 10,8"/></svg>
+  Top
+</button>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Image enlarged"><span id="lb-close" aria-label="Close">&times;</span><img id="lb-img" src="" alt=""></div>
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="brand" aria-label="Stanlyn Lu, home">
+      <svg viewBox="0 0 200 200" width="22" height="22" aria-hidden="true"><circle cx="100" cy="100" r="100" fill="#2d8841"/><g fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="5"><line x1="44.69" y1="21.51" x2="100.91" y2="77.73"/><line x1="155.31" y1="21.51" x2="98.39" y2="78.42"/><line x1="44.69" y1="121.14" x2="100" y2="176.45"/><line x1="155.31" y1="121.14" x2="98.26" y2="178.19"/><line x1="100" y1="73.99" x2="100" y2="155.83"/></g></svg>
+      Stanlyn Lu
+    </a>
+    <a href="index.html#works" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      All works
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Design Systems · Wayfinding · Cross-team Collaboration</div>
+      <h1>A wayfinding subsystem that finally speaks <em>one language</em></h1>
+      <p class="hero-sub">How I helped consolidate navigation patterns from two product teams into a single LD 3.5-approved subsystem - reviewed by the Foundation team and standardized for developer implementation.</p>
+
+      <div class="meta-strip" role="list" aria-label="Project details">
+        <div class="meta-item" role="listitem">
+          <div class="label">My Role</div>
+          <div class="val">UX/UI Designer</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Tool</div>
+          <div class="val">Figma</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Team</div>
+          <div class="val">Campus · Foundation · Engineering · Product</div>
+        </div>
+        <div class="meta-item" role="listitem">
+          <div class="label">Timeline</div>
+          <div class="val">Nov 2025 – Dec 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap-wide">
+      <div class="hero-img">
+        <img src="assets/nav-cover-screens.jpg" alt="Three-screen mockup showing the navigation subsystem across mobile, tablet, and desktop viewports">
+        <img class="slide-back" src="assets/nav-cover-components.png" alt="Figma component library overview showing Header Navigation, Masthead, and Dropdown components from the Campus Navigation subsystem">
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+
+    <!-- ══ THE SITUATION ══ -->
+    <div class="prose">
+      <div class="section-label">The Situation</div>
+      <h2>A navigation gap that two teams filled independently.</h2>
+      <p>Walmart's Living Design 3.5 is the universal design system across all three product organizations. The navigation domain (maps, POI search, indoor routing, room booking) sits within AX and falls outside what LD 3.5 covers - which is where the subsystem comes in.</p>
+
+      <div class="ld-org" aria-label="LD 3.5 organization structure">
+        <div class="ld-top">
+          <div class="ld-top-label">Living Design 3.5</div>
+          <div class="ld-top-sub">Universal design system · components, tokens, accessibility standards, interaction patterns</div>
+        </div>
+        <div class="ld-connector" aria-hidden="true"></div>
+        <div class="ld-orgs">
+          <div class="ld-org-item">
+            <div class="ld-org-tag">CX</div>
+            <div class="ld-org-name">Customer Experience</div>
+            <div class="ld-org-desc">Walmart.com · Walmart mobile app · consumer-facing products</div>
+          </div>
+          <div class="ld-org-item">
+            <div class="ld-org-tag">PX</div>
+            <div class="ld-org-name">Partner Experience</div>
+            <div class="ld-org-desc">Supplier tools · marketplace partner portals · vendor-facing products</div>
+          </div>
+          <div class="ld-org-item ld-org-active">
+            <div class="ld-org-tag">AX</div>
+            <div class="ld-org-name">Associate Experience</div>
+            <div class="ld-org-desc">Internal tools for Walmart associates · Campus &amp; Visit products</div>
+            <div class="ld-subsystem-badge">↳ Campus Navigation Subsystem <span>this project</span></div>
+          </div>
+        </div>
+      </div>
+      <p>The <a href="https://apps.apple.com/us/app/me-campus/id1633327532" target="_blank" rel="noopener">Me@Campus app</a> is Walmart's primary navigation product. Visit (visitor management, check-in, preregistration) had built navigation-adjacent patterns independently. Over time, the overlap became hard to ignore: similar components, different implementations, no shared reference.</p>
+      <p>Neither team had built the wrong thing - but with similar patterns in two places and no shared foundation, consolidation was overdue.</p>
+    </div>
+
+    <!-- ══ FOUNDATION ══ -->
+    <div class="section-label" style="margin-bottom:8px">Foundation</div>
+    <p style="color:var(--muted);font-size:16px;margin-bottom:24px;line-height:1.6">The subsystem extends LD 3.5 - it doesn't replace it. LD 3.5 covers color primitives, typography, tokens, and core components. The navigation subsystem layers on top, filling the domain gap. Every token, color, and type decision traces back to LD 3.5 primitives - which is what made Foundation review possible.</p>
+    <div class="two-up" style="margin-top:0">
+      <figure class="fig">
+        <div class="img-scroll-wrap">
+          <img src="assets/nav-ld35-colors.jpg" alt="LD 3.5 primitive color palette from Walmart's Living Design system, showing full color ramps for blue, cyan, grey, green, orange, pink, purple, red, and spark" data-lb>
+        </div>
+        <figcaption><strong>LD 3.5 Primitive Colors:</strong> The foundational palette for all semantic, component, and navigation-specific tokens used in the subsystem.</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="img-scroll-wrap">
+          <img src="assets/nav-ld35-type.jpg" alt="LD 3.5 typography scale defining display, heading, body, and caption type styles across mobile and desktop screen sizes" data-lb>
+        </div>
+        <figcaption><strong>LD 3.5 Typography:</strong> Type scale and hierarchy standards applied across all Campus and Visit surfaces - no custom type introduced.</figcaption>
+      </figure>
+    </div>
+
+    <hr>
+
+    <!-- ══ DISCOVER & DEFINE ══ -->
+    <div class="prose">
+      <div class="section-label">Discover &amp; Define</div>
+      <h2>What the cross-team audit surfaced</h2>
+      <p>Three teams audited what had been built: Me@Campus designers (who owned the navigation product), Visit designers (building navigation-adjacent patterns), and the Foundation team (design system alignment and accessibility compliance). Together we mapped where independent work had produced inconsistency.</p>
+
+      <div class="problem-grid">
+        <div class="problem-item">
+          <div class="problem-tag">Parallel duplication</div>
+          <p class="problem-body">Both teams had built navigation patterns independently: search bars, POI cards, map panels, solving the same problems with incompatible solutions.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-tag">No LD 3.5 coverage</div>
+          <p class="problem-body">Navigation patterns sat outside LD 3.5's scope. Each team started from scratch and made different decisions.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-tag">Naming inconsistency</div>
+          <p class="problem-body">Component names, property structures, and variant logic all differed. Engineers reconciled Figma layer names with code before every handoff.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-tag">No review path</div>
+          <p class="problem-body">Without a consolidated library, there was no path for the Foundation team to review, approve, or standardize navigation patterns for implementation.</p>
+        </div>
+      </div>
+
+      <p>These four issues shaped the goal: consolidate into a single subsystem, get it Foundation-approved, then standardize attributes for developer implementation.</p>
+    </div>
+
+    <hr>
+
+    <!-- ══ DESIGN & VALIDATE ══ -->
+    <div class="prose" style="margin-bottom:40px">
+      <div class="section-label">Design &amp; Validate</div>
+      <h2>Four contributions that made it work</h2>
+    </div>
+
+    <!-- 1. HOW I STRUCTURED IT -->
+    <div class="prose" style="margin-bottom:32px">
+      <h3 style="font-size:22px;letter-spacing:-.02em;margin-bottom:4px;margin-top:0">1. How I structured it</h3>
+      <p style="color:var(--muted);font-size:15px;margin-bottom:24px">A shared hierarchy agreed upon with engineering before any component was built.</p>
+      <p>I defined a four-level hierarchy that maps directly to how engineering organizes its code - making the Figma file structure a natural mirror of the component library.</p>
+    </div>
+
+    <div class="arch-levels" style="margin-bottom:36px">
+      <div class="arch-level">
+        <div class="arch-level-num">1<br>Components</div>
+        <div class="arch-level-body">
+          <div class="arch-level-title">Atoms &amp; molecules</div>
+          <p class="arch-level-desc">Buttons, fields, chips, icons, badges - the smallest reusable building blocks. Each defined once, used everywhere.</p>
+        </div>
+      </div>
+      <div class="arch-level">
+        <div class="arch-level-num">2<br>Patterns</div>
+        <div class="arch-level-body">
+          <div class="arch-level-title">Search, lists, filters, map cards, step navigation</div>
+          <p class="arch-level-desc">Recurring UI compositions assembled from components. Defined at the pattern level so product teams don't rebuild the same layouts independently.</p>
+        </div>
+      </div>
+      <div class="arch-level">
+        <div class="arch-level-num">3<br>Features</div>
+        <div class="arch-level-body">
+          <div class="arch-level-title">POI search, indoor routing, room booking, visitor management</div>
+          <p class="arch-level-desc">Full product features assembled from patterns. Each feature has both agnostic and product-specific variants to support reuse across Campus and Visit.</p>
+        </div>
+      </div>
+      <div class="arch-level">
+        <div class="arch-level-num">4<br>Flows</div>
+        <div class="arch-level-body">
+          <div class="arch-level-title">End-to-end navigation and Visit journeys</div>
+          <p class="arch-level-desc">Complete task flows spanning multiple features. The highest level of audit - where cross-product consistency is most visible and most critical.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-up" style="margin-bottom:72px">
+      <figure class="fig">
+        <img src="assets/nav-arch-components.png" alt="Figma file showing mobile-level UI components that form the foundational building blocks of the navigation subsystem" data-lb>
+        <figcaption><strong>Components level:</strong> Mobile-first atoms and molecules, agreed with engineering as the starting point before any pattern work began.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="assets/nav-arch-flows.jpg" alt="Figma file showing entry point screens demonstrating how components and patterns scale into full navigation and Visit experiences" data-lb>
+        <figcaption><strong>Features &amp; Flows level:</strong> How individual components assemble into full navigation and Visit journeys - the audit layer that makes cross-product consistency visible.</figcaption>
+      </figure>
+    </div>
+
+    <!-- 2. HOW I ALIGNED IT -->
+    <div class="prose" style="margin-bottom:32px">
+      <h3 style="font-size:22px;letter-spacing:-.02em;margin-bottom:4px;margin-top:0">2. How I aligned it</h3>
+      <p style="color:var(--muted);font-size:15px;margin-bottom:24px">Co-defining governance with the Foundation team and engineering, not just presenting specs to them.</p>
+      <p>Identifying what to merge was easy. Getting three teams to agree on the rules before anything shipped was the real work. I worked across all three teams to co-define the governance layer: naming conventions, container rules, the four-level hierarchy, and a contribution model both product teams could work within.</p>
+      <p>This meant structuring the library for Foundation review: organizing components into explicit layers (usage guidelines, agnostic components, product-specific variants, navigation patterns, documentation), then aligning on intake, versioning, and implementation notes for engineering.</p>
+
+      <div class="contrib-strip">
+        <div class="contrib-label">What I co-defined with the Foundation team</div>
+        <ul class="contrib-list">
+          <li>Naming conventions for components, variants, and asset files - agreed with engineering so Figma layer names map directly to code</li>
+          <li>Container rules and base part logic - defining when something should be a base part versus an atom</li>
+          <li>The component → pattern → feature → flow hierarchy as the shared mental model across design and engineering</li>
+          <li>Cross-team contribution model - how other Campus product teams can add to the subsystem without introducing drift</li>
+          <li>Versioning and intake process - when a component gets updated, how that change propagates and who reviews it</li>
+        </ul>
+      </div>
+
+      <div class="callout">
+        <div class="callout-label">How the collaboration landed</div>
+        <p>Cross-team sessions surfaced edge cases neither team had caught alone - naming conflicts that would have caused implementation issues, and reuse opportunities that cut the component count. Having the Foundation team in the room raised the bar: tighter standards than either team would have set independently, and confidence on both sides that what shipped would hold up under review.</p>
+      </div>
+    </div>
+
+    <figure class="fig" style="margin-bottom:72px">
+      <img src="assets/nav-dropdown.jpg" alt="Figma component file for the Dropdown component, showing developer-ready naming, container logic, variant properties, and auto-layout specs in the properties panel" data-lb>
+      <figcaption><strong>Example - Dropdown component:</strong> Naming, container logic, variant properties, and auto-layout specs visible at a glance. The Figma file structure mirrors how engineering organizes the component in code.</figcaption>
+    </figure>
+
+    <!-- 3. HOW I DOCUMENTED IT -->
+    <div class="prose" style="margin-bottom:32px">
+      <h3 style="font-size:22px;letter-spacing:-.02em;margin-bottom:4px;margin-top:0">3. How I documented it</h3>
+      <p style="color:var(--muted);font-size:15px;margin-bottom:24px">Naming conventions and property structure that made the handoff frictionless.</p>
+      <p>Engineers were reconciling Figma layer names with code variables before every handoff. A strict, shared taxonomy closed that gap - Figma and codebase now tell the same story.</p>
+      <p>All components use Boolean-driven properties aligned with React Native conventions - designers toggle variations from the panel without duplicating frames, keeping the file clean and auditable.</p>
+    </div>
+
+    <div class="naming-rules" style="margin-bottom:72px">
+      <div class="naming-rule">
+        <div class="naming-rule-type">Component name</div>
+        <div class="naming-rule-val">
+          Title Case
+          <span>e.g. Button, Product Card, Header Bar</span>
+        </div>
+      </div>
+      <div class="naming-rule">
+        <div class="naming-rule-type">Layer / variable</div>
+        <div class="naming-rule-val">
+          camelCase
+          <span>e.g. iconLeft, titleText, priceLabel, container</span>
+        </div>
+      </div>
+      <div class="naming-rule">
+        <div class="naming-rule-type">Variant property</div>
+        <div class="naming-rule-val">
+          camelCase
+          <span>e.g. variant=primary, size=lg, state=disabled</span>
+        </div>
+      </div>
+      <div class="naming-rule">
+        <div class="naming-rule-type">Asset file</div>
+        <div class="naming-rule-val">
+          camelCase
+          <span>e.g. ChevronRight, IconSearch, MapPinFilled</span>
+        </div>
+      </div>
+      <div class="naming-rule">
+        <div class="naming-rule-type">Structure</div>
+        <div class="naming-rule-val">
+          Component Name → .basePart → _slotComponent
+          <span>Base parts extracted only when the group has variants</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. HOW I SCALED IT -->
+    <div class="prose" style="margin-bottom:32px">
+      <h3 style="font-size:22px;letter-spacing:-.02em;margin-bottom:4px;margin-top:0">4. How I scaled it</h3>
+      <p style="color:var(--muted);font-size:15px;margin-bottom:24px">Responsive contracts and agnostic components built for reuse, not just the current product.</p>
+      <p>Every component was built to work across all three viewport tiers. Viewport templates were established first - defining the responsive contract each pattern had to satisfy before shipping.</p>
+    </div>
+
+    <div class="viewport-strip" style="margin-bottom:28px">
+      <div class="vp-item">
+        <div class="vp-icon">📱</div>
+        <div class="vp-label">Mobile</div>
+        <div class="vp-products">Me@Campus app<br><span style="color:var(--muted);font-size:12px">Portrait · Landscape</span></div>
+      </div>
+      <div class="vp-item">
+        <div class="vp-icon">⬛</div>
+        <div class="vp-label">Tablet</div>
+        <div class="vp-products">Visit Kiosk<br><span style="color:var(--muted);font-size:12px">Portrait · Landscape</span></div>
+      </div>
+      <div class="vp-item">
+        <div class="vp-icon">🖥️</div>
+        <div class="vp-label">Desktop</div>
+        <div class="vp-products">Me@Campus web · Visit Admin<br><span style="color:var(--muted);font-size:12px">XL · XXL</span></div>
+      </div>
+    </div>
+
+    <figure class="fig" style="margin-bottom:28px">
+      <img src="assets/nav-viewport-templates.jpg" alt="Figma utility file showing six empty viewport frames: Mobile Portrait, Mobile Landscape, Tablet Portrait, Tablet Landscape, Desktop XL, and Desktop XXL" data-lb>
+      <figcaption><strong>Viewport templates:</strong> Established before component work began - every pattern had to be validated across all six frames before being added to the subsystem.</figcaption>
+    </figure>
+
+    <div class="two-up" style="margin-bottom:36px">
+      <figure class="fig">
+        <img src="assets/nav-mobile-mockup.jpg" alt="Mobile mockup showing the Campus Map feature in Me@Campus at portrait viewport" data-lb>
+        <figcaption><strong>Me@Campus - Mobile:</strong> The Campus Map feature on mobile, the primary viewport for campus navigation.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="assets/nav-desktop-mockup.jpg" alt="Desktop mockup showing the Campus Map feature in Me@Campus, demonstrating navigation subsystem components in context at the Desktop XL viewport" data-lb>
+        <figcaption><strong>Me@Campus - Desktop:</strong> The same feature scaled to desktop - the same subsystem components adapting across viewports.</figcaption>
+      </figure>
+    </div>
+
+    <div class="prose" style="margin-bottom:0">
+      <p>Each component has two versions: <strong>agnostic</strong> (generic POI card, search, list item) and <strong>product-specific</strong> (Me@Campus, Visit Admin, Visit Kiosk, Preregistration). Any team can adopt the agnostic version immediately, then extend it without forking the shared foundation.</p>
+    </div>
+
+    <div class="a11y-grid" style="margin-bottom:72px;margin-top:8px">
+      <div class="a11y-item">
+        <div class="a11y-title">Color contrast</div>
+        <p class="a11y-body">Every component validated against LD 3.5 standards before handoff - kiosk, mobile, and desktop all pass at their respective contrast requirements.</p>
+      </div>
+      <div class="a11y-item">
+        <div class="a11y-title">Screen reader labeling</div>
+        <p class="a11y-body">ARIA label guidance embedded directly in the component documentation - no ambiguity about what engineers should attach at implementation.</p>
+      </div>
+      <div class="a11y-item">
+        <div class="a11y-title">Keyboard &amp; tab order</div>
+        <p class="a11y-body">Desktop components include keyboard and tab order recommendations, designed for the admin portal and Me@Campus web surfaces where keyboard navigation is expected.</p>
+      </div>
+      <div class="a11y-item">
+        <div class="a11y-title">Motion-aware interactions</div>
+        <p class="a11y-body">Micro-interactions account for reduced-motion preferences - animated transitions are optional layers, not baked into the base component behavior.</p>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ══ OUTCOMES ══ -->
+    <div class="prose">
+      <div class="section-label">Where It Stands</div>
+      <h2>A scoped contribution with a clear foundation for what comes next</h2>
+      <p>Two months delivered: a consolidated component architecture approved by the Foundation team, a shared naming taxonomy adopted by both teams, an agnostic component set covering core navigation patterns, and a governance model for ongoing maintenance. Scoped, not company-wide - but it fills a real gap in LD 3.5.</p>
+      <p>Still in progress: product-specific variant rollout, developer implementation, and adoption as both products converge. The architecture is now being stress-tested by real product work - the right kind of next step.</p>
+      <p>Campus and Visit are converging into a unified experience. A shared navigation language established now means both teams build on the same foundation - not two separate ones.</p>
+
+      <div class="callout">
+        <div class="callout-label">What this project demonstrates</div>
+        <p>Design system contributions are often invisible - the value is in what doesn't happen: the duplicate that never got built, the naming conflict that never reached code, the confusion resolved in a session rather than a post-launch bug report. This case study is a record of that work.</p>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ══ REFLECTION ══ -->
+    <div class="prose">
+      <div class="section-label">Reflection</div>
+      <h2>What I'd do differently</h2>
+      <ul class="reflection-list">
+        <li>
+          <div class="num" aria-hidden="true">1</div>
+          <p><strong>Surface the audit findings earlier and more visibly.</strong> The audit findings were the clearest case for why this subsystem mattered. I used them internally but could have shared them more explicitly with stakeholders to build faster alignment on scope.</p>
+        </li>
+        <li>
+          <div class="num" aria-hidden="true">2</div>
+          <p><strong>Define the agnostic/product-specific split from day one.</strong> The agnostic/product-specific distinction emerged mid-project. Had it been part of the original architecture decision, the library would have been cleaner from the start - less refactoring of early components.</p>
+        </li>
+        <li>
+          <div class="num" aria-hidden="true">3</div>
+          <p><strong>Build the contribution model before the first component ships.</strong> Governance is easier to introduce as the foundation than to retrofit later. Future subsystem work should start with the contribution model, not end with it.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="chips" style="margin-bottom:80px">
+      <span class="chip">Design Systems</span>
+      <span class="chip">Wayfinding</span>
+      <span class="chip">Component Architecture</span>
+      <span class="chip">Cross-team Governance</span>
+      <span class="chip">Figma</span>
+      <span class="chip">React Native conventions</span>
+    </div>
+
+  </div>
+
+  <!-- NEXT PROJECT -->
+  <div class="wrap">
+    <p class="section-label" style="margin-bottom:16px">Related work</p>
+    <a href="itfow.html" class="next-card">
+      <div class="shot">
+        <img src="assets/itfow.jpg" alt="A hand holding a phone in a Walmart aisle showing the Ask Sam conversational assistant.">
+      </div>
+      <div class="body">
+        <div class="next-label">Case study</div>
+        <h3>ITFOW Chatbot</h3>
+        <p>Evolving the associate experience through conversational and AR-based assistance, bridging physical store tasks with digital intelligence for thousands of Walmart associates.</p>
+      </div>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap-wide foot-inner">
+    <div class="foot-name">Stanlyn Lu · Senior Product Designer, Walmart Global Tech</div>
+    <div class="foot-links">
+      <a href="mailto:lintanxi@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/lintanxi/" rel="noopener" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const progressBar = document.getElementById('progress-bar');
+  const backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    if (progressBar) progressBar.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+    if (backTop) backTop.classList.toggle('visible', scrolled > 400);
+  }, { passive: true });
+  if (backTop) backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // Lightbox
+  const lb = document.getElementById('lb');
+  const lbImg = document.getElementById('lb-img');
+  const lbClose = document.getElementById('lb-close');
+  document.querySelectorAll('img[data-lb]').forEach(img => {
+    img.addEventListener('click', () => {
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  function closeLb() { lb.classList.remove('open'); document.body.style.overflow = ''; lbImg.src = ''; }
+  lbClose.addEventListener('click', closeLb);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+</script>
+
+</body>
+</html>
