@@ -2,6 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T3NQX4SQDX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T3NQX4SQDX');
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Warden — Stanlyn Lu</title>
 <meta name="description" content="How I identified a governance bottleneck inside Walmart's global security operations platform and designed the infrastructure needed to scale workflows safely.">
@@ -420,11 +429,6 @@
       <img src="assets/warden-pain-pipeline.jpg" alt="Five-step pain pipeline: Content Change → Spreadsheet → Meetings → Engineering → Release, with callouts showing the costs at each step: slow updates, conflicting requirements, engineering dependency, operational overhead" data-lb>
       <figcaption><strong>Pain pipeline:</strong> mapping the content change process revealed friction at every step, and a gap between the speed at which operational needs changed and the speed at which the system could respond.</figcaption>
     </figure>
-
-    <div class="pullquote">
-      "Operational needs change fast, but our process doesn't."
-      <cite>The result of a change pipeline that treated questionnaire content as code, not configuration</cite>
-    </div>
 
     <hr>
 
