@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T3NQX4SQDX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T3NQX4SQDX');
+</script>
+
+<title>Stanlyn Lu — Case Study Deck</title>
+<style>
+  @font-face{font-family:"Everyday Sans";font-weight:400;src:url("fonts/everyday-400.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:500;src:url("fonts/everyday-500.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:700;src:url("fonts/everyday-700.woff") format("woff")}
+  @font-face{font-family:"Everyday Sans";font-weight:900;src:url("fonts/everyday-900.woff") format("woff")}
+
+  :root{
+    --bg:#f0efeb; --surface:#f7f6f2; --ink:#222222; --muted:#515357;
+    --line:#e1e0d8; --blue:#0a5fd6; --blue-ink:#002e99; --blue-pale:#e6ecf9;
+    --leaf:#3a9d3a; --red:#c0392b; --red-pale:#fdf0ee; --green-pale:#e8f5e9; --green-ink:#1b5e20;
+    --font:"Everyday Sans","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  @page{ size:13.333in 7.5in; margin:0 }
+  html,body{background:#fff;font-family:var(--font);-webkit-font-smoothing:antialiased;color:var(--ink)}
+
+  .slide{
+    position:relative;width:13.333in;height:7.5in;overflow:hidden;
+    background:var(--bg);page-break-after:always;break-after:page;
+    padding:0.62in 0.78in;display:flex;flex-direction:column;
+  }
+  .slide:last-child{page-break-after:auto}
+
+  /* shared atoms */
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--blue);flex:none}
+  .kicker{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+  h1{font-size:50px;font-weight:700;line-height:1.03;letter-spacing:-.035em}
+  h1 em{color:var(--blue);font-style:normal}
+  h2{font-size:34px;font-weight:700;line-height:1.08;letter-spacing:-.03em}
+  h2 em{color:var(--blue);font-style:normal}
+  .lead{font-size:19px;line-height:1.55;color:var(--muted);font-weight:400}
+  p.body{font-size:16px;line-height:1.6;color:var(--muted)}
+  strong{color:var(--ink);font-weight:600}
+  .num-tag{position:absolute;bottom:0.42in;right:0.78in;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em}
+  .brand-foot{position:absolute;bottom:0.42in;left:0.78in;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+  .brand-foot svg{width:15px;height:15px}
+
+  .row{display:flex;gap:26px}
+  .col{flex:1;min-width:0}
+  .center{justify-content:center;align-items:center;text-align:center}
+
+  /* meta strip */
+  .meta-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .meta-item{background:var(--surface);padding:15px 16px}
+  .meta-item .l{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+  .meta-item .v{font-size:13px;font-weight:600;color:var(--ink);line-height:1.35}
+
+  /* cards grids */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .card .ct{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);margin-bottom:7px}
+  .card .cb{font-size:13.5px;line-height:1.5;color:var(--muted)}
+
+  /* stakeholder quote cards */
+  .qcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;height:100%}
+  .qcard .nm{font-size:15px;font-weight:700;color:var(--ink)}
+  .qcard .ti{font-size:11.5px;color:var(--muted);margin-bottom:11px}
+  .qcard .qt{font-size:14px;font-style:italic;line-height:1.55;color:var(--muted)}
+  .qcard .qt strong{color:var(--blue-ink);font-style:normal}
+
+  /* callout */
+  .callout{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:18px 22px}
+  .callout .cl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .callout p{font-size:16px;line-height:1.5;color:var(--ink)}
+
+  /* image frame */
+  .imgframe{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+  .imgframe img{display:block;width:100%;height:100%;object-fit:cover}
+  .cap{font-size:12px;color:var(--muted);line-height:1.45;margin-top:9px}
+
+  /* impact tiles */
+  .impact{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px 20px}
+  .tile .n{font-size:46px;font-weight:700;letter-spacing:-.04em;color:var(--blue);line-height:1}
+  .tile .t{margin-top:10px;font-size:13.5px;color:var(--muted);line-height:1.45}
+
+  /* decision two-col */
+  .dec{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .dec .d{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .dec .d .h{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
+  .dec .rej .h{color:var(--red)}
+  .dec .cho .h{color:var(--leaf)}
+  .dec .d p{font-size:13.5px;line-height:1.5;color:var(--muted)}
+
+  /* numbered list */
+  .nlist{list-style:none;display:flex;flex-direction:column;gap:13px}
+  .nlist li{display:grid;grid-template-columns:30px 1fr;gap:13px;align-items:start}
+  .nlist li .nn{width:30px;height:30px;border-radius:50%;background:var(--blue-pale);color:var(--blue-ink);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+  .nlist li p{font-size:15px;line-height:1.5;color:var(--muted)}
+
+  /* check list */
+  .clist{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .clist li{font-size:15px;line-height:1.45;color:var(--muted);padding-left:26px;position:relative}
+  .clist li::before{content:"";position:absolute;left:0;top:6px;width:14px;height:14px;border-radius:50%;background:var(--leaf)}
+  .clist li::after{content:"";position:absolute;left:4.3px;top:9.5px;width:5px;height:2.5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg)}
+  .clist.dim li::before{background:var(--line)}
+  .clist.dim li::after{display:none}
+
+  .chip{display:inline-block;font-size:12px;font-weight:500;padding:6px 13px;border-radius:999px;background:var(--blue-pale);color:var(--blue-ink);margin:0 6px 6px 0}
+
+  .ba-label{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 11px;border-radius:999px;margin-bottom:8px}
+  .ba-label.before{background:var(--red-pale);color:var(--red)}
+  .ba-label.after{background:var(--green-pale);color:var(--green-ink)}
+
+  .divider-num{position:absolute;top:0.55in;right:0.78in;font-size:13px;font-weight:700;color:var(--blue);letter-spacing:.1em}
+  .section-divider{justify-content:center}
+  .section-divider .big{font-size:64px;font-weight:700;letter-spacing:-.04em;line-height:1.02;margin-top:14px}
+  .section-divider .big em{color:var(--blue);font-style:normal}
+
+  .pull{font-size:24px;font-weight:500;font-style:italic;line-height:1.4;color:var(--ink);border-left:4px solid var(--blue);padding:6px 0 6px 24px}
+  .pull cite{display:block;font-size:14px;font-style:normal;color:var(--muted);margin-top:14px;font-weight:500}
+
+  .logo-circ{width:40px;height:40px}
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<section class="slide center" style="background:var(--ink);color:var(--bg);text-align:center">
+  <svg class="logo-circ" viewBox="0 0 200 200" style="width:54px;height:54px;margin-bottom:30px"><circle cx="100" cy="100" r="100" fill="#2d8841"/><g fill="none" stroke="#fff" stroke-width="5"><line x1="44.69" y1="21.51" x2="100.91" y2="77.73"/><line x1="155.31" y1="21.51" x2="98.39" y2="78.42"/><line x1="44.69" y1="121.14" x2="100" y2="176.45"/><line x1="155.31" y1="121.14" x2="98.26" y2="178.19"/><line x1="100" y1="73.99" x2="100" y2="155.83"/></g></svg>
+  <div style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#b9c4ce;margin-bottom:22px">Product Design · Case Studies</div>
+  <h1 style="font-size:58px;color:#fff;max-width:9.4in">Designing systems, <em style="color:#6ea8f0">shipping services</em></h1>
+  <p style="font-size:19px;color:#c9d2da;margin-top:24px;max-width:7.4in;line-height:1.5">Two case studies from Walmart Global Tech — one about designing the system behind the system, one about unifying a service to global scale.</p>
+  <div style="margin-top:40px;font-size:15px;color:#fff;font-weight:600">Stanlyn Lu · Product Designer</div>
+</section>
+
+<!-- ============ FRAMING / AGENDA ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="dot"></span>How to read these two cases</div>
+  <h2 style="margin-top:16px;max-width:10in">Two cases, chosen to show range</h2>
+  <div class="row" style="margin-top:34px;flex:1">
+    <div class="col">
+      <div class="card" style="height:100%;border-top:4px solid var(--blue)">
+        <div class="kicker">Case 01 · Warden</div>
+        <h2 style="font-size:24px;margin:12px 0 14px">0→1 systems &amp; governance</h2>
+        <p class="body" style="margin-bottom:14px">I reframed a usability request as a structural problem and designed the infrastructure that lets operations change the system safely — without going through engineering.</p>
+        <p class="body"><strong>Signals:</strong> strategic thinking, working solo in ambiguity, AI judgment in high-stakes workflows.</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="height:100%;border-top:4px solid var(--leaf)">
+        <div class="kicker" style="color:var(--leaf)">Case 02 · Visit Check-in</div>
+        <h2 style="font-size:24px;margin:12px 0 14px">Service design &amp; measured impact</h2>
+        <p class="body" style="margin-bottom:14px">I unified visitor check-in from twelve isolated, inaccessible systems into one accessible service across every US and India campus.</p>
+        <p class="body"><strong>Signals:</strong> craft, accessibility rigor, stakeholder alignment, real outcomes (30% / 3× / ~60%).</p>
+      </div>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Stanlyn Lu</span></div>
+  <div class="num-tag">Framing</div>
+</section>
+
+<!-- ============ SECTION DIVIDER — WARDEN ============ -->
+<section class="slide section-divider" style="background:var(--ink);color:#fff">
+  <div style="text-align:center">
+    <div style="font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6ea8f0">Case 01</div>
+    <div class="big" style="color:#fff">Governing the <em style="color:#6ea8f0">system</em><br>behind the system</div>
+    <p style="font-size:18px;color:#c9d2da;margin-top:26px;max-width:8in;margin-left:auto;margin-right:auto;line-height:1.5">Walmart's global security operations platform · Sole Product Designer</p>
+  </div>
+</section>
+
+<!-- W1 — title + meta + hero -->
+<section class="slide">
+  <div class="eyebrow"><span class="dot"></span>Governance Design · Security Operations · Design Systems · AI</div>
+  <h2 style="margin-top:14px;max-width:9.2in">I was asked to improve usability. The real problem was <em>governance</em>.</h2>
+  <div class="row" style="margin-top:24px;flex:1;align-items:stretch">
+    <div class="col" style="flex:1.05;display:flex;flex-direction:column;justify-content:space-between">
+      <p class="lead" style="font-size:17px">How I reframed a usability request as a governance problem, and designed the infrastructure that lets the people closest to operations change the system safely.</p>
+      <div class="meta-strip" style="margin-top:18px">
+        <div class="meta-item"><div class="l">Role</div><div class="v">Sole Product Designer</div></div>
+        <div class="meta-item"><div class="l">Surfaces</div><div class="v">Warden · Mobile · Emergency App</div></div>
+        <div class="meta-item"><div class="l">Team</div><div class="v">~40 · Product + Eng</div></div>
+        <div class="meta-item"><div class="l">Timeline</div><div class="v">Feb 2026 – Present</div></div>
+      </div>
+    </div>
+    <div class="col" style="flex:1.1">
+      <div class="imgframe" style="height:3.55in"><img src="assets/warden.jpg" alt="Warden operations center"></div>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Warden</span></div>
+  <div class="num-tag">01</div>
+</section>
+
+<!-- W2 — situation -->
+<section class="slide">
+  <div class="kicker">The situation I inherited</div>
+  <h2 style="margin-top:12px;max-width:10in">A platform that had outgrown its foundations</h2>
+  <p class="body" style="margin-top:14px;max-width:9.6in;font-size:16.5px">Warden was built fast. Growth from a handful of incident types to <strong>72+ across 11 categories</strong> — more regions, more compliance, a designer transition — left a system never designed to be maintained at this scale. I joined as the sole designer on a ~40-person team.</p>
+  <div class="grid2" style="margin-top:22px;flex:1;align-content:center">
+    <div class="card"><div class="ct">Operational Complexity</div><div class="cb">72+ incident types, 11+ categories, 80+ question categories, a taxonomy still actively evolving. Regional and compliance rules with no unified logic.</div></div>
+    <div class="card"><div class="ct">UX Debt</div><div class="cb">A codebase mixing Material UI, Ant Design, and custom styling. Inconsistent patterns across surfaces; a prior sub-system only partially adopted.</div></div>
+    <div class="card"><div class="ct">Governance Bottleneck</div><div class="cb">Every questionnaire change required a spreadsheet, approval meetings, an engineering ticket, and a release cycle. Needs moved faster than the system could adapt.</div></div>
+    <div class="card"><div class="ct">Solo Coverage</div><div class="cb">As the only designer: new feature design, design-system alignment across three layers, and AI evaluation — with no handover from the previous designer.</div></div>
+  </div>
+  <div class="brand-foot"><span>Warden</span></div>
+  <div class="num-tag">02</div>
+</section>
+
+<!-- W3 — research -->
+<section class="slide">
+  <div class="kicker">Stakeholder Research</div>
+  <h2 style="margin-top:12px">Three different problems. One root cause.</h2>
+  <p class="body" style="margin-top:12px;max-width:9.6in">I interviewed three stakeholders with different vantage points — operations, the questionnaire content owner, and the PM who bore the cost of every change.</p>
+  <div class="grid3" style="margin-top:22px;flex:1;align-content:center">
+    <div class="qcard"><div class="nm">Rick</div><div class="ti">Director, Operations &amp; Technology · GSOC</div><div class="qt">"When something changes operationally, we need to <strong>update the questionnaire quickly</strong> — but by the time a change reaches operators, the situation has moved on."</div></div>
+    <div class="qcard"><div class="nm">Lizzy</div><div class="ti">Director, Security Operations · Content Owner</div><div class="qt">"I maintain a <strong>huge spreadsheet of questions</strong>, and every change requires reviews and approvals from multiple leaders before anything goes to engineering."</div></div>
+    <div class="qcard"><div class="nm">Mike</div><div class="ti">Product Manager · Warden</div><div class="qt">"Every questionnaire change becomes an <strong>engineering effort</strong>. We need to reduce friction and manual work without creating compliance or data risk."</div></div>
+  </div>
+  <div class="brand-foot"><span>Warden</span></div>
+  <div class="num-tag">03</div>
+</section>
+
+<!-- W4 — the reframe -->
+<section class="slide">
+  <div class="kicker">Discovery · The reframe</div>
+  <h2 style="margin-top:12px;max-width:10in">The real problem was workflow <em>governance</em>, not the workflow</h2>
+  <div class="row" style="margin-top:20px;flex:1;align-items:center">
+    <div class="col" style="flex:1.15">
+      <p class="body" style="font-size:16.5px;margin-bottom:16px">A single questionnaire change followed this path: <strong>spreadsheet → approval meetings → engineering ticket → release cycle.</strong> Weeks, for what was essentially a content edit.</p>
+      <p class="body" style="font-size:16.5px">Worse, a simple change had <strong>downstream effects on compliance reporting, dashboards, and notification subscriptions</strong> — none visible to the person requesting it. That invisibility was the real problem.</p>
+      <div class="callout" style="margin-top:20px">
+        <div class="cl">Cross-interview insight</div>
+        <p>Workflow ownership was trapped in spreadsheets, approvals, and release cycles. The people who understood what needed to change had no path to change it.</p>
+      </div>
+    </div>
+    <div class="col" style="flex:1">
+      <div class="imgframe" style="background:#fff"><img src="assets/warden-pain-pipeline.jpg" alt="Pain pipeline" style="object-fit:contain;height:3.7in"></div>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Warden</span></div>
+  <div class="num-tag">04</div>
+</section>
+
+<!-- W5 — the 0→1 solution -->
+<section class="slide">
+  <div class="kicker">0→1 Design</div>
+  <h2 style="margin-top:12px;max-width:10in">Designing the boundary between flexibility and governance</h2>
+  <div class="row" style="margin-top:18px;flex:1;align-items:center">
+    <div class="col" style="flex:1.25">
+      <div class="imgframe" style="background:#fff"><img src="assets/warden-super-admin.jpg" alt="Super Admin platform" style="object-fit:contain;height:4.1in"></div>
+    </div>
+    <div class="col" style="flex:0.95">
+      <p class="body" style="font-size:16px;margin-bottom:14px">The central question was <strong>what to allow, not just what to show.</strong> Phase 1 gave Super Admins four configurable dimensions:</p>
+      <ul class="clist">
+        <li><strong>Visibility</strong> — show/hide per question</li>
+        <li><strong>Ordering</strong> — drag-to-reorder</li>
+        <li><strong>Requiredness</strong> — required vs. optional</li>
+        <li><strong>Country rules</strong> — region-based logic</li>
+      </ul>
+      <p class="body" style="font-size:15px;margin-top:14px">Every change is logged to a persistent <strong>audit trail</strong> — surfaced in the view, not buried in settings. Auditability was a first-class requirement.</p>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Warden</span></div>
+  <div class="num-tag">05</div>
+</section>
+
+<!-- W6 — what NOT to build -->
+<section class="slide">
+  <div class="kicker">Design Strategy · The hardest decision</div>
+  <h2 style="margin-top:12px;max-width:10in">Earning trust before expanding capability</h2>
+  <p class="body" style="margin-top:12px;max-width:9.8in">The most important decision was what <strong>not</strong> to build yet. Question authoring was excluded from Phase 1 — not for technical reasons, but because the taxonomy was mid-consolidation and premature access would have created real compliance exposure.</p>
+  <div class="dec" style="margin-top:20px">
+    <div class="d rej"><div class="h">✕ Rejected — Full authoring on day one</div><p>Maximum flexibility, but the taxonomy was mid-consolidation, approvals weren't established, and question changes cascade into compliance reports, dashboards, and subscription logic.</p></div>
+    <div class="d cho"><div class="h">✓ Chosen — Configuration first, authoring later</div><p>Phase 1 introduces real operational control (visibility, ordering, requiredness) while deferring authoring until governance matures. Content stays stable; only behavior is configurable.</p></div>
+  </div>
+  <div class="row" style="margin-top:18px;gap:14px">
+    <div class="col"><div class="card" style="border-top:3px solid var(--leaf)"><div class="ct" style="color:var(--leaf)">Phase 1 · Shipped</div><div class="cb">Show/hide · reorder · required toggle · country rules · compliance locks · full audit trail</div></div></div>
+    <div class="col"><div class="card"><div class="ct" style="color:var(--muted)">Upcoming phases</div><div class="cb">Create/edit/remove questions · sub-question logic · category management · versioning &amp; rollback · AI-assisted config</div></div></div>
+  </div>
+  <div class="brand-foot"><span>Warden</span></div>
+  <div class="num-tag">06</div>
+</section>
+
+<!-- W7 — AI -->
+<section class="slide">
+  <div class="kicker">Scope Beyond the Platform</div>
+  <h2 style="margin-top:12px;max-width:10in">Evaluating AI in high-stakes workflows</h2>
+  <div class="row" style="margin-top:18px;flex:1">
+    <div class="col">
+      <h2 style="font-size:19px;margin-bottom:8px">AI-assisted incident reporting</h2>
+      <p class="body" style="font-size:15px">Store managers describe a situation in plain language; the AI pre-populates the form as a <strong>draft</strong> — every field editable, ambiguities flagged for confirmation. The AI never submits on their behalf.</p>
+      <h2 style="font-size:19px;margin:18px 0 8px">AI-assisted incident summary</h2>
+      <p class="body" style="font-size:15px">Operators managing concurrent incidents can surface a one-paragraph summary on demand — enough to assess severity and act. Always on demand, never auto-shown.</p>
+    </div>
+    <div class="col" style="display:flex;align-items:center">
+      <div class="callout" style="border-left-color:var(--leaf)">
+        <div class="cl">Design Principle</div>
+        <p style="font-size:18px;line-height:1.45"><strong>AI assists documentation. Humans remain accountable.</strong></p>
+        <p style="font-size:14.5px;color:var(--muted);margin-top:12px;line-height:1.5">The risk in a high-stakes workflow isn't AI extracting data wrong — it's an operator trusting output they didn't verify. Every pattern (disambiguation prompts, editable drafts, accuracy reminders) was designed around that.</p>
+      </div>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Warden</span></div>
+  <div class="num-tag">07</div>
+</section>
+
+<!-- W8 — impact + reflection -->
+<section class="slide">
+  <div class="kicker">Impact &amp; Reflection</div>
+  <h2 style="margin-top:12px">What was delivered — and what I'd do differently</h2>
+  <div class="impact" style="margin-top:20px">
+    <div class="tile"><div class="n">0→1</div><div class="t">Super Admin configuration platform — no comparable tooling existed before</div></div>
+    <div class="tile"><div class="n">3</div><div class="t">surfaces aligned under a unified governance &amp; design-system strategy for the first time</div></div>
+    <div class="tile"><div class="n">∞→1</div><div class="t">design-system layers reduced to a single documented alignment strategy with LD 3.5</div></div>
+  </div>
+  <div class="row" style="margin-top:22px;gap:30px;align-items:center">
+    <div class="col">
+      <p class="body" style="font-size:14.5px"><strong>Honest note:</strong> success measures are directional — there was almost no baseline data. If I did it again, I'd push for instrumentation from day one.</p>
+    </div>
+    <div class="col">
+      <p class="body" style="font-size:14.5px">The most valuable outcome was the <strong>governance framework itself</strong>: a clear boundary between what's configurable and what needs engineering, an audit trail as accountability, and a phased model that builds trust before expanding authority.</p>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Warden</span></div>
+  <div class="num-tag">08</div>
+</section>
+
+<!-- ============ SECTION DIVIDER — VISIT ============ -->
+<section class="slide section-divider" style="background:var(--ink);color:#fff">
+  <div style="text-align:center">
+    <div style="font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7fd28a">Case 02</div>
+    <div class="big" style="color:#fff">When the welcome<br>experience <em style="color:#7fd28a">isn't</em> welcoming</div>
+    <p style="font-size:18px;color:#c9d2da;margin-top:26px;max-width:8.4in;margin-left:auto;margin-right:auto;line-height:1.5">Unifying Walmart campus visitor check-in across every US &amp; India campus · Lead Product Designer</p>
+  </div>
+</section>
+
+<!-- V1 — title + meta + hero -->
+<section class="slide">
+  <div class="eyebrow"><span class="dot"></span>Service Design · Facilities &amp; Access · Accessibility</div>
+  <h2 style="margin-top:14px;max-width:9.6in">A $500B company with a <em>clipboard</em> at the front door</h2>
+  <div class="row" style="margin-top:22px;flex:1;align-items:stretch">
+    <div class="col" style="flex:1.05;display:flex;flex-direction:column;justify-content:space-between">
+      <p class="lead" style="font-size:17px">Twelve campuses, twelve different check-in processes — fragmented, and none designed with accessibility in mind. I unified them into one accessible service.</p>
+      <div class="meta-strip" style="margin-top:18px">
+        <div class="meta-item"><div class="l">Role</div><div class="v">Lead Product Designer</div></div>
+        <div class="meta-item"><div class="l">Touchpoints</div><div class="v">Kiosk · Web · Email · Admin</div></div>
+        <div class="meta-item"><div class="l">Team</div><div class="v">PM · Eng · Security · Ops</div></div>
+        <div class="meta-item"><div class="l">Timeline</div><div class="v">Nov 2024 – Oct 2025</div></div>
+      </div>
+    </div>
+    <div class="col" style="flex:1.1">
+      <div class="imgframe" style="height:3.55in"><img src="assets/kiosk-real.jpg" alt="Deployed kiosks"></div>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Visit Check-in</span></div>
+  <div class="num-tag">01</div>
+</section>
+
+<!-- V2 — constraints + accessibility -->
+<section class="slide">
+  <div class="kicker">My Role &amp; the constraints</div>
+  <h2 style="margin-top:12px">Sole lead designer, end to end</h2>
+  <div class="row" style="margin-top:18px;flex:1;align-items:center">
+    <div class="col" style="flex:1.05">
+      <p class="body" style="font-size:15.5px;margin-bottom:16px">I owned every surface — kiosk, preregistration web flow, email system, and admin portal — and led the accessibility strategy. WCAG 2.1 AA shaped the interaction model from day one.</p>
+      <div class="grid2">
+        <div class="card"><div class="ct">Hardware</div><div class="cb">Surface Go's compact screen — every interaction one decision deep.</div></div>
+        <div class="card"><div class="ct">Connectivity</div><div class="cb">Unreliable at several sites — full offline mode with paper fallbacks.</div></div>
+        <div class="card"><div class="ct">Inclusivity</div><div class="cb">Motion sensitivity, mount heights, screen-reader support — designed in.</div></div>
+        <div class="card"><div class="ct">Fragmentation</div><div class="cb">Twelve implementations, no shared library, no cross-campus visibility.</div></div>
+      </div>
+    </div>
+    <div class="col" style="flex:0.92">
+      <div class="imgframe" style="height:3.4in"><img src="assets/field-wheelchair.jpg" alt="Accessibility gap in the field"></div>
+      <div class="cap"><strong>Accessibility gap:</strong> for some visitors, check-in simply didn't work — no keyboard path, no contrast compliance. A non-negotiable constraint from day one.</div>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Visit Check-in</span></div>
+  <div class="num-tag">02</div>
+</section>
+
+<!-- V3 — discovery -->
+<section class="slide">
+  <div class="kicker">Discovery</div>
+  <h2 style="margin-top:12px">The problem the software couldn't see</h2>
+  <p class="body" style="margin-top:12px;max-width:9.8in">Every implementation was built inside-out — what does the system need to capture? Nobody asked what the visitor, host, or front-desk associate needed to <em>do</em>. The screens were fine; the service around them had no connective tissue.</p>
+  <div class="pull" style="margin:20px 0;max-width:9.4in">"I end up re-entering half the visitors myself because the screen times out on them. None of that shows up anywhere."<cite>— Front-desk associate, field interview</cite></div>
+  <div class="grid3" style="margin-top:6px">
+    <div class="card"><div class="ct" style="text-transform:none;font-size:13px">1 · Preregistration</div><div class="cb">The highest-leverage fix nobody had prioritized — the tool existed in a separate system nobody knew about.</div></div>
+    <div class="card"><div class="ct" style="text-transform:none;font-size:13px">2 · Accessibility</div><div class="cb">Failures created invisible operational load — associates completing check-in for visitors who couldn't. The workaround had become the process.</div></div>
+    <div class="card"><div class="ct" style="text-transform:none;font-size:13px">3 · Host awareness</div><div class="cb">Hosts had no real-time signal their visitor arrived. Visitors waited in the lobby; no system solved it.</div></div>
+  </div>
+  <div class="brand-foot"><span>Visit Check-in</span></div>
+  <div class="num-tag">03</div>
+</section>
+
+<!-- V4 — the hard part: alignment -->
+<section class="slide">
+  <div class="kicker">The hard part</div>
+  <h2 style="margin-top:12px;max-width:10in">Getting everyone to agree was the real design challenge</h2>
+  <div class="row" style="margin-top:20px;flex:1;align-items:center">
+    <div class="col">
+      <p class="body" style="font-size:16px;margin-bottom:14px">Each campus had a different definition of "welcoming," and sequential reviews stalled progress. Leadership engaged with visuals more readily than with service flows — so <strong>the landing page became a proxy for confidence in the entire system.</strong></p>
+      <p class="body" style="font-size:16px">I recognized what was happening: stakeholders hadn't built a shared mental model, so the landing page became where anxiety surfaced.</p>
+    </div>
+    <div class="col">
+      <div class="callout">
+        <div class="cl">What I changed</div>
+        <p style="font-size:15.5px;line-height:1.5">Instead of sequential reviews, I presented <strong>all directions simultaneously</strong> — video, carousel, static photography — each with explicit tradeoffs tied to goals we'd already aligned on. Making the decision space visible let stakeholders converge without feeling overruled.</p>
+      </div>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Visit Check-in</span></div>
+  <div class="num-tag">04</div>
+</section>
+
+<!-- V5 — the design: unified UI, local logic -->
+<section class="slide">
+  <div class="kicker">The Design</div>
+  <h2 style="margin-top:12px;max-width:10in">Unified UI, local logic — one system, genuinely different campuses</h2>
+  <div class="row" style="margin-top:18px;flex:1;align-items:center">
+    <div class="col" style="flex:1.2">
+      <div class="imgframe" style="background:#fff"><img src="assets/journey-map-walkin.png" alt="Walk-in visitor journey map" style="object-fit:contain;height:4in"></div>
+      <div class="cap"><strong>Walk-in visitor journey:</strong> the opportunities row drove every kiosk screen — each traces to a specific field observation.</div>
+    </div>
+    <div class="col" style="flex:0.95">
+      <p class="body" style="font-size:15.5px;margin-bottom:14px">The answer was a <strong>configurable flow architecture</strong>: the same interface, with location-aware steps that activate by facility type.</p>
+      <ul class="clist">
+        <li>NDA signing for California</li>
+        <li>Device registration for India (IDC)</li>
+        <li>Streamlined short-form for 8th &amp; Plate</li>
+      </ul>
+      <p class="body" style="font-size:15.5px;margin-top:14px">All on one codebase, one Surface Go. Walk-in kiosk operable in <strong>under 60 seconds without instruction</strong> — progressive disclosure, one decision per screen.</p>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Visit Check-in</span></div>
+  <div class="num-tag">05</div>
+</section>
+
+<!-- V6 — closing the loops -->
+<section class="slide">
+  <div class="kicker">Closing the loops</div>
+  <h2 style="margin-top:12px">Three capabilities the legacy system never had</h2>
+  <div class="grid3" style="margin-top:22px;flex:1;align-content:center">
+    <div class="card"><div class="ct">Check-out &amp; multi-building</div><div class="cb">Visitors scan at each entry/exit — no repeated check-ins. Every scan syncs in real time to the Visit Admin portal: a complete, time-stamped record of campus movement. Net-new visibility.</div></div>
+    <div class="card"><div class="ct">Preregistration</div><div class="cb">The tool existed but nobody knew. I wired the prereg link directly into the host's calendar invite — so sending the invite and the prep link became a <strong>single action</strong>. Pre-registered visitors clear check-in far faster.</div></div>
+    <div class="card"><div class="ct">Host notification</div><div class="cb">Any completed check-in triggers an instant alert to the host — defaulting to no action needed. One tap to decline; the front desk is then notified automatically. No phone call, no manual escalation.</div></div>
+  </div>
+  <div class="brand-foot"><span>Visit Check-in</span></div>
+  <div class="num-tag">06</div>
+</section>
+
+<!-- V7 — accessibility practice -->
+<section class="slide">
+  <div class="kicker">Accessibility built into the practice</div>
+  <h2 style="margin-top:12px;max-width:10in">Keyboard-first, validated before handoff</h2>
+  <div class="row" style="margin-top:20px;flex:1;align-items:center">
+    <div class="col">
+      <ul class="nlist">
+        <li><span class="nn">1</span><p>Built the interaction model <strong>keyboard-navigation first</strong> — every touch interaction had a keyboard equivalent from day one.</p></li>
+        <li><span class="nn">2</span><p>Every screen validated against a <strong>shared accessibility checklist</strong> before it went to engineering.</p></li>
+        <li><span class="nn">3</span><p>Annotations embedded directly in Figma — contrast ratios, focus order, screen-reader labels — so developers had <strong>zero ambiguity at handoff</strong>.</p></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="callout" style="border-left-color:var(--leaf)">
+        <div class="cl">Why it matters</div>
+        <p style="font-size:16px;line-height:1.5">A wheelchair user at the Bentonville turnstile had no guaranteed accessible check-in path. A security associate had flagged this gap for <strong>over a year</strong> before design started.</p>
+      </div>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Visit Check-in</span></div>
+  <div class="num-tag">07</div>
+</section>
+
+<!-- V8 — impact -->
+<section class="slide">
+  <div class="kicker">Outcomes</div>
+  <h2 style="margin-top:12px">What changed, and how we measured it</h2>
+  <p class="body" style="margin-top:12px;max-width:9.8in">Shipped to all US campuses, then Bengaluru and other India locations — becoming the <strong>global standard</strong> for Walmart campus visitor management.</p>
+  <div class="impact" style="margin-top:22px">
+    <div class="tile"><div class="n">30%</div><div class="t">reduction in average visitor processing time across all campuses post-launch</div></div>
+    <div class="tile"><div class="n">3×</div><div class="t">increase in preregistration completion rate</div></div>
+    <div class="tile"><div class="n">~60%</div><div class="t">fewer front-desk escalations at high-traffic campuses in the first quarter</div></div>
+  </div>
+  <p class="body" style="margin-top:22px;font-size:14.5px;max-width:9.8in">The admin portal eliminated the most common manual override — associates re-entering visitor data after kiosk timeouts — which had driven a significant share of front-desk escalations.</p>
+  <div class="brand-foot"><span>Visit Check-in</span></div>
+  <div class="num-tag">08</div>
+</section>
+
+<!-- V9 — Visit Admin backbone -->
+<section class="slide">
+  <div class="kicker">The operational backbone · Visit Admin</div>
+  <h2 style="margin-top:12px;max-width:10in">Behind the experience is the tool security runs on</h2>
+  <div class="row" style="margin-top:16px;flex:1;align-items:center">
+    <div class="col" style="flex:1.15">
+      <div class="row" style="gap:12px">
+        <div class="col">
+          <span class="ba-label before">Before</span>
+          <div class="imgframe" style="background:#fff"><img src="assets/admin-wl-b1.png" alt="Legacy watchlist, icon-only" style="object-fit:contain;height:2.5in"></div>
+        </div>
+        <div class="col">
+          <span class="ba-label after">Phase 1</span>
+          <div class="imgframe" style="background:#fff"><img src="assets/admin-wl-a1.png" alt="Redesigned watchlist, labeled badges" style="object-fit:contain;height:2.5in"></div>
+        </div>
+      </div>
+      <div class="cap"><strong>Watchlist:</strong> icon-only threat flags → semantic labeled badges (Caution / Critical / Awareness). In a safety-critical module, ambiguity has direct consequences.</div>
+    </div>
+    <div class="col" style="flex:0.9">
+      <p class="body" style="font-size:15px;margin-bottom:12px">When engineering capacity shifted to the kiosk rebuild, I scoped Phase 1 to <strong>LD 3.5 migration + targeted usability fixes</strong> and kept the IA work documented and queued.</p>
+      <p class="body" style="font-size:15px">Phasing also de-risked adoption: many associates are <strong>20+ year</strong> employees on the legacy manual process. Incremental releases let phasing read as <strong>strategy, not compromise</strong>.</p>
+    </div>
+  </div>
+  <div class="brand-foot"><span>Visit Admin</span></div>
+  <div class="num-tag">09</div>
+</section>
+
+<!-- V10 — reflection -->
+<section class="slide">
+  <div class="kicker">Reflection</div>
+  <h2 style="margin-top:12px">What I'd do differently</h2>
+  <ul class="nlist" style="margin-top:22px;gap:18px">
+    <li><span class="nn">1</span><p><strong>I'd instrument the service earlier.</strong> We had almost no baseline data — check-in times, prereg rates, accessibility escalations were all unmeasured. Measurement should have been scoped in from the start, not advocated for mid-project.</p></li>
+    <li><span class="nn">2</span><p><strong>I'd push harder for pilot-then-scale.</strong> We launched across all US campuses nearly simultaneously. A single high-traffic pilot with a six-week learning period would have surfaced group-booking edge cases — and saved two engineering sprints.</p></li>
+    <li><span class="nn">3</span><p><strong>I underestimated the front-desk associate as a design partner.</strong> I interviewed them early but treated them as research subjects. I should have brought two in as co-reviewers — they caught workflow gaps I was too close to see.</p></li>
+  </ul>
+  <div class="brand-foot"><span>Visit Check-in</span></div>
+  <div class="num-tag">10</div>
+</section>
+
+<!-- CLOSING -->
+<section class="slide center" style="background:var(--ink);color:var(--bg);text-align:center">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#b9c4ce;margin-bottom:20px">Thank you</div>
+  <h1 style="font-size:46px;color:#fff;max-width:9in">From designing screens<br>to <em style="color:#6ea8f0">designing systems</em></h1>
+  <div class="row" style="gap:60px;margin-top:40px;max-width:8in">
+    <div class="col"><div style="font-size:14px;color:#8fa0ad;margin-bottom:6px">Warden</div><p style="font-size:14.5px;color:#c9d2da;line-height:1.5">A governance framework that makes the platform improvable over time.</p></div>
+    <div class="col"><div style="font-size:14px;color:#8fa0ad;margin-bottom:6px">Visit Check-in</div><p style="font-size:14.5px;color:#c9d2da;line-height:1.5">A unified, accessible service that became Walmart's global standard.</p></div>
+  </div>
+  <div style="margin-top:44px;font-size:15px;color:#fff;font-weight:600">Stanlyn Lu · Product Designer</div>
+  <div style="margin-top:8px;font-size:13px;color:#8fa0ad">lintanxi@gmail.com · linkedin.com/in/lintanxi</div>
+</section>
+
+</body>
+</html>

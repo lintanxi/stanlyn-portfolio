@@ -2,11 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T3NQX4SQDX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T3NQX4SQDX');
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lotus Baby — Stanlyn Lu</title>
-<meta name="description" content="Lotus Baby — an interactive animation game and master's thesis on identity and China's one-child policy, by Stanlyn (Ye) Lu.">
+<title>Lotus Baby · Stanlyn Lu</title>
+<meta name="description" content="Lotus Baby: an interactive animation game and master's thesis on identity, the only-child generation, and China's one-child policy, by Stanlyn (Ye) Lu.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="creative.css">
+<link rel="stylesheet" href="creative.css?v=10">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -29,44 +38,250 @@
 <main id="main">
   <section class="hero">
     <div class="wrap">
-      <a class="back" href="creative.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Creative</a>
-      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Interactive game · master's thesis</span>
-      <h1>Lotus Baby</h1>
-      <p class="hook">An interactive animation game about two generations growing up under China's one-child policy — where the player is asked to build a "perfect child."</p>
+      <div class="hero-top">
+        <a class="back" href="creative.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Creative</a>
+        <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Interactive game · master's thesis</span>
+      </div>
+      <h1>Lotus <span class="accent">Baby</span></h1>
+      <p class="hook">An interactive animation game about two generations under China's one-child policy, where the player is handed a single task: build a "perfect child."</p>
     </div>
   </section>
 
-  <section>
+  <section style="padding-top:0">
     <div class="wrap">
       <div class="meta">
-        <div class="m"><div class="k">Role</div><div class="v">Solo project · master's thesis</div></div>
+        <div class="m"><div class="k">Role</div><div class="v">Solo project · master's thesis (ITP, NYU)</div></div>
         <div class="m"><div class="k">Tools</div><div class="v">Eko Studio · JavaScript · Photoshop · After Effects · Premiere</div></div>
-        <div class="m"><div class="k">Themes</div><div class="v">Identity · China · one-child policy</div></div>
+        <div class="m"><div class="k">Key words</div><div class="v">Identity · China · one-child policy · generation gap</div></div>
       </div>
+    </div>
+  </section>
 
-      <!-- TODO: copy the documentation video / a key frame from the old lotus-baby project into assets/creative/ and set src -->
-      <figure class="figure">
-        <div class="ph">Gameplay / documentation video</div>
-        <figcaption>TODO: embed the two-minute documentation, or a gameplay clip.</figcaption>
-      </figure>
-
+  <!-- OVERVIEW -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Overview</h2></div>
       <div class="prose">
-        <p class="lead">Lotus Baby is an interactive animation game, built in Eko Studio with JavaScript.</p>
-        <p>It explores the friction between two generations — parents born in the 1960s and children born in the 1990s — inside China's specific cultural context.</p>
-        <p>Players answer ten questions across different scenarios, all in service of one goal the game sets for them: creating a "PERFECT CHILD." The choices, and the discomfort they create, are the point.</p>
-        <p><em>TODO: add a note on the design intent — what you wanted players to feel, and what the branching structure was meant to reveal.</em></p>
+        <p class="lead"><em>Lotus Baby</em> is an interactive animation game, built in Eko Studio with JavaScript.</p>
+        <p>It's about the gap between two generations: parents born in the 1960s and their children in the 1990s, set inside China's recent history. The player is handed a single goal: answer ten questions, across ten everyday scenarios, and build a "PERFECT CHILD." The choices, and the discomfort they stir up, are the point.</p>
       </div>
-
-      <!-- TODO: drop screens / stills into assets/creative/ and set src -->
-      <div class="gallery">
-        <div class="tile wide"><span class="ph">Key scene</span></div>
-        <div class="tile"><span class="ph">Question</span></div>
-        <div class="tile"><span class="ph">Outcome</span></div>
-        <div class="tile"><span class="ph">Animation</span></div>
-        <div class="tile"><span class="ph">Detail</span></div>
+      <div class="vid">
+        <iframe src="https://player.vimeo.com/video/278400016" title="Lotus Baby: two-minute documentation" allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
+      <p class="vidcap"><b>Lotus Baby</b>: two-minute documentation of the interactive game.</p>
+    </div>
+  </section>
 
-      <div class="callout">Rebuilt here in my current design system. <em>(Optional note — the original lives in the older portfolio, untouched.)</em></div>
+  <!-- CONCEPT -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Where the name comes from</h2></div>
+      <div class="bq-intro">
+        <figure class="bq-fig">
+          <img src="assets/creative/lb-nezha.jpg" alt="An illustration of Nezha, reborn standing atop a pink lotus" loading="lazy">
+          <figcaption>Nezha, remade from the lotus.</figcaption>
+        </figure>
+        <div class="prose">
+          <p>Every Chinese child grows up with the legend of <em>Nezha</em>. But I never read it this way until, as a teenager, I came across this passage by the essayist <b>Hu Lancheng</b> (胡兰成), writing about the novelist <b>Eileen Chang</b> (张爱玲) and her relationship with her parents.</p>
+        </div>
+      </div>
+      <div class="bq">
+        <p class="en">"Nezha was a small child who churned up the rivers and seas and brought down great trouble. Afraid of the fallout, his father invoked the debt of having given him life, and set out to punish him. In his fury, Nezha carved off his flesh to return to his mother and stripped his bones to return to his father. In the end, Guanyin Bodhisattva remade his body from a lotus leaf and a lotus root, and gave him life a second time."</p>
+        <p class="zh" lang="zh">哪吒是个小小孩童，翻江搅海闯了大祸，他父亲怕连累，挟生身之恩要责罚他，哪吒一怒，剜肉还母，剔骨还父，后来是观世音菩萨用荷叶与藕做成他的肢体。</p>
+      </div>
+      <p class="bq-cite"><b>Hu Lancheng</b> · 胡兰成 (English translation mine)</p>
+      <div class="prose" style="margin-top:22px">
+        <p>What caught me was one idea buried inside it: <em>挟生身之恩</em>, a parent leveraging the debt of having given life. Nezha's answer is to give the body back and be remade, this time on his own terms. That is the question the whole game circles.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BACKGROUND -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>The ground I grew up on</h2></div>
+      <div class="prose">
+        <p>My parents were born in the 1960s, into a century that kept rewriting itself.</p>
+      </div>
+      <div class="timeline">
+        <div class="ev"><div class="yr">1959–1961</div><h4>The Great Famine</h4><p>An estimated tens of millions died of starvation (historians' figures range from roughly 15 to 55 million).</p></div>
+        <div class="ev"><div class="yr">1966–1976</div><h4>The Cultural Revolution</h4><p>A decade that gutted the education system, much of the country's cultural heritage, and its shared moral footing.</p></div>
+        <div class="ev"><div class="yr">1978</div><h4>Reform and Opening-Up</h4><p>The first real chance in a generation to change the course of a life.</p></div>
+        <div class="ev"><div class="yr">1981–2015</div><h4>The One-Child Policy</h4><p>Couples signed away the right to a second child. Those who didn't faced heavy fines, or a forced abortion.</p></div>
+      </div>
+      <div class="prose" style="margin-top:28px">
+        <p>My father always wanted a boy. He was ashamed to tell my grandmother I was a girl. But they could only have me.</p>
+      </div>
+      <p class="statement">And I am not a <span class="accent">satisfactory child</span>.</p>
+    </div>
+  </section>
+
+  <!-- DEBT VS LOVE -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>A debt, or a relationship</h2></div>
+      <p class="bigquote" lang="zh">羊跪乳，鸦反哺。人之情，孝父母。</p>
+      <p class="note">"The lamb kneels to nurse; the raven feeds its parents in turn. So too should people honor their mother and father."</p>
+      <div class="prose" style="margin-top:24px">
+        <p>In the old moral order, a child is born already in debt, and the only way to settle it is filial piety. I don't believe in that. I think parents and children should <b>love and respect each other</b>, as equals.</p>
+        <p>Two years ago my father told me he feels like part of an <em>abandoned generation</em>: dutiful to his own parents, but never repaid the same way by me. I was born in 1992, into far more choice and entirely new ways of thinking, and that gap is what the game is really about.</p>
+      </div>
+      <p class="note" style="margin-top:24px">Since January 1, 2016, Chinese couples may legally have more than one child; the birth rate stayed low. In August 2018 the government floated penalties for families with fewer than two children. To many, it felt like being told how to live.</p>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Research</h2><p class="sec-sub">To get past my own story, I looked at the generation's.</p></div>
+      <div class="prose">
+        <p>A report on China's 1990s-born mapped a familiar cluster of feelings: hard to get close to anyone, reluctant to share, perpetually unsafe, unwilling to have children, pessimistic about the future, and deeply uncomfortable with responsibility.</p>
+      </div>
+      <figure class="figure">
+        <img src="assets/creative/lb-research.jpg" alt="A cluster network visualization of the common problems reported by China's 1990s generation" loading="lazy">
+        <figcaption>A network of the generation's most-reported struggles.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- A PERFECT CHILD -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>A "perfect child", as parents picture one</h2><p class="sec-sub">The brief the game quietly hands every player. Stated plainly, because that is what makes it sting.</p></div>
+      <div class="checklist">
+        <div class="ck"><h4>Clean</h4><p>Keeps their room spotless.</p></div>
+        <div class="ck"><h4>Loves to share</h4><p>Hides nothing from their parents: diaries, texts, and messages all open to inspection.</p></div>
+        <div class="ck"><h4>Innocent</h4><p>Never sets foot in a bar. Lives in the library.</p></div>
+        <div class="ck"><h4>Frugal</h4><p>Spends carefully, dresses plainly, and never looks the least bit sexually attractive.</p></div>
+        <div class="ck"><h4>Hardworking</h4><p>Brilliant and diligent. Bound for Tsinghua, Peking, Harvard, or Yale.</p></div>
+        <div class="ck"><h4>A tidy social life</h4><p>Never dates through college, then somehow marries someone rich and well-educated by 25.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONA -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Who it's for</h2></div>
+      <div class="persona">
+        <div class="side">
+          <p class="nm">Lily</p>
+          <p class="pquote">"I feel like I owe my parents a lot. I don't want a child of my own. I hope to live differently."</p>
+          <div class="row"><b>Age</b> · 25</div>
+          <div class="row"><b>Family</b> · only child</div>
+          <div class="row"><b>Status</b> · international student</div>
+          <div class="row"><b>Relationship</b> · single</div>
+          <div class="row"><b>Location</b> · New York City</div>
+          <div class="row"><b>Character</b> · outgoing, independent</div>
+        </div>
+        <div class="body">
+          <h4>Goals</h4>
+          <ul>
+            <li>Find her own values and her own pace.</li>
+            <li>Stop being anyone's attachment.</li>
+            <li>See her parents healthy and happy.</li>
+            <li>Actually understand her parents, and be understood.</li>
+          </ul>
+          <h4>Frustrations</h4>
+          <ul>
+            <li>Her parents don't understand her.</li>
+            <li>Everyone worries because she is still single.</li>
+            <li>As the only child, she carries all of the responsibility.</li>
+          </ul>
+          <h4>Bio</h4>
+          <p>A millennial only child of parents born in the 1960s, Lily has lived with a severe generation gap her whole life, and doesn't want children of her own. She keeps wondering whether her family could ever really understand one another.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- USER STORIES -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>What it feels like</h2><p class="sec-sub">Three accounts from a viral Zhihu thread, "What did your parents hurt you with the most?" (lightly edited for length).</p></div>
+      <div class="stories">
+        <div class="story">
+          <div class="story-n">01 · The love letter</div>
+          <p>In primary school I fell for a boy and wrote him a letter. I kept it in my drawer; my father found it and read it aloud to the whole family. I cried under the quilt, and my mother pulled it back to watch me, smiling. They still bring that boy up, years later. <span class="punch">It still makes my skin crawl.</span></p>
+        </div>
+
+        <div class="story">
+          <div class="story-n">02 · The illusion of choice</div>
+          <p>Another describes a childhood of choices that were never really choices:</p>
+          <div class="dialogue" aria-label="A dialogue showing the illusion of choice">
+            <div class="bubble parent"><span class="who">Mom</span>Do you want to see the monkeys or the tigers?</div>
+            <div class="bubble child"><span class="who">Me</span>The monkeys.</div>
+            <p class="beat">She takes me to see the tigers.</p>
+            <div class="bubble parent"><span class="who">Mom</span>Apple juice or orange juice?</div>
+            <div class="bubble child"><span class="who">Me</span>Orange juice.</div>
+            <p class="beat">She hands me the apple juice.</p>
+          </div>
+          <p class="dialogue-end">Every choice already had a right answer, so I stopped choosing. Years later, a girlfriend asked me: <b>"Why are you so boring?"</b></p>
+        </div>
+
+        <div class="story">
+          <div class="story-n">03 · The rabbits</div>
+          <p>When I was six, my cousin brought me two rabbits. I loved them like best friends. Then my mother decided her sister had a better place for them and made me give them away. For half a year I kept asking how they were; she never answered.</p>
+          <p>One day we visited my aunt's house and I asked my five-year-old nephew where the rabbits were. "We ate them," he said. "Both." I didn't cry and I didn't argue. It was a hot summer day; I just went very quiet, and couldn't stop the tears.</p>
+          <p class="punch">My best friends are eaten.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSPIRATION -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>A reference: Traveling Frog</h2></div>
+      <div class="prose">
+        <p>The form came from an unlikely place: <em>Traveling Frog</em>, the game that topped China's App Store in early 2018. You can't really play it. You pack the frog's bag, prepare its food, and wait, never knowing where it has gone or when it will come back.</p>
+        <p>That waiting <em>is</em> the game, and it is exactly what a parent does. (Japan reportedly used it to nudge would-be parents toward having children.) <em>Lotus Baby</em> borrows that restraint: a game made almost entirely of small choices and the consequences that follow them.</p>
+      </div>
+      <figure class="figure" style="max-width:420px">
+        <img src="assets/creative/lb-frog.jpg" alt="A screenshot of the mobile game Traveling Frog, showing the frog reading at home in its mossy treehouse" loading="lazy">
+        <figcaption><em>Traveling Frog</em> (Hit-Point, 2017), shown here as a reference.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- DESIGN & ITERATION -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Design &amp; iteration</h2><p class="sec-sub">The game went through three prototypes; each one taught me what the last got wrong.</p></div>
+      <div class="iters">
+        <div class="iter">
+          <div class="n">1</div>
+          <div>
+            <h4>From questions to situations</h4>
+            <p>The first build asked players things like <span class="q">"Would you respect your child's privacy?"</span> Everyone said yes. So I stopped asking and started staging: <span class="q">"Your child is hiding something from you…"</span> Suddenly, most players chose to read the diary without permission. What people did, not what they said, was the truth I was after.</p>
+          </div>
+        </div>
+        <div class="iter">
+          <div class="n">2</div>
+          <div>
+            <h4>From a god's view to the parent's</h4>
+            <p>I narrowed the scope. Instead of a detached, all-seeing frame, the player sits squarely in the parents' point of view, making the choices and feeling the weight of them.</p>
+          </div>
+        </div>
+        <div class="iter">
+          <div class="n">3</div>
+          <div>
+            <h4>Refining the interface</h4>
+            <p>The third pass reworked the layout and the buttons, adding interaction and hover feedback so every choice felt deliberate rather than incidental.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TALK -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>The thesis talk</h2></div>
+      <div class="vid">
+        <iframe src="https://player.vimeo.com/video/269196156" title="ITP Thesis Week 2018: Lotus Baby" allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <p class="vidcap"><b>ITP Thesis Week 2018</b>: presenting <em>Lotus Baby</em> (≈ 11 min).</p>
     </div>
   </section>
 </main>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stanlyn Lu : Resume</title>
+<style>
+  @font-face{font-family:"Montserrat";font-weight:400;font-style:normal;src:url("resume-fonts/Montserrat-Regular.ttf") format("truetype")}
+  @font-face{font-family:"Montserrat";font-weight:600;font-style:normal;src:url("resume-fonts/Montserrat-SemiBold.ttf") format("truetype")}
+  @font-face{font-family:"Montserrat";font-weight:700;font-style:normal;src:url("resume-fonts/Montserrat-Bold.ttf") format("truetype")}
+  @font-face{font-family:"Montserrat";font-weight:400;font-style:italic;src:url("resume-fonts/Montserrat-Italic.ttf") format("truetype")}
+
+  :root{
+    --ink:#2b2b2b;       /* primary text */
+    --soft:#6f6f6f;      /* secondary / dates */
+    --faint:#9a9a9a;     /* tertiary */
+    --rule:#d9d9d9;      /* hairlines */
+    --accent:#3a6f5f;    /* muted teal marker */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  @page{ size:8.5in 11in; margin:0 }
+  html,body{background:#fff}
+  body{
+    width:8.5in;padding:0.46in 0.55in 0.4in;
+    font-family:"Montserrat",Arial,sans-serif;color:var(--ink);
+    font-size:9pt;line-height:1.38;-webkit-font-smoothing:antialiased;
+  }
+
+  /* ── Header ── */
+  .head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+  .head > div:first-child{flex:none}
+  .name{font-size:23pt;font-weight:700;letter-spacing:.07em;line-height:1;white-space:nowrap}
+  .subtitle{font-size:9pt;font-weight:600;letter-spacing:.30em;color:var(--soft);margin-top:7px;text-transform:uppercase}
+  .contact{font-size:8.2pt;color:var(--soft);text-align:right;line-height:1.85;white-space:nowrap}
+  .contact .ci{display:inline-flex;align-items:center;gap:5px;justify-content:flex-end;margin-left:7px}
+  .contact .ci:first-child{margin-left:0}
+  .contact svg{width:10px;height:10px;flex:none;color:var(--accent)}
+  .contact a{color:var(--soft);text-decoration:none}
+
+  .divider{border:none;border-top:1px solid var(--ink);margin:11px 0 13px}
+
+  /* ── Columns ── */
+  .cols{display:flex;gap:0.42in;align-items:flex-start}
+  .left{flex:1.62;min-width:0}
+  .right{flex:1;min-width:0}
+
+  h2.sec{font-size:10.5pt;font-weight:700;letter-spacing:.20em;text-transform:uppercase;color:var(--ink);
+    padding-bottom:4px;border-bottom:1px solid var(--rule);margin-bottom:9px}
+  section{margin-bottom:14px}
+  section:last-child{margin-bottom:0}
+
+  p.profile{font-size:9pt;line-height:1.5;color:var(--ink)}
+  p.profile strong{font-weight:700}
+
+  /* ── Experience ── */
+  .company{display:flex;align-items:center;gap:7px;font-size:10pt;font-weight:700;margin-bottom:1px}
+  .company .marker{width:7px;height:7px;background:var(--accent);border-radius:1px;flex:none}
+  .role-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:5px 0 3px}
+  .role{font-size:9pt;font-weight:600;color:var(--ink)}
+  .date{font-size:8pt;font-weight:600;color:var(--faint);letter-spacing:.04em;white-space:nowrap}
+  ul.bul{list-style:none;margin:0 0 8px}
+  ul.bul li{position:relative;padding-left:12px;margin-bottom:3.5px;font-size:8.8pt;line-height:1.4;color:var(--ink)}
+  ul.bul li:last-child{margin-bottom:0}
+  ul.bul li::before{content:"";position:absolute;left:0;top:5.5px;width:3px;height:3px;border-radius:50%;background:var(--soft)}
+  ul.bul li strong{font-weight:700}
+  .job{margin-bottom:11px}
+  .job:last-child{margin-bottom:0}
+
+  /* ── Right column blocks ── */
+  .edu{margin-bottom:10px}
+  .edu:last-child{margin-bottom:0}
+  .edu .school{font-size:8.4pt;font-weight:700;line-height:1.3;text-transform:uppercase;letter-spacing:.01em}
+  .edu .deg{font-size:8.4pt;color:var(--soft);margin-top:1px}
+
+  .skill-group{margin-bottom:8px}
+  .skill-group:last-child{margin-bottom:0}
+  .skill-group .lbl{font-size:8.2pt;font-weight:700;color:var(--accent);letter-spacing:.04em;margin-bottom:2px}
+  .skill-group .val{font-size:8.5pt;color:var(--ink);line-height:1.45}
+
+  .lang{font-size:8.7pt;line-height:1.7;color:var(--ink)}
+  ul.cw{list-style:none;margin:0}
+  ul.cw li{position:relative;padding-left:11px;margin-bottom:4px;font-size:8.5pt;line-height:1.4;color:var(--ink)}
+  ul.cw li::before{content:"";position:absolute;left:0;top:5.5px;width:3px;height:3px;border-radius:50%;background:var(--accent)}
+  ul.cw li em{font-style:italic}
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="head">
+    <div>
+      <div class="name">STANLYN (YE) LU</div>
+      <div class="subtitle">Senior Product Designer</div>
+    </div>
+    <div class="contact">
+      <div class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1l-2.2 2.2z"/></svg><span>+1 (917) 808-6373</span></div>
+      <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><a href="mailto:lintanxi@gmail.com">lintanxi@gmail.com</a></div>
+      <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0114 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Austin, TX</span></div>
+      <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg><a href="https://yelu.work/">yelu.work</a></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="cols">
+    <!-- LEFT -->
+    <div class="left">
+
+      <section>
+        <h2 class="sec">Profile</h2>
+        <p class="profile">Senior Product Designer with <strong>9+ years in product design</strong>, specializing in high-stakes enterprise systems: from <strong>0&rarr;1 platform architecture and design governance</strong> to accessible, shipped services. I combine research, systems thinking, and design craft to align user needs with business and compliance goals across global teams.</p>
+      </section>
+
+      <section>
+        <h2 class="sec">Work Experience</h2>
+
+        <div class="job">
+          <div class="company"><span class="marker"></span>Walmart Global Tech</div>
+
+          <div class="role-row"><span class="role">Senior UX Designer</span><span class="date">Oct 2023 – Present</span></div>
+          <ul class="bul">
+            <li>Reframed a usability request as a <strong>governance problem</strong> and designed a 0&rarr;1 configurable admin platform for <strong>Warden</strong>, Walmart's global security operations system, moving workflow ownership from engineering to operations with audit trails and compliance locks, across 72+ incident types supporting <strong>10,800+ locations and 2.1M+ associates</strong>.</li>
+            <li>Led the <strong>Visit Check-in</strong> service end-to-end (kiosk, web, email, admin) for 10K+ associates: cut average visitor processing time <strong>30%</strong>, <strong>tripled</strong> preregistration completion, and reduced front-desk escalations <strong>~60%</strong> at high-traffic campuses.</li>
+            <li>Defined <strong>AI-assisted reporting</strong> patterns for high-stakes workflows: editable drafts, disambiguation checkpoints, and human-in-the-loop confirmation, keeping operators accountable for AI output.</li>
+            <li>Built and governed a component <strong>sub-design system</strong> adopted by 5+ internal products, improving design-to-dev efficiency <strong>~25%</strong> and aligning surfaces to the enterprise standard.</li>
+            <li>Drove <strong>WCAG 2.1 AA</strong> accessibility across multiple tools with keyboard-first interaction models and annotated engineering handoff specs; mentored junior designers through critiques and QA reviews.</li>
+          </ul>
+
+          <div class="role-row"><span class="role">UX / UI Designer</span><span class="date">Jun 2019 – Oct 2023</span></div>
+          <ul class="bul">
+            <li>Delivered end-to-end design for 6+ internal enterprise platforms: Visit, Digital Twin, Me@Walmart ITFOW, Me@Campus, Mentor Match, and Hubble Admin.</li>
+            <li>Led foundational user research and stakeholder workshops to shape product strategy, define user needs, and inform early design direction.</li>
+            <li>Established design standards and documentation that evolved into a shared component library used across multiple internal tools.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="company"><span class="marker"></span>ArtBinder Inc</div>
+          <div class="role-row"><span class="role">Product Designer</span><span class="date">Sep 2018 – Dec 2018</span></div>
+          <ul class="bul">
+            <li>Conducted user research and redesigned the ArtBinder mobile app to improve usability, collaborating with engineers through Jira and QA testing.</li>
+          </ul>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+      <section>
+        <h2 class="sec">Education</h2>
+        <div class="edu">
+          <div class="school">New York University – Tisch School of the Arts</div>
+          <div class="deg">MPS, Interactive Telecommunications Program (2018)</div>
+        </div>
+        <div class="edu">
+          <div class="school">Syracuse University – S.I. Newhouse School of Public Communications</div>
+          <div class="deg">MA, Television, Radio &amp; Film (2016)</div>
+        </div>
+        <div class="edu">
+          <div class="school">South China Normal University – School of Literature</div>
+          <div class="deg">BA, Editing &amp; Publishing (2014)</div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="sec">Skills</h2>
+        <div class="skill-group">
+          <div class="lbl">Methods</div>
+          <div class="val">User Research, Heuristic Evaluation, Journey Mapping, Information Architecture, Rapid Prototyping, Usability Testing</div>
+        </div>
+        <div class="skill-group">
+          <div class="lbl">Specialties</div>
+          <div class="val">Service Design, Design Systems &amp; Governance, AI-Assisted UX, 0&rarr;1 Product Design, Accessibility (WCAG 2.1 AA / Inclusive Design), Design-to-Code (HTML/CSS)</div>
+        </div>
+        <div class="skill-group">
+          <div class="lbl">Tools</div>
+          <div class="val">Figma, FigJam, Miro, UserZoom, Jira, Confluence, Adobe Suite</div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="sec">Languages</h2>
+        <div class="lang">English &nbsp;·&nbsp; Mandarin Chinese &nbsp;·&nbsp; Cantonese</div>
+      </section>
+
+      <section>
+        <h2 class="sec">Creative Works</h2>
+        <ul class="cw">
+          <li>Published author of 6 books and 100+ articles on art, culture, and storytelling</li>
+          <li>Composer of 16 original songs</li>
+          <li>Directed the 3D animated short <em>Estranged Stars</em>, premiered in New York (2017)</li>
+        </ul>
+      </section>
+
+    </div>
+  </div>
+
+</body>
+</html>

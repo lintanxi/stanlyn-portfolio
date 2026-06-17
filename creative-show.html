@@ -2,11 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T3NQX4SQDX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T3NQX4SQDX');
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Estranged Stars — Stanlyn Lu</title>
-<meta name="description" content="Estranged Stars — an immersive 3D big-screen show drawn from a Tang Dynasty poem, written, storyboarded, and edited by Stanlyn (Ye) Lu. Shown at ITP 2017 and Expanded Cinema Vol.3.">
+<title>Estranged Stars · Stanlyn Lu</title>
+<meta name="description" content="Estranged Stars: an immersive 3D big-screen show drawn from a Tang Dynasty poem, written, storyboarded, and edited by Stanlyn (Ye) Lu. Shown at ITP 2017 and Expanded Cinema Vol.3.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="creative.css">
+<link rel="stylesheet" href="creative.css?v=10">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -29,10 +38,12 @@
 <main id="main">
   <section class="hero">
     <div class="wrap">
-      <a class="back" href="creative.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Creative</a>
-      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Immersive · 3D big-screen show</span>
+      <div class="hero-top">
+        <a class="back" href="creative.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Creative</a>
+        <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Immersive · 3D big-screen show</span>
+      </div>
       <h1>Estranged <span class="accent">Stars</span></h1>
-      <p class="hook">A three-minute musical animation, staged across a panoramic wall of screens — two friends share a tranquil time, then drift apart, until every memory dissolves into a single cup of sake.</p>
+      <p class="hook">A three-minute musical animation, staged across a panoramic wall of screens: two friends share a tranquil time, then drift apart, until every memory dissolves into a single cup of sake.</p>
     </div>
   </section>
 
@@ -40,15 +51,14 @@
   <section style="padding-top:0">
     <div class="wrap">
       <figure class="figure">
-        <!-- TODO: drop the installation shot (audience + panoramic screen) → assets/creative/es-installation.jpg -->
-        <div class="ph">es-installation.jpg — the big-screen installation</div>
+        <img src="assets/creative/es-installation.jpg" alt="Estranged Stars projected across a panoramic wall of screens, audience silhouetted in front of the neon-crossroads scene">
       </figure>
 
       <!-- META -->
       <div class="meta">
         <div class="m"><div class="k">Role</div><div class="v">Screenwriter · Storyboard · Editor · Co-producer</div></div>
         <div class="m"><div class="k">Tools</div><div class="v">Final Draft X · Celtx Shots · Unreal Engine · Cinema 4D · Mixamo · 3D scanning · Premiere · After Effects · Audition</div></div>
-        <div class="m"><div class="k">Team</div><div class="v">Ran Tian (Visual Director, 3D Modeling) · David Chen (Sound Director) · Morning Qu (Mo-cap Performer)</div></div>
+        <div class="m"><div class="k">Team</div><div class="v">Ran Tian (Visual Director, 3D Modeling) · David Chen (Sound Director) · Manning Qu (Mo-cap Performer)</div></div>
       </div>
     </div>
   </section>
@@ -58,18 +68,16 @@
     <div class="wrap">
       <div class="sec-head"><h2>Overview</h2></div>
       <div class="prose">
-        <p class="lead"><em>Estranged Stars</em> is a three-minute musical animation, drawn from the Tang Dynasty poem <em>Meeting With an Old Friend</em> by Du Fu — staged not as a screening but as an immersive, big-screen show that wraps the audience in the image.</p>
+        <p class="lead"><em>Estranged Stars</em> is a three-minute musical animation, drawn from the Tang Dynasty poem <em>Meeting With an Old Friend</em> by Du Fu: staged not as a screening but as an immersive, big-screen show that wraps the audience in the image.</p>
         <p>The title refers to the constellations <em>Shen</em> (参, Orion) and <em>Shang</em> (商, Antares), which never appear in the sky at the same time. The story follows two close friends who share a tranquil, happy stretch of life and then part ways. The animation leans on metaphor to carry the feeling, until all the memories disappear into a cup of sake.</p>
       </div>
-      <p class="bigquote" style="margin-top:24px"><em>"My heart has passed thousands of miles from the past, back to the wide, wide world."</em></p>
+      <p class="bigquote tagline" style="margin-top:24px">"My heart has passed thousands of miles from the past, back to the wide, wide world."</p>
 
       <!-- MAIN FILM -->
       <div class="vid">
-        <!-- TODO: replace the placeholder with the Vimeo embed for the 3-min film.
-             <iframe src="https://player.vimeo.com/video/VIDEO_ID" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe> -->
-        <div class="ph">Main film — Vimeo embed<br>(send the URL / video ID)</div>
+        <iframe src="https://player.vimeo.com/video/285446526" title="Estranged Stars: the film" allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
-      <p class="vidcap"><b>Estranged Stars</b> — the three-minute film.</p>
+      <p class="vidcap"><b>Estranged Stars</b>: the three-minute film.</p>
     </div>
   </section>
 
@@ -77,17 +85,15 @@
   <section style="padding-top:0">
     <div class="wrap">
       <div class="sec-head"><h2>Inspiration &amp; concept</h2></div>
-      <p class="bigquote">Everyone carries cherished memories or feelings that can't be shared. In other people's eyes you are just drinking <b>a cup of sake</b> — but no one sees that <b>your heart has traveled thousands of miles</b> into your splendid memory. And after the sake is gone, your heart still has to come back to this wide, wide world, ignoring all the emptiness and loneliness.</p>
+      <p class="bigquote">Everyone carries cherished memories or feelings that can't be shared. In other people's eyes you are just drinking <b>a cup of sake</b>, but no one sees that <b>your heart has traveled thousands of miles</b> into your splendid memory. And after the sake is gone, your heart still has to come back to this wide, wide world, ignoring all the emptiness and loneliness.</p>
 
       <div class="concept">
-        <!-- TODO: assets/creative/es-constellation.jpg (Chinese constellation chart) -->
-        <div class="frame"><span class="ph">es-constellation.jpg</span></div>
-        <!-- TODO: assets/creative/es-starfield.jpg (starfield) -->
-        <div class="frame"><span class="ph">es-starfield.jpg</span></div>
+        <div class="frame"><img src="assets/creative/es-constellation.jpg" alt="Chinese constellation chart showing two figures sharing a drink beneath the stars" loading="lazy"></div>
+        <div class="frame"><img src="assets/creative/es-starfield.jpg" alt="Deep-blue starfield" loading="lazy"></div>
       </div>
-      <p class="note"><b>Shen</b> (参, Orion) and <b>Shang</b> (商, Antares) are two constellations that never appear at the same time — in classical Chinese literature, they stand as a metaphor for separation.</p>
+      <p class="note"><b>Shen</b> (参, Orion) and <b>Shang</b> (商, Antares) are two constellations that never appear at the same time: in classical Chinese literature, they stand as a metaphor for separation.</p>
 
-      <p class="poem-head">Meeting With an Old Friend — Du Fu<span class="zh">赠卫八处士 · 唐 · 杜甫</span></p>
+      <p class="poem-head">Meeting With an Old Friend · Du Fu<span class="zh">赠卫八处士 · 唐 · 杜甫</span></p>
       <div class="poem">
         <p class="en">In life, friends seldom are brought near; like stars, each one shines in its sphere.</p><p class="zh">人生不相见，动如参与商。</p>
         <p class="en">Tonight, oh! what a happy night! We sit beneath the same lamplight.</p><p class="zh">今夕复何夕，共此灯烛光。</p>
@@ -105,13 +111,29 @@
     </div>
   </section>
 
+  <!-- DESIGNING FOR THE WALL -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Designing for the wall</h2></div>
+      <div class="prose">
+        <p class="lead">The "big screen" is the whole point, and the whole problem.</p>
+        <p>The piece premiered on an extraordinarily wide panoramic wall, far wider than any ordinary frame. Almost no footage fits a ratio that extreme: making something that could actually fill it, edge to edge, was the real challenge every artist in the show had to solve.</p>
+        <p>So instead of fighting the format, I designed the story around it. I looked for subjects that are naturally long and horizontal: a sushi-bar counter, the keys of a grand piano, a subway sliding past a platform, a starry night stretched across the sky. Each one spans the full width while still carrying a beat of the story. The wide scenes came first; I wrote the narrative to connect them.</p>
+      </div>
+      <figure class="figure">
+        <img src="assets/creative/es-banner.jpg" alt="Estranged Stars playing across the full panoramic wall, two scenes side by side above a seated audience" loading="lazy">
+        <figcaption>One frame, two scenes, the full width of the wall: the format the whole film was designed around.</figcaption>
+      </figure>
+      <div class="callout">A constraint became the concept: the shape of the screen decided what the film could be about.</div>
+    </div>
+  </section>
+
   <!-- STORYBOARD -->
   <section style="padding-top:0">
     <div class="wrap">
-      <div class="sec-head"><h2>Storyboard</h2><p class="sec-sub">Ten pages of shots — from script to camera, before a single frame was built.</p></div>
+      <div class="sec-head"><h2>Storyboard</h2><p class="sec-sub">Ten pages of shots: every scene composed to run the full width of the wall.</p></div>
       <figure class="figure">
-        <!-- TODO: assets/creative/es-storyboard.jpg (the full 10-page sheet) -->
-        <div class="ph">es-storyboard.jpg — the full storyboard sheet</div>
+        <img src="assets/creative/es-storyboard.jpg" alt="Ten-page storyboard for Estranged Stars, shot by shot" loading="lazy">
       </figure>
     </div>
   </section>
@@ -119,15 +141,14 @@
   <!-- IN UNREAL ENGINE (GIFs) -->
   <section style="padding-top:0">
     <div class="wrap">
-      <div class="sec-head"><h2>In the engine</h2><p class="sec-sub">Scenes built and lit in Unreal — poppy field, grassland, two interiors, the metro platform, the neon crossroads.</p></div>
+      <div class="sec-head"><h2>In the engine</h2><p class="sec-sub">Scenes built and lit in Unreal: poppy field, grassland, two interiors, the metro platform, the neon crossroads.</p></div>
       <div class="gifs">
-        <!-- TODO: animated GIFs → assets/creative/es-ue-1.gif … es-ue-6.gif -->
-        <div class="g"><span class="ph">es-ue-1.gif<br>poppy field · piano</span></div>
-        <div class="g"><span class="ph">es-ue-2.gif<br>grassland</span></div>
-        <div class="g"><span class="ph">es-ue-3.gif<br>apartment · cello</span></div>
-        <div class="g"><span class="ph">es-ue-4.gif<br>apartment · kitchen</span></div>
-        <div class="g"><span class="ph">es-ue-5.gif<br>metro platform</span></div>
-        <div class="g"><span class="ph">es-ue-6.gif<br>neon crossroads</span></div>
+        <div class="g"><video src="assets/creative/piano.mp4" poster="assets/creative/piano-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="In-engine: grand piano in a field of poppies"></video></div>
+        <div class="g"><video src="assets/creative/train.mp4" poster="assets/creative/train-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="In-engine: a train crossing an open grassland"></video></div>
+        <div class="g"><video src="assets/creative/room.mp4" poster="assets/creative/room-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="In-engine: an apartment living room with a piano"></video></div>
+        <div class="g"><video src="assets/creative/argue.mp4" poster="assets/creative/argue-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="In-engine: figures in an apartment kitchen"></video></div>
+        <div class="g"><video src="assets/creative/subway.mp4" poster="assets/creative/subway-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="In-engine: a subway platform"></video></div>
+        <div class="g"><video src="assets/creative/street.mp4" poster="assets/creative/street-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="In-engine: a neon city crossroads at night"></video></div>
       </div>
     </div>
   </section>
@@ -139,18 +160,15 @@
       <div class="steps">
         <div>
           <p class="lbl">3D scanning</p>
-          <!-- TODO: assets/creative/es-3d-scan.jpg -->
-          <div class="frame"><span class="ph">es-3d-scan.jpg</span></div>
+          <div class="frame"><img src="assets/creative/es-3d-scan.jpg" alt="Performers being 3D-scanned in a motion-capture studio" loading="lazy"></div>
         </div>
         <div>
           <p class="lbl">Motion capture</p>
-          <!-- TODO: assets/creative/es-mocap.jpg -->
-          <div class="frame"><span class="ph">es-mocap.jpg</span></div>
+          <div class="frame"><img src="assets/creative/es-mocap.jpg" alt="A performer in a motion-capture suit being directed" loading="lazy"></div>
         </div>
         <div>
           <p class="lbl">Unreal Engine</p>
-          <!-- TODO: assets/creative/es-unreal.jpg -->
-          <div class="frame"><span class="ph">es-unreal.jpg</span></div>
+          <div class="frame"><img src="assets/creative/es-unreal.jpg" alt="An apartment scene staged and lit in the Unreal Engine editor" loading="lazy"></div>
         </div>
       </div>
     </div>
@@ -159,13 +177,9 @@
   <!-- FILM STILLS -->
   <section style="padding-top:0">
     <div class="wrap">
-      <div class="sec-head"><h2>Stills</h2><p class="sec-sub">The film moves through the seasons — izakaya, poppy field, autumn forest, snow, the subway, the city at night.</p></div>
+      <div class="sec-head"><h2>Stills</h2><p class="sec-sub">The film moves through the seasons: izakaya, poppy field, autumn forest, snow, the subway, the city at night.</p></div>
       <div class="filmstrip">
-        <!-- TODO: a few of the strongest widescreen stills → assets/creative/es-still-1.jpg … (curated to the best few) -->
-        <div class="ph">es-still-1.jpg — poppy field</div>
-        <div class="ph">es-still-2.jpg — autumn forest</div>
-        <div class="ph">es-still-3.jpg — snow</div>
-        <div class="ph">es-still-4.jpg — neon crossroads</div>
+        <img src="assets/creative/es-filmstrip.jpg" alt="Widescreen stills from Estranged Stars, scene by scene through the seasons" loading="lazy">
       </div>
     </div>
   </section>
@@ -177,21 +191,19 @@
 
       <div class="exhibit">
         <p class="x-head"><b>ITP 2017 Big Screen Show</b><span class="x-meta"> · IAC, 555 W 18th St, New York, NY 10011 · December 8, 2017</span></p>
-        <div class="gallery">
-          <!-- TODO: assets/creative/es-itp-1.jpg … (curated to the best few) -->
-          <div class="tile wide"><span class="ph">es-itp-1.jpg</span></div>
-          <div class="tile"><span class="ph">es-itp-2.jpg</span></div>
-          <div class="tile"><span class="ph">es-itp-3.jpg</span></div>
+        <div class="xgrid">
+          <img src="assets/creative/es-itp-1.jpg" alt="ITP Big Screen Show: audience seated before the panoramic screens" loading="lazy">
+          <img src="assets/creative/es-itp-2.jpg" alt="ITP Big Screen Show: piano keys spanning the panorama" loading="lazy">
+          <img src="assets/creative/es-itp-3.jpg" alt="ITP Big Screen Show: the subway scene across the screens" loading="lazy">
         </div>
       </div>
 
       <div class="exhibit">
         <p class="x-head"><b>Expanded Cinema, Vol.&nbsp;3</b><span class="x-meta"> · IFP, 30 John St, Brooklyn, NY 11201 · August 2, 2018</span></p>
-        <div class="gallery">
-          <!-- TODO: assets/creative/es-ifp-1.jpg … (curated to the best few) -->
-          <div class="tile wide"><span class="ph">es-ifp-1.jpg</span></div>
-          <div class="tile"><span class="ph">es-ifp-2.jpg</span></div>
-          <div class="tile"><span class="ph">es-ifp-3.jpg</span></div>
+        <div class="xgrid">
+          <img src="assets/creative/es-ifp-2.jpg" alt="Expanded Cinema Vol.3: visitors watching the autumn-forest scene on the long screen" loading="lazy">
+          <img src="assets/creative/es-ifp-1.jpg" alt="Expanded Cinema Vol.3: a viewer silhouetted against the blue screens" loading="lazy">
+          <img src="assets/creative/es-ifp-4.jpg" alt="Expanded Cinema Vol.3: the Estranged Stars end-card over a starfield" loading="lazy">
         </div>
       </div>
     </div>
@@ -200,18 +212,17 @@
   <!-- DOCUMENTATION -->
   <section style="padding-top:0">
     <div class="wrap">
-      <div class="sec-head"><h2>Documentation</h2><p class="sec-sub">Captured in the room — a 360° camera best conveys how the piece wraps around the audience.</p></div>
+      <div class="sec-head"><h2>Documentation</h2><p class="sec-sub">Captured in the room: a 360° camera best conveys how the piece wraps around the audience.</p></div>
       <div class="vid">
-        <!-- TODO: replace with the 360° documentation Vimeo embed -->
-        <div class="ph">360° documentation — Vimeo embed<br>(send the URL / video ID)</div>
+        <iframe src="https://player.vimeo.com/video/277577203" title="Estranged Stars: 360° camera documentation" allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
-      <p class="vidcap"><b>Estranged Stars</b> — 360° camera documentation. <a href="#" rel="noopener">Watch the GoPro walkthrough →</a> <em>(TODO: set this link to the GoPro Vimeo URL.)</em></p>
+      <p class="vidcap"><b>Estranged Stars</b>: 360° camera documentation. <a href="https://vimeo.com/277578606" rel="noopener" target="_blank">Watch the GoPro walkthrough →</a></p>
     </div>
   </section>
 
   <section style="padding-top:0">
     <div class="wrap">
-      <div class="callout">Built with a small collaborator team and a game engine, <em>Estranged Stars</em> turned a thousand-year-old poem into something the audience could stand inside — the same instinct I bring to product work: make the feeling, not just the screen.</div>
+      <div class="callout">Built with a small collaborator team and a game engine, <em>Estranged Stars</em> turned a thousand-year-old poem into something the audience could stand inside.</div>
     </div>
   </section>
 </main>

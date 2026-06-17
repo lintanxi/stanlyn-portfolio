@@ -2,11 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T3NQX4SQDX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T3NQX4SQDX');
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Decent Dialogue — Stanlyn Lu</title>
-<meta name="description" content="Decent Dialogue — a Python chatbot that stages conversations between celebrities by deconstructing their speech.">
+<title>Decent Dialogue · Stanlyn Lu</title>
+<meta name="description" content="Decent Dialogue: a 2017 generative-poetry experiment in Python that models how famous people talk and pairs two of them at random to say beautiful nonsense. By Stanlyn (Ye) Lu.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="creative.css">
+<link rel="stylesheet" href="creative.css?v=10">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -29,35 +38,120 @@
 <main id="main">
   <section class="hero">
     <div class="wrap">
-      <a class="back" href="creative.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Creative</a>
-      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Experiment · conversational · Python</span>
-      <h1>Decent Dialogue</h1>
-      <p class="hook">A chatbot that stages conversations between celebrities — living or not — by deconstructing the way they actually speak.</p>
+      <div class="hero-top">
+        <a class="back" href="creative.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Creative</a>
+        <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Experiment · generative poetry</span>
+      </div>
+      <h1>Decent <span class="accent">Dialogue</span></h1>
+      <p class="hook">A class asked us to write a poem in Python. So we built a small machine that learns how famous people talk, pairs two of them at random, and lets them say beautiful nonsense to each other.</p>
     </div>
   </section>
 
-  <section>
+  <section style="padding-top:0">
     <div class="wrap">
-      <div class="meta">
-        <div class="m"><div class="k">My role</div><div class="v">UX research · UX design</div></div>
-        <div class="m"><div class="k">Tools</div><div class="v">Python · Adobe Illustrator · Sketch</div></div>
-        <div class="m"><div class="k">Team</div><div class="v">Jingfei Lin (Programmer)</div></div>
-      </div>
-
-      <!-- TODO: copy chatbot.gif from the old decent-dialogue project into assets/creative/ and set src -->
-      <figure class="figure">
-        <div class="ph">Chatbot demo (chatbot.gif)</div>
-        <figcaption>TODO: drop in the demo GIF showing a generated dialogue.</figcaption>
+      <figure class="figure" style="max-width:480px;margin-left:auto;margin-right:auto">
+        <img src="assets/creative/dialogue.jpg" alt="Illustration of a phone with chat bubbles between celebrities, including Taylor Swift, Einstein, Trump, and Obama">
       </figure>
-
-      <div class="prose">
-        <p class="lead">Decent Dialogue is a chatbot simulating conversations among celebrities.</p>
-        <p>No matter whether the celebrity is still alive, and no matter what language they speak — as long as some original speeches or writings can be found and translated, we can build a chatbot in their style. By selecting two or more figures, a user can stage a "decent dialogue" between them.</p>
-        <p>It's built in Python, deconstructing and analyzing different styles of speech to create a playful, interactive experience.</p>
-        <p><em>TODO: add a short note on what you'd explore next, or what the project taught you about conversational design — it pairs nicely with your AI-assisted UX work on the Work tab.</em></p>
+      <div class="meta">
+        <div class="m"><div class="k">Role</div><div class="v">Idea · concept · design</div></div>
+        <div class="m"><div class="k">Tools</div><div class="v">Python · spaCy · Selenium · Flask · Illustrator</div></div>
+        <div class="m"><div class="k">Team</div><div class="v">Jingfei Lin (development)</div></div>
       </div>
+    </div>
+  </section>
 
-      <div class="callout">Rebuilt here in my current design system. <em>(Optional note — the original lives in the older portfolio, untouched.)</em></div>
+  <!-- OVERVIEW -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Overview</h2></div>
+      <div class="prose">
+        <p class="lead">The brief was almost a dare: write a poem in Python. This was 2017, before "AI writing" meant anything to most people.</p>
+        <p>So we built a small program that reads how famous people actually talk. It scrapes their best-known quotes, learns which words they reach for, then pairs two figures at random and lets them hold a conversation: Einstein and Taylor Swift, Trump and Jesus, whoever the dice land on.</p>
+        <p>The grammar is deliberately rigid and the pairings are pure chance, so what comes out is gloriously broken. <em>"Delicious relationship is in my car."</em> That randomness is the whole point. It's less a chatbot than a poem that writes itself. I came up with the idea and designed it; Jingfei Lin built it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXCHANGES -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Overheard</h2><p class="sec-sub">Four exchanges the machine produced. Every line is generated; none of it was written by us.</p></div>
+      <div class="convos">
+        <div class="convo">
+          <div class="cb a"><img class="av" src="assets/creative/dd-einstein.jpg" alt="" loading="lazy"><span class="line"><span class="who">Albert Einstein</span>What if single presence just marries me irrelevantly?</span></div>
+          <div class="cb b"><img class="av" src="assets/creative/dd-taylor.jpg" alt="" loading="lazy"><span class="line"><span class="who">Taylor Swift</span>Delicious relationship is in my car.</span></div>
+        </div>
+        <div class="convo">
+          <div class="cb a"><img class="av" src="assets/creative/dd-taylor.jpg" alt="" loading="lazy"><span class="line"><span class="who">Taylor Swift</span>What if loathsome individuals figure now they aren't straight?</span></div>
+          <div class="cb b"><img class="av" src="assets/creative/dd-trump.jpg" alt="" loading="lazy"><span class="line"><span class="who">Donald Trump</span>That rumor hasn't good insecurity.</span></div>
+        </div>
+        <div class="convo">
+          <div class="cb a"><img class="av" src="assets/creative/dd-trump.jpg" alt="" loading="lazy"><span class="line"><span class="who">Donald Trump</span>What if big decompress holds me back?</span></div>
+          <div class="cb b"><img class="av" src="assets/creative/dd-jesus.jpg" alt="" loading="lazy"><span class="line"><span class="who">Jesus Christ</span>You get pretty butterfly.</span></div>
+        </div>
+        <div class="convo">
+          <div class="cb a"><img class="av" src="assets/creative/dd-jesus.jpg" alt="" loading="lazy"><span class="line"><span class="who">Jesus Christ</span>What if junior bus does it ridiculously?</span></div>
+          <div class="cb b"><img class="av" src="assets/creative/dd-musk.jpg" alt="" loading="lazy"><span class="line"><span class="who">Elon Musk</span>Next character happens to be a car.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RAW OUTPUT -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Straight from the generator</h2><p class="sec-sub">Press "one more time," and it keeps going, forever.</p></div>
+      <div class="genout">
+<span class="q">What if aggressive land keep near silent me n't?</span>
+Best disgrace be forgotten everything.
+<span class="q">What if net dream be n't that I Especially?</span>
+Great hate support their anything.
+<span class="q">What if stronger song carry back foreign I frankly?</span>
+Happy music do my instinct.
+<span class="q">What if bigger soccer rebuild especially that you always?</span>
+Safe song picture miraculous world.
+<span class="q">What if good facet sink So basic I never?</span>
+Happy television do little secret.</div>
+      <p class="gencap">Raw output from the question-and-answer mode.</p>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>How it works</h2><p class="sec-sub">Four steps, from real quotes to generated nonsense.</p></div>
+      <div class="iters">
+        <div class="iter">
+          <div class="n">1</div>
+          <div>
+            <h4>Scrape</h4>
+            <p>Pull each figure's most-quoted words from BrainyQuote with Selenium. Six source texts to start: Trump, Taylor Swift, Drake, Obama, Einstein, and Bob Dylan (Jesus and Elon Musk joined later).</p>
+          </div>
+        </div>
+        <div class="iter">
+          <div class="n">2</div>
+          <div>
+            <h4>Tag</h4>
+            <p>Run every word through part-of-speech tagging with spaCy, sorting them into five lists: nouns, verbs, adjectives, adverbs, and pronouns.</p>
+          </div>
+        </div>
+        <div class="iter">
+          <div class="n">3</div>
+          <div>
+            <h4>Reassemble</h4>
+            <p>Drop random words from those lists into a fixed grammar. The rigidity of the template against the randomness of the words is what makes it sing.</p>
+            <div class="tmpl"><b>Question</b> = "What if" + adj + noun + verb + adv + adj + pron + verb + adv<br><b>Answer</b> &nbsp;&nbsp;= adj + noun + verb + adj + noun</div>
+          </div>
+        </div>
+        <div class="iter">
+          <div class="n">4</div>
+          <div>
+            <h4>Serve</h4>
+            <p>A tiny Flask app picks two figures and prints their exchange. Two modes: <b>Automatic</b>, where the machine talks to itself, and <b>Player</b>, where you choose who speaks.</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout">The original code is long gone now; what's left is the documentation and the poems it left behind. Made in 2017 with a web scraper and a part-of-speech tagger, years before a chatbot could do any of this on its own. The seams show, and that is the charm: a poem made of pure coincidence.</div>
     </div>
   </section>
 </main>
