@@ -15,10 +15,15 @@
 <title>Decent Dialogue · Stanlyn Lu</title>
 <meta name="description" content="Decent Dialogue: a 2017 generative-poetry experiment in Python that models how famous people talk and pairs two of them at random to say beautiful nonsense. By Stanlyn (Ye) Lu.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="creative.css?v=10">
+<link rel="stylesheet" href="creative.css?v=11">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<div id="progress-bar" aria-hidden="true"></div>
+<button id="back-top" aria-label="Back to top">
+  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,8 6,4 10,8"/></svg>
+  Top
+</button>
 
 <header>
   <div class="wrap nav">
@@ -166,5 +171,18 @@ Happy television do little secret.</div>
     </div>
   </div>
 </footer>
+<script>
+(function(){
+  var progressBar=document.getElementById('progress-bar');
+  var backTop=document.getElementById('back-top');
+  window.addEventListener('scroll',function(){
+    var h=document.documentElement;
+    var pct=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;
+    progressBar.style.width=pct+'%';
+    backTop.classList.toggle('visible',pct>15);
+  },{passive:true});
+  backTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+})();
+</script>
 </body>
 </html>

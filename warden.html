@@ -159,9 +159,44 @@
   /* ── Challenge grid ── */
   .challenge-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:28px 0}
   .challenge-item{background:var(--surface);padding:22px 20px;display:flex;flex-direction:column;gap:8px}
+  .c-head{display:flex;align-items:center;gap:10px}
+  .c-icon{width:32px;height:32px;border-radius:8px;background:var(--blue-pale);color:var(--blue-ink);display:flex;align-items:center;justify-content:center;flex:none}
+  .c-icon svg{width:18px;height:18px}
   .c-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
   .c-body{margin:0;font-size:14.5px;color:var(--muted);line-height:1.55}
   @media(max-width:560px){.challenge-grid{grid-template-columns:1fr}}
+
+  /* ── DS layers diagram ── */
+  .ds-diagram{margin:0}
+  .ds-layers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:640px){.ds-layers{grid-template-columns:1fr}}
+  .ds-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+  .ds-card--target{background:var(--blue-pale);border-color:var(--blue)}
+  .ds-eyebrow{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+  .ds-card--target .ds-eyebrow{color:var(--blue-ink)}
+  .ds-name{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:2px}
+  .ds-card--target .ds-name{color:var(--blue-ink)}
+  .ds-chip{font-size:12.5px;font-weight:500;padding:5px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
+  .ds-card--target .ds-chip{background:#fff;border-color:#cdd9f5;color:var(--blue-ink)}
+  .ds-converge{display:flex;justify-content:center;color:var(--blue);margin:6px 0}
+  .ds-converge svg{width:26px;height:26px}
+  .ds-outcome{background:var(--blue);color:#fff;border-radius:var(--r);padding:14px 22px;text-align:center;font-size:14.5px;font-weight:600;max-width:420px;margin:0 auto}
+
+  /* ── Configurable dimensions ── */
+  .dim-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:8px 0 14px}
+  @media(max-width:720px){.dim-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:420px){.dim-grid{grid-template-columns:1fr}}
+  .dim-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+  .dim-icon{width:32px;height:32px;border-radius:8px;background:var(--blue-pale);color:var(--blue-ink);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+  .dim-icon svg{width:18px;height:18px}
+  .dim-name{font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:4px}
+  .dim-desc{font-size:13px;color:var(--muted);line-height:1.5}
+  .guard-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 8px}
+  @media(max-width:560px){.guard-grid{grid-template-columns:1fr}}
+  .guard-card{display:flex;gap:14px;align-items:flex-start;background:var(--blue-pale);border:1px solid #cdd9f5;border-radius:var(--r);padding:18px}
+  .guard-card .dim-icon{background:#fff;margin-bottom:0;flex:none}
+  .guard-name{font-size:14px;font-weight:700;color:var(--blue-ink);margin-bottom:3px}
+  .guard-desc{font-size:13px;color:#41506e;line-height:1.5}
 
   /* ── Phase table ── */
   .phase-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0}
@@ -277,7 +312,7 @@
         </div>
         <div class="meta-item" role="listitem">
           <div class="label">Team</div>
-          <div class="val">~40 people · Product + Engineering</div>
+          <div class="val">22 people · Product Manager · Tech Lead · Engineering</div>
         </div>
         <div class="meta-item" role="listitem">
           <div class="label">Timeline</div>
@@ -351,25 +386,37 @@
     <div class="prose">
       <div class="section-label">The Situation I Inherited</div>
       <h2>A platform that had outgrown its foundations</h2>
-      <p>Warden was built fast. Growth from a handful of incident types to 72+ across 11 categories (more regions, more compliance requirements, and a designer transition along the way) left a system that had never been designed to be maintained at this scale. I joined in February 2026 as the sole designer on a ~40-person team, inheriting three surfaces and an open set of problems.</p>
+      <p>Warden was built fast. Growth from a handful of incident types to 72+ across 11 categories (more regions, more compliance requirements, and a designer transition along the way) left a system that had never been designed to be maintained at this scale. I joined in February 2026 as the sole designer, embedded in a 22-person team: 5 business stakeholders, 1 product manager, 1 tech lead, and developers across features.</p>
     </div>
 
     <div class="challenge-grid">
       <div class="challenge-item">
-        <div class="c-title">Operational Complexity</div>
-        <p class="c-body">72+ incident types, 11+ categories, 80+ question categories, and a taxonomy still actively evolving. Regional requirements and compliance rules varied across the system with no unified logic.</p>
+        <div class="c-head">
+          <span class="c-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+          <div class="c-title">Operational Complexity</div>
+        </div>
+        <p class="c-body">72+ incident types across 11 categories and an evolving taxonomy, with regional and compliance rules that varied with no unified logic.</p>
       </div>
       <div class="challenge-item">
-        <div class="c-title">UX Debt</div>
-        <p class="c-body">The codebase mixed Material UI, Ant Design, and custom styling. Patterns were inconsistent across surfaces. A previous designer had built a Warden sub-system that improved usability, but adoption was partial and it had never been reconciled with Walmart's enterprise design standard.</p>
+        <div class="c-head">
+          <span class="c-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h10M4 17h13"/><circle cx="19" cy="14" r="3"/></svg></span>
+          <div class="c-title">UX Debt</div>
+        </div>
+        <p class="c-body">Material UI, Ant Design, and custom styling mixed across surfaces. A previous designer's sub-system helped but was only partly adopted and never reconciled with the enterprise standard.</p>
       </div>
       <div class="challenge-item">
-        <div class="c-title">Governance Bottleneck</div>
-        <p class="c-body">Every questionnaire change (even minor ones) required a spreadsheet, multiple approval meetings, an engineering ticket, and a release cycle. Operational needs moved faster than the system could adapt.</p>
+        <div class="c-head">
+          <span class="c-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg></span>
+          <div class="c-title">Governance Bottleneck</div>
+        </div>
+        <p class="c-body">Every questionnaire change needed a spreadsheet, approval meetings, an engineering ticket, and a release cycle. Operational needs outpaced the system.</p>
       </div>
       <div class="challenge-item">
-        <div class="c-title">Solo Coverage</div>
-        <p class="c-body">As the only designer, I was simultaneously responsible for new feature design, design system alignment across three layers, and AI feature evaluation, with no design coverage handover from the previous designer.</p>
+        <div class="c-head">
+          <span class="c-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+          <div class="c-title">Solo Coverage</div>
+        </div>
+        <p class="c-body">As the only designer, I covered new feature design, design-system alignment across three layers, and AI evaluation, with no handover from the previous designer.</p>
       </div>
     </div>
 
@@ -420,7 +467,7 @@
     <div class="prose">
       <div class="section-label">Discovery</div>
       <h2>The real problem was workflow governance, not the workflow itself</h2>
-      <p>What looked like a UX problem was structural. A single questionnaire change followed this path: spreadsheet → approval meetings → engineering ticket → release cycle. Weeks, for what was essentially a content edit. Worse, <strong>a simple change had downstream effects on compliance reporting, dashboards, and notification subscriptions</strong>, none of which were visible to the person requesting it. That invisibility was the real problem.</p>
+      <p>What looked like a UX problem was structural. The deeper issue was invisible: <strong>a simple content edit had downstream effects on compliance reporting, dashboards, and notification subscriptions</strong>, none of which were visible to the person requesting the change.</p>
     </div>
 
     <!-- PAIN PIPELINE IMAGE -->
@@ -432,21 +479,52 @@
 
     <hr>
 
-    <!-- OPPORTUNITY -->
-    <div class="prose">
-      <div class="section-label">Opportunity</div>
-      <h2>Moving workflow ownership closer to operations</h2>
-      <p>The core opportunity: move the <em>ability to change</em> the questionnaire out of engineering and into operations, without compromising compliance or content integrity. Meaningful flexibility within real constraints: approvals still required, taxonomy still consolidating, compliance non-negotiable. The design challenge was finding that boundary.</p>
-    </div>
-
-    <hr>
-
     <!-- SUPER ADMIN PLATFORM -->
     <div class="prose">
       <div class="section-label">0→1 Design</div>
       <h2>Designing the boundary between flexibility and governance</h2>
-      <p>The central design question: what to allow, not just what to show. Phase 1 gave Super Admins four configurable dimensions: <strong>visibility</strong> (show/hide per question within an incident type), <strong>ordering</strong> (drag-to-reorder), <strong>requiredness</strong> (required vs. optional), and <strong>country rules</strong> (region-based question logic). Super Admins can also lock individual questions based on compliance or policy requirements, preventing users with lower access from making changes to those questions.</p>
-      <p>Every change is logged in a persistent audit trail: who changed what, when, and on which incident type. Auditability was a first-class requirement, surfaced at the bottom of the configuration view rather than buried in settings.</p>
+      <p>The opportunity was to move the ability to change the questionnaire out of engineering and into operations, without compromising compliance or content integrity. That made the central design question what to allow, not just what to show. Phase 1 gave Super Admins four configurable dimensions, held inside two governance guardrails.</p>
+    </div>
+
+    <!-- CONFIGURABLE DIMENSIONS -->
+    <div class="dim-grid fig-wide">
+      <div class="dim-card">
+        <span class="dim-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <div class="dim-name">Visibility</div>
+        <div class="dim-desc">Show or hide each question within an incident type</div>
+      </div>
+      <div class="dim-card">
+        <span class="dim-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4l-3 3M7 4l3 3M17 20V4M17 20l-3-3M17 20l3-3"/></svg></span>
+        <div class="dim-name">Ordering</div>
+        <div class="dim-desc">Drag to reorder the question sequence</div>
+      </div>
+      <div class="dim-card">
+        <span class="dim-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9"/></svg></span>
+        <div class="dim-name">Requiredness</div>
+        <div class="dim-desc">Toggle each question required or optional</div>
+      </div>
+      <div class="dim-card">
+        <span class="dim-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></span>
+        <div class="dim-name">Country rules</div>
+        <div class="dim-desc">Apply region-based question logic</div>
+      </div>
+    </div>
+
+    <div class="guard-grid fig-wide">
+      <div class="guard-card">
+        <span class="dim-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+        <div>
+          <div class="guard-name">Compliance locks</div>
+          <div class="guard-desc">Super Admins lock individual questions, preventing lower-access users from changing them.</div>
+        </div>
+      </div>
+      <div class="guard-card">
+        <span class="dim-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/><path d="M12 8v4l3 2"/></svg></span>
+        <div>
+          <div class="guard-name">Audit trail</div>
+          <div class="guard-desc">Every change is logged, who, what, when, surfaced in the configuration view, not buried in settings.</div>
+        </div>
+      </div>
     </div>
 
     <!-- SUPER ADMIN UI IMAGE -->
@@ -492,7 +570,7 @@
 
         <!-- YES box -->
         <line x1="155" y1="148" x2="155" y2="186" stroke="#0a5fd6" stroke-width="1.5" marker-end="url(#arr-blue)"/>
-        <rect x="16" y="190" width="278" height="114" rx="10" fill="#f7f6f2" stroke="#0a5fd6" stroke-width="1.5"/>
+        <rect x="16" y="190" width="278" height="124" rx="10" fill="#f7f6f2" stroke="#0a5fd6" stroke-width="1.5"/>
         <text x="26" y="212" font-size="10" font-weight="700" fill="#0a5fd6" letter-spacing=".06em">SUB-QUESTION TRIGGERED</text>
         <text x="26" y="232" font-size="13.5" fill="#222222">"Who was notified?"</text>
         <!-- option chips -->
@@ -561,27 +639,45 @@
       </div>
     </div>
 
-    <div class="decisions">
-      <div class="decision">
-        <div class="d-col rejected">
-          <div class="d-head">Full authoring from day one</div>
-          <p>Allow Super Admins to create, edit, and remove questions immediately. Maximum flexibility, but the taxonomy was mid-consolidation, approval processes weren't established, and question changes cascade into compliance reports, dashboards, and subscription logic.</p>
-        </div>
-        <div class="d-col chosen">
-          <div class="d-head">Configuration-first, authoring later</div>
-          <p>Phase 1 introduces meaningful operational control (visibility, ordering, requiredness) while deferring authoring until governance structures mature. Builds trust and adoption before expanding capability. A question's content stays stable; only its behavior is configurable.</p>
-        </div>
-      </div>
-    </div>
-
     <hr>
 
     <!-- DESIGN SYSTEM -->
     <div class="prose">
       <div class="section-label">Design Governance</div>
       <h2>Aligning three sources of truth simultaneously</h2>
-      <p>I inherited three overlapping design system layers: a live product built on mixed Material UI and Ant Design; a Warden UX sub-system built by the previous designer (dark-mode-optimized, partially adopted); and Walmart's LD 3.5, a new company-wide standard whose dark mode components were still in progress. I audited inconsistencies between the live product and the sub-system, aligned new work to LD 3.5 where possible, and documented Warden-specific patterns for formal LD 3.5 review, so they could enter the backlog rather than remain one-off implementations.</p>
+      <p>I inherited three overlapping design system layers, each at a different level of maturity. I aligned new work to LD 3.5 where possible, and documented Warden-specific patterns for formal LD 3.5 review so they could enter the backlog rather than remain one-off implementations.</p>
     </div>
+
+    <!-- DESIGN SYSTEM — THREE LAYERS DIAGRAM -->
+    <figure class="fig fig-wide" style="margin-top:8px">
+      <div class="ds-diagram">
+        <div class="ds-layers">
+          <div class="ds-card">
+            <div class="ds-eyebrow">Live Product</div>
+            <div class="ds-name">What shipped</div>
+            <span class="ds-chip">Mixed Material UI + Ant Design</span>
+            <span class="ds-chip">Inconsistent patterns</span>
+          </div>
+          <div class="ds-card">
+            <div class="ds-eyebrow">Warden Sub-system</div>
+            <div class="ds-name">Previous designer</div>
+            <span class="ds-chip">Dark-mode optimized</span>
+            <span class="ds-chip">Partially adopted</span>
+          </div>
+          <div class="ds-card ds-card--target">
+            <div class="ds-eyebrow">Walmart LD 3.5</div>
+            <div class="ds-name">Enterprise standard</div>
+            <span class="ds-chip">Company-wide, required</span>
+            <span class="ds-chip">Dark mode in progress</span>
+          </div>
+        </div>
+        <div class="ds-converge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </div>
+        <div class="ds-outcome">One alignment strategy, anchored to LD 3.5</div>
+      </div>
+      <figcaption><strong>Three evolving systems:</strong> a live product, a partially adopted sub-system, and the required enterprise standard, all aligned at once under a single LD 3.5 anchored strategy.</figcaption>
+    </figure>
 
     <!-- DESIGN SYSTEM — THREE IMAGES -->
     <div class="three-up fig-wide" style="margin-top:8px">
@@ -598,7 +694,6 @@
         <figcaption><strong>Walmart LD 3.5:</strong> required enterprise standard with dark mode components still in progress at time of this work</figcaption>
       </figure>
     </div>
-    <p class="fig-wide" style="font-size:13px;color:var(--muted);text-align:center;margin-top:-20px;margin-bottom:36px">Three evolving systems, each at a different level of completeness and dark-mode readiness, all requiring alignment at the same time.</p>
 
     <hr>
 
@@ -609,10 +704,10 @@
       <p>As the sole designer, I was also responsible for evaluating two AI features that had already been built. The features existed, but the interaction model hadn't been validated for the accountability risks specific to a security operations context. My discovery work focused on understanding where the current flows created trust gaps, and defining the guardrails needed before operators could rely on AI output in time-sensitive situations.</p>
 
       <h3>AI-assisted incident reporting</h3>
-      <p>Store managers in the field can't always stop to fill out a form. The AI reporting flow lets them describe the situation in plain language and pre-populates the incident form from that narrative. The AI presents its output as a draft (every field editable, ambiguities flagged for human confirmation, and a persistent note reminding operators to verify before submitting). The AI never submits on their behalf.</p>
+      <p>Store managers who can't stop to fill out a form describe the situation in plain language, and the AI pre-populates the incident form as an editable draft: ambiguities flagged for confirmation, never submitted on their behalf.</p>
 
       <h3>AI-assisted incident summary</h3>
-      <p>Operators managing high volumes of concurrent incidents can tap to surface a one-paragraph AI summary of any open report, enough to assess severity and act, without reading through a full questionnaire response. Always on demand, never auto-shown.</p>
+      <p>Operators handling many concurrent incidents can tap to surface a one-paragraph summary of any open report, enough to assess severity and act without reading the full response. On demand, never auto-shown.</p>
     </div>
 
     <!-- AI IMAGES -->

@@ -360,6 +360,15 @@ body.has-cursor .item{cursor:none}
 .tmpl{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--rose);border-radius:0 var(--r) var(--r) 0;padding:15px 18px;margin:16px 0 0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.8;color:var(--ink);overflow-x:auto}
 .tmpl b{color:var(--rose)}
 
+/* ── Scroll progress + back to top (rose) ── */
+#progress-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--rose);z-index:200;transition:width .1s linear;pointer-events:none}
+#back-top{position:fixed;bottom:32px;right:32px;z-index:90;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s,background .15s;background:var(--ink);color:var(--bg);border:none;border-radius:100px;padding:10px 20px;font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px}
+#back-top svg{width:12px;height:12px;flex-shrink:0;transition:transform .2s}
+#back-top.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+#back-top:hover{background:var(--rose)}
+#back-top:hover svg{transform:translateY(-2px)}
+@media(prefers-reduced-motion:reduce){#back-top{transition:opacity .3s}#progress-bar{transition:none}}
+
 /* ── Footer ── */
 footer{border-top:1px solid var(--line);padding:32px 0 48px;margin-top:24px}
 .foot-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
