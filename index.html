@@ -496,11 +496,20 @@
   if(!window.matchMedia || !window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
   var cursor = document.getElementById('viewCursor');
   var cards = document.querySelectorAll('.works .card');
-  function move(e){ cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; }
+  var lastX = -1, lastY = -1;
+  function place(x, y){ cursor.style.left = x + 'px'; cursor.style.top = y + 'px'; }
+  document.addEventListener('mousemove', function(e){ lastX = e.clientX; lastY = e.clientY; });
   cards.forEach(function(card){
-    card.addEventListener('mouseenter', function(){ cursor.classList.add('is-visible'); });
+    card.addEventListener('mouseenter', function(){
+      if(lastX < 0) return;        // no real pointer position yet (e.g. entered via scroll) — wait for move
+      place(lastX, lastY);
+      cursor.classList.add('is-visible');
+    });
+    card.addEventListener('mousemove', function(e){
+      place(e.clientX, e.clientY);
+      cursor.classList.add('is-visible');
+    });
     card.addEventListener('mouseleave', function(){ cursor.classList.remove('is-visible'); });
-    card.addEventListener('mousemove', move);
   });
 })();
 </script>
