@@ -20,13 +20,14 @@
   var hider = document.createElement('style');
   hider.id = 'gate-hider';
   hider.textContent = 'html{visibility:hidden}html.gate-on{visibility:visible}' +
-    'html.gate-on body>*:not(#gate){display:none!important}' +
+    /* everything hides except the gate and the site header, so the brand stays clickable */
+    'html.gate-on body>*:not(#gate):not(header){display:none!important}' +
     'html.gate-on,html.gate-on body{overflow:hidden;height:100%}';
   (document.head || document.documentElement).appendChild(hider);
 
   var css = [
-    '#gate{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;',
-    'padding:24px;background:#f0efeb;color:#222;',
+    '#gate{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;',
+    'padding:24px;padding-top:calc(var(--gate-top,62px) + 24px);background:#f0efeb;color:#222;',
     'font-family:"Everyday Sans","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}',
     '#gate .box{width:100%;max-width:380px;text-align:center}',
     '#gate .mark{width:34px;height:34px;margin:0 auto 22px;color:#3a9d3a}',
@@ -65,8 +66,7 @@
     '<button type="submit">Enter</button>' +
     '</form>' +
     '<p class="err" role="alert">That password isn’t right. Try again.</p>' +
-    '<p class="foot"><a href="mailto:stanlyn.lu@gmail.com">Request access</a> · ' +
-    '<a href="index.html">Back to home</a></p>' +
+    '<p class="foot"><a href="mailto:stanlyn.lu@gmail.com">Request access</a></p>' +
     '</div>';
 
   /* Primary check: SHA-256 via WebCrypto (needs a secure context).
@@ -105,6 +105,15 @@
     gate.innerHTML = HTML;
     document.body.appendChild(gate);
     document.documentElement.classList.add('gate-on');
+
+    /* Offset the gate by the real header height, whatever the viewport. */
+    var head = document.querySelector('body > header');
+    function fit() {
+      var h = head ? head.offsetHeight : 0;
+      document.documentElement.style.setProperty('--gate-top', h + 'px');
+    }
+    fit();
+    window.addEventListener('resize', fit);
 
     var prevTitle = document.title;
     document.title = 'Private — Stanlyn Lu';
