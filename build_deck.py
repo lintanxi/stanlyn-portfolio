@@ -673,7 +673,7 @@ text(s, 7.0, 4.0, 3.4, 1.5, [{"text": "Visit Check-in", "size": 14, "color": LT2
      {"text": "A unified, accessible service that became Walmart's global standard.", "size": 14,
       "color": LT, "align": PP_ALIGN.CENTER, "ls": 1.4}])
 text(s, 0, 5.85, SW, 0.4, [{"text": "Stanlyn Lu · Product Designer", "size": 15, "bold": True, "color": WHITE, "align": PP_ALIGN.CENTER}])
-text(s, 0, 6.35, SW, 0.4, [{"text": "lintanxi@gmail.com · linkedin.com/in/lintanxi", "size": 13, "color": LT2, "align": PP_ALIGN.CENTER}])
+text(s, 0, 6.35, SW, 0.4, [{"text": "stanlyn.lu@gmail.com · linkedin.com/in/lintanxi", "size": 13, "color": LT2, "align": PP_ALIGN.CENTER}])
 notes(s, "Close with the one-line throughline: 'Both cases are really the same move — looking past "
        "the stated request to the system underneath, then designing the structure that makes things "
        "better over time.' Then invite questions.")
